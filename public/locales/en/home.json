@@ -1,0 +1,36 @@
+{
+    "hero": {
+        "eyebrow": "Samarkand, Uzbekistan",
+        "slide_1_title": "Discover the secrets of Registan",
+        "slide_1_subtitle": "A thousand years of heritage, right before your eyes",
+        "slide_2_title": "The Silk Road awaits you",
+        "slide_2_subtitle": "History breathes in every step, legends in every corner",
+        "slide_3_title": "Feel the grandeur of the East",
+        "slide_3_subtitle": "Tilework, domes, and unforgettable landscapes",
+        "slide_4_title": "Samarkand - a time machine",
+        "slide_4_subtitle": "A city where the past meets the present",
+        "slide_5_title": "Every stone tells a story",
+        "slide_5_subtitle": "Your journey begins right here",
+        "slide_6_title": "Under open skies, within history",
+        "slide_6_subtitle": "Unforgettable days await you",
+        "cta_primary": "View tours",
+        "cta_secondary": "About us",
+        "search_placeholder": "Which tour or city interests you?",
+        "search_button": "Search"
+    },
+    "popular": {
+        "eyebrow": "Featured destinations",
+        "title": "Popular tours",
+        "days_short": "days",
+        "view": "View",
+        "view_all": "View all tours"
+    },
+    "destinations": {
+        "eyebrow": "Where to go",
+        "title": "Choose your destination",
+        "subtitle": "Every city awaits with its own history and its own rhythm",
+        "tours_count": "tours",
+        "explore": "Explore",
+        "view_all": "All destinations"
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "nav": {
+    "home": "Bosh sahifa",
+    "tours": "Turlar",
+    "about": "Biz haqimizda",
+    "contact": "Aloqa",
+    "login": "Kirish",
+    "book": "Tur band qilish"
+  }
+}
