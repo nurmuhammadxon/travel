@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { AuthProvider } from "@/contexts/AuthContext";
 import {
   initServerI18next,
   getT,
@@ -37,7 +38,8 @@ export default async function RootLayout({
   return (
     <html lang={lng}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <I18nProvider fallbackLng={i18nConfig.fallbackLng} language={lng} resources={resources}>          {children}
+        <I18nProvider fallbackLng={i18nConfig.fallbackLng} language={lng} resources={resources}>
+          <AuthProvider>{children}</AuthProvider>
         </I18nProvider>
       </body>
     </html>

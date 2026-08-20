@@ -4,8 +4,8 @@ const i18nConfig: I18nConfig = {
   supportedLngs: ["uz", "ru", "en"],
   fallbackLng: "uz",
   defaultNS: "common",
-  ns: ["common", "home", "tours", "about", "contact"],
-  hideDefaultLocale: true, 
+  ns: ["common", "home", "tours", "about", "contact", "auth"],
+  hideDefaultLocale: true,
 };
 
 export default i18nConfig;
