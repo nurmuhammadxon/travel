@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/contexts/AuthContext";
 import {
@@ -14,6 +15,43 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 initServerI18next(i18nConfig);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lng: string }>;
+}): Promise<Metadata> {
+  const { lng } = await params;
+  const { t } = await getT("common", { lng });
+
+  return {
+    title: {
+      default: t("meta.default_title"),
+      template: `%s | DiscoverStans`,
+    },
+    description: t("meta.default_description"),
+    metadataBase: new URL("https://travel-lake-rho-83.vercel.app/"),
+    alternates: {
+      languages: {
+        uz: "/",
+        ru: "/ru",
+        en: "/en",
+      },
+    },
+    openGraph: {
+      title: t("meta.default_title"),
+      description: t("meta.default_description"),
+      siteName: "DiscoverStans",
+      locale: lng,
+      type: "website",
+      images: ["/images/hero_image.jpg"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("meta.default_title"),
+      description: t("meta.default_description"),
+    },
+  };
+}
 
 export async function generateStaticParams() {
   return generateI18nStaticParams();
