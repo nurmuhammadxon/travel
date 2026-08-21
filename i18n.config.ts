@@ -6,6 +6,12 @@ const i18nConfig: I18nConfig = {
   defaultNS: "common",
   ns: ["common", "home", "tours", "about", "contact", "auth", "services"],
   hideDefaultLocale: true,
+  ...(process.env.NODE_ENV === "production"
+    ? {
+      resourceLoader: (language: string, namespace: string) =>
+        import(`./public/locales/${language}/${namespace}.json`),
+    }
+    : {}),
 };
 
 export default i18nConfig;

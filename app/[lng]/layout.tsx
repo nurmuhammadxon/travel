@@ -15,40 +15,21 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 initServerI18next(i18nConfig);
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ lng: string }>;
-}): Promise<Metadata> {
-  const { lng } = await params;
-  const { t } = await getT("common", { lng });
 
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: {
-      default: t("meta.default_title"),
+      default: "DiscoverStans — Markaziy Osiyo bo'ylab sayohat",
       template: `%s | DiscoverStans`,
     },
-    description: t("meta.default_description"),
-    metadataBase: new URL("https://travel-lake-rho-83.vercel.app/"),
-    alternates: {
-      languages: {
-        uz: "/",
-        ru: "/ru",
-        en: "/en",
-      },
-    },
+    description: "O'zbekiston va Markaziy Osiyo bo'ylab tanlangan sayohat turlari.",
+    metadataBase: new URL("https://travel-lake-rho-83.vercel.app"),
     openGraph: {
-      title: t("meta.default_title"),
-      description: t("meta.default_description"),
+      title: "DiscoverStans",
+      description: "O'zbekiston va Markaziy Osiyo bo'ylab tanlangan sayohat turlari.",
       siteName: "DiscoverStans",
-      locale: lng,
       type: "website",
       images: ["/images/hero_image.jpg"],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("meta.default_title"),
-      description: t("meta.default_description"),
     },
   };
 }
