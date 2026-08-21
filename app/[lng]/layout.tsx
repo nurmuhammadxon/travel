@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "O'zbekiston va Markaziy Osiyo bo'ylab tanlangan sayohat turlari.",
       siteName: "DiscoverStans",
       type: "website",
-      images: ["/images/hero_image.jpg"],
+      images: ["/images/hero_image.png"],
     },
   };
 }
