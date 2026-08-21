@@ -18,7 +18,7 @@ export async function Footer({ lng }: { lng: string }) {
             <div className="mx-auto max-w-7xl px-4 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
                 <div>
                     <span className="text-xl font-bold tracking-tight">
-                        Sayohat<span className="text-accent">Yoli</span>
+                        Discover<span className="text-accent">Stans</span>
                     </span>
                     <p className="mt-3 text-sm text-primary-foreground/70 leading-relaxed">
                         {t("footer.about")}

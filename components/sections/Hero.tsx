@@ -37,7 +37,7 @@ export function Hero() {
     return (
         <section className="relative min-h-screen flex flex-col overflow-hidden">
             <Image
-                src="/images/hero_image.jpg"
+                src="/images/hero_image.png"
                 alt="Registon maydoni, Samarqand"
                 fill
                 priority

@@ -3,8 +3,17 @@
         "home": "Home",
         "tours": "Tours",
         "about": "About Us",
+        "blog": "Blog",
         "contact": "Contact",
         "login": "Log In",
         "book": "Book a Tour"
+    },
+    "footer": {
+        "about": "We organize unforgettable journeys across Samarkand and Uzbekistan - history, culture, and hospitality in one place.",
+        "quick_links": "Quick links",
+        "contact": "Contact",
+        "address": "Registan Street, Samarkand",
+        "follow": "Follow us",
+        "rights": "All rights reserved."
     }
 }

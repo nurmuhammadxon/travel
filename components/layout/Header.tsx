@@ -21,6 +21,8 @@ const NAV_LINKS = [
   { href: "/", key: "nav.home" },
   { href: "/tours", key: "nav.tours" },
   { href: "/about", key: "nav.about" },
+  { href: "/blogs", key: "nav.blog" },
+  { href: "/services", key: "nav.service" },
   { href: "/contact", key: "nav.contact" },
 ];
 
@@ -53,10 +55,8 @@ export function Header() {
   const pathWithoutLocale = i18nConfig.supportedLngs.includes(segments[0])
     ? segments.slice(1)
     : segments;
-  const isHomePage = pathWithoutLocale.length === 0;
 
-
-  const isTransparent = isHomePage && !scrolled;
+  const isTransparent = !scrolled;
 
   function switchLocale(locale: string) {
     const rest = pathWithoutLocale;
@@ -68,8 +68,8 @@ export function Header() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${isTransparent
-        ? "bg-transparent backdrop-blur-md shadow-sm"
-        : "bg-white"
+          ? "bg-transparent"
+          : "bg-background backdrop-blur-md shadow-md"
         }`}
     >
       <nav className="mx-auto max-w-7xl px-4 flex items-center justify-between h-16 md:h-20">
@@ -79,7 +79,7 @@ export function Header() {
             className={`text-xl md:text-2xl font-bold tracking-tight transition-colors ${isTransparent ? "text-white" : "text-primary"
               }`}
           >
-            Sayohat<span className="text-accent">Yoli</span>
+            Discover<span className="text-accent">Stans</span>
           </span>
         </Link>
         {/* navbar */}

@@ -3,8 +3,18 @@
     "home": "Bosh sahifa",
     "tours": "Turlar",
     "about": "Biz haqimizda",
+    "blog": "Blog",
+    "service": "Service",
     "contact": "Aloqa",
     "login": "Kirish",
     "book": "Tur band qilish"
+  },
+  "footer": {
+    "about": "Samarqand va O'zbekiston bo'ylab unutilmas sayohatlar tashkil qilamiz - tarix, madaniyat va mehmondo'stlik bir joyda.",
+    "quick_links": "Tezkor havolalar",
+    "contact": "Aloqa",
+    "address": "Registon ko'chasi, Samarqand",
+    "follow": "Bizni kuzating",
+    "rights": "Barcha huquqlar himoyalangan."
   }
 }
