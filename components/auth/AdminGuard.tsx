@@ -4,12 +4,14 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
+const ADMIN_ROLES = ["admin", "agent"];
+
 export function AdminGuard({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if (!isLoading && (!user || user.role !== "admin")) {
+        if (!isLoading && (!user || !ADMIN_ROLES.includes(user.role))) {
             router.push("/login");
         }
     }, [user, isLoading, router]);
@@ -22,8 +24,8 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
         );
     }
 
-    if (!user || user.role !== "admin") {
-        return null; // redirect useEffect ichida sodir bo'ladi
+    if (!user || !ADMIN_ROLES.includes(user.role)) {
+        return null;
     }
 
     return <>{children}</>;

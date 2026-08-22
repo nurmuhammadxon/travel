@@ -8,6 +8,7 @@ import {
   generateI18nStaticParams,
 } from "next-i18next/server";
 import { I18nProvider } from "next-i18next/client";
+import { Toaster } from "@/components/ui/sonner";
 import i18nConfig from "../../i18n.config";
 import "../globals.css";
 
@@ -59,6 +60,7 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <I18nProvider fallbackLng={i18nConfig.fallbackLng} language={lng} resources={resources}>
           <AuthProvider>{children}</AuthProvider>
+          <Toaster richColors position="top-center" />
         </I18nProvider>
       </body>
     </html>

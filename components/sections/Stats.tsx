@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { useT } from "next-i18next/client";
 import { cn } from "@/lib/utils";
 
-const STATS = [
-    { key: "years", value: 12, suffix: "", offset: "md:mt-16" },
-    { key: "satisfaction", value: 95, suffix: "%", offset: "" },
-    { key: "adventures", value: 986, suffix: "+", offset: "md:mt-16" },
-    { key: "travelers", value: 9431, suffix: "+", offset: "" },
-];
+interface Review {
+    rating: number;
+}
+
+interface StatsProps {
+    totalTours: number;
+    reviews?: Review[];
+}
 
 function useCountUp(target: number, start: boolean, duration = 1500) {
     const [value, setValue] = useState(0);
@@ -65,7 +67,7 @@ function StatCircle({
     );
 }
 
-export function Stats() {
+export function Stats({ totalTours, reviews = [] }: StatsProps) {
     const { t } = useT("home");
     const ref = useRef<HTMLDivElement>(null);
     const [started, setStarted] = useState(false);
@@ -86,10 +88,28 @@ export function Stats() {
         return () => observer.disconnect();
     }, []);
 
+    // reviews[].rating backenddan 1-5 oralig'ida keladi, foizga o'giramiz
+    const satisfactionPct =
+        reviews.length > 0
+            ? Math.round(
+                (reviews.reduce((sum, r) => sum + r.rating, 0) /
+                    reviews.length /
+                    5) *
+                100
+            )
+            : 95; // reviews hali bo'lmasa fallback
+
+    const stats = [
+        { key: "years", value: 12, suffix: "", offset: "md:mt-16" },
+        { key: "satisfaction", value: satisfactionPct, suffix: "%", offset: "" },
+        { key: "adventures", value: totalTours, suffix: "+", offset: "md:mt-16" },
+        { key: "travelers", value: 9431, suffix: "+", offset: "" },
+    ];
+
     return (
         <section ref={ref} className="py-10 md:py-8 bg-background">
             <div className="mx-auto max-w-6xl px-4 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-14 justify-items-center">
-                {STATS.map((stat) => (
+                {stats.map((stat) => (
                     <StatCircle
                         key={stat.key}
                         value={stat.value}

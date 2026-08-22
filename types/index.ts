@@ -1,4 +1,4 @@
-export type UserRole = "customer" | "admin";
+export type UserRole = "customer" | "agent" | "admin";
 
 export interface User {
     id: string;
@@ -75,10 +75,14 @@ export interface Booking {
 export interface Review {
     id: string;
     tour_id: string;
+    reviewer_name: string;
     rating: number;
     text: string;
     images: string[];
     reviewer_country?: string;
+    is_verified?: boolean;
+    source?: string;
+    source_url?: string;
     created_at?: string;
 }
 

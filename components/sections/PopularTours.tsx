@@ -4,17 +4,10 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { ChevronLeft, ChevronRight, MapPin, Clock, ArrowUpRight } from "lucide-react";
+import { getMediaUrl } from "@/lib/media";
+import type { Tour } from "@/types";
 
-const MOCK_TOURS = [
-    { id: "1", slug: "registon-samarqand", title: "Registon va Shohizinda", location: "Samarqand", days: 1, price: 45, image: "/images/tour-1.jpg" },
-    { id: "2", slug: "buxoro-tarix", title: "Buxoroning tarixiy markazi", location: "Buxoro", days: 2, price: 90, image: "/images/tour-2.jpg" },
-    { id: "3", slug: "xiva-ichon-qala", title: "Xiva — Ichon Qal'a sayohati", location: "Xiva", days: 2, price: 110, image: "/images/tour-3.jpg" },
-    { id: "4", slug: "fargona-vodiysi", title: "Farg'ona vodiysi bo'ylab", location: "Farg'ona", days: 3, price: 150, image: "/images/tour-4.jpg" },
-    { id: "5", slug: "nurota-cholsuv", title: "Nurota va Cho'lsuv ko'li", location: "Nurota", days: 1, price: 60, image: "/images/tour-5.jpg" },
-    { id: "6", slug: "silk-road-classic", title: "Klassik Ipak yo'li turi", location: "Samarqand — Buxoro — Xiva", days: 7, price: 480, image: "/images/tour-6.jpg" },
-];
-
-export function PopularTours() {
+export function PopularTours({ tours }: { tours: Tour[] }) {
     const { t } = useT("home");
     const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -100,10 +93,10 @@ export function PopularTours() {
                 onMouseMove={onMouseMove}
                 onMouseUp={endDrag}
                 onMouseLeave={endDrag}
-                className={`flex gap-5 overflow-x-auto pb-4 px-4 md:px-[max(1rem,calc((100vw-80rem)/2+1rem))] snap-x snap-mandatory scroll-smooth select-none [-ms-overflow-style:none] [scrollbar-none] [&::-webkit-scrollbar]:hidden ${isMouseDown ? "cursor-grabbing scroll-auto" : "cursor-grab"
+                className={`flex gap-5 overflow-x-auto pb-4 px-4 md:px-[max(1rem,calc((100vw-80rem)/2+1rem))] snap-x snap-mandatory scroll-smooth select-none [-ms-overflow-style:none] scrollbar-none [&::-webkit-scrollbar]:hidden ${isMouseDown ? "cursor-grabbing scroll-auto" : "cursor-grab"
                     }`}
             >
-                {MOCK_TOURS.map((tour) => (
+                {tours.map((tour) => (
                     <Link
                         key={tour.id}
                         href={`/tours/${tour.slug}`}
@@ -112,14 +105,12 @@ export function PopularTours() {
                         className="group snap-start shrink-0 w-70 md:w-[320px] rounded-2xl overflow-hidden bg-card ring-1 ring-border hover:ring-primary/30 transition-all duration-300"
                     >
                         <div className="relative h-52 bg-muted overflow-hidden">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                                src={tour.image}
+                                src={getMediaUrl(tour.images?.[0])}
                                 alt={tour.title}
                                 draggable={false}
                                 className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
-                                onError={(e) => {
-                                    (e.target as HTMLImageElement).style.display = "none";
-                                }}
                             />
                             <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm font-bold text-primary">
                                 ${tour.price}
@@ -129,17 +120,20 @@ export function PopularTours() {
                         <div className="p-5">
                             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
                                 <MapPin className="h-3.5 w-3.5" />
-                                {tour.location}
+                                {tour.country}
                             </div>
                             <h3 className="text-base font-bold text-foreground leading-snug mb-3 group-hover:text-primary transition-colors">
                                 {tour.title}
                             </h3>
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                    <Clock className="h-3.5 w-3.5" />
-                                    {tour.days} {t("popular.days_short")}
-                                </div>
-                                <span className="flex items-center gap-1 text-sm font-semibold text-accent">
+                                {tour.short_description ? (
+                                    <p className="text-xs text-muted-foreground line-clamp-1 flex-1 mr-2">
+                                        {tour.short_description}
+                                    </p>
+                                ) : (
+                                    <span />
+                                )}
+                                <span className="flex items-center gap-1 text-sm font-semibold text-accent shrink-0">
                                     {t("popular.view")}
                                     <ArrowUpRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                                 </span>

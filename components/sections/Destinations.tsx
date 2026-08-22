@@ -5,21 +5,32 @@ import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { Country } from "@/types";
 
-const DESTINATIONS = [
-    { slug: "toshkent", name: "Toshkent", tours: 14, image: "/images/dest-toshkent.jpg" },
-    { slug: "buxoro", name: "Buxoro", tours: 12, image: "/images/dest-buxoro.jpg" },
-    { slug: "samarqand", name: "Samarqand", tours: 18, image: "/images/dest-samarqand.jpg" },
-    { slug: "xiva", name: "Xiva", tours: 9, image: "/images/dest-xiva.jpg" },
-    { slug: "fargona", name: "Farg'ona vodiysi", tours: 6, image: "/images/dest-fargona.jpg" },
-];
+const COUNTRY_IMAGES: Record<string, string> = {
+    uzbekistan: "/images/dest-toshkent.jpg",
+    toshkent: "/images/dest-toshkent.jpg",
+    buxoro: "/images/dest-buxoro.jpg",
+    samarqand: "/images/dest-samarqand.jpg",
+    xiva: "/images/dest-xiva.jpg",
+    fargona: "/images/dest-fargona.jpg",
+};
+const FALLBACK_IMAGE = "/images/dest-fallback.jpg";
+
+function getCountryImage(slug: string) {
+    return COUNTRY_IMAGES[slug] ?? FALLBACK_IMAGE;
+}
 
 const ROTATE_INTERVAL = 4000;
 
-export function Destinations() {
+interface DestinationsProps {
+    countries: (Country & { tourCount: number })[];
+}
+
+export function Destinations({ countries }: DestinationsProps) {
     const { t } = useT("home");
-    const [active, setActive] = useState(2); // markazdan boshlaymiz (Samarqand)
-    const count = DESTINATIONS.length;
+    const count = countries.length;
+    const [active, setActive] = useState(Math.floor(count / 2));
 
     const isDragging = useRef(false);
     const dragStartX = useRef(0);
@@ -31,9 +42,12 @@ export function Destinations() {
     );
 
     useEffect(() => {
+        if (count <= 1) return;
         const id = setInterval(() => setActive((prev) => (prev + 1) % count), ROTATE_INTERVAL);
         return () => clearInterval(id);
     }, [count, active]);
+
+    if (count === 0) return null;
 
     function onPointerDown(e: React.PointerEvent) {
         isDragging.current = true;
@@ -68,7 +82,6 @@ export function Destinations() {
                 </div>
             </div>
 
-            {/* Karusel */}
             <div
                 className="relative h-95 md:h-115 select-none cursor-grab active:cursor-grabbing touch-pan-y"
                 onPointerDown={onPointerDown}
@@ -76,8 +89,7 @@ export function Destinations() {
                 onPointerUp={onPointerUp}
                 onPointerLeave={onPointerUp}
             >
-                {DESTINATIONS.map((dest, i) => {
-                    // Doiraviy masofa: -2, -1, 0, 1, 2 (eng yaqin yo'nalishda)
+                {countries.map((dest, i) => {
                     let offset = i - active;
                     if (offset > count / 2) offset -= count;
                     if (offset < -count / 2) offset += count;
@@ -86,7 +98,7 @@ export function Destinations() {
                     const isCenter = offset === 0;
                     const visible = abs <= 2;
 
-                    const translateX = offset * 190; // px, kartalar orasidagi masofa
+                    const translateX = offset * 190;
                     const scale = isCenter ? 1 : abs === 1 ? 0.82 : 0.68;
                     const opacity = isCenter ? 1 : abs === 1 ? 0.6 : 0.3;
                     const blur = isCenter ? 0 : abs === 1 ? 1 : 2;
@@ -111,7 +123,7 @@ export function Destinations() {
                         >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                                src={dest.image}
+                                src={getCountryImage(dest.slug)}
                                 alt={dest.name}
                                 draggable={false}
                                 className="absolute inset-0 h-full w-full object-cover bg-muted"
@@ -124,7 +136,7 @@ export function Destinations() {
                             <div className="absolute inset-0 flex flex-col justify-end p-5 text-left">
                                 <h3 className="text-xl md:text-2xl font-bold text-white">{dest.name}</h3>
                                 <p className="text-xs md:text-sm text-white/70 mt-1">
-                                    {dest.tours} {t("destinations.tours_count")}
+                                    {dest.tourCount} {t("destinations.tours_count")}
                                 </p>
 
                                 {isCenter && (
@@ -143,9 +155,8 @@ export function Destinations() {
                 })}
             </div>
 
-            {/* Nuqtalar */}
             <div className="flex items-center justify-center gap-2 mt-8">
-                {DESTINATIONS.map((_, i) => (
+                {countries.map((_, i) => (
                     <button
                         key={i}
                         type="button"

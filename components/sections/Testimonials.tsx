@@ -4,23 +4,19 @@ import { useRef, useState } from "react";
 import { useT } from "next-i18next/client";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { Review } from "@/types";
 
 const AVATAR_COLORS = ["bg-primary", "bg-accent", "bg-secondary"];
 
-const REVIEWS = [
-  { name: "Aziza Karimova", location: "Toshkent", rating: 5, initial: "A", key: "review_1" },
-  { name: "John Miller", location: "AQSH", rating: 5, initial: "J", key: "review_2" },
-  { name: "Elena Petrova", location: "Rossiya", rating: 5, initial: "E", key: "review_3" },
-  { name: "Ahmad Yusupov", location: "Qozogiston", rating: 4, initial: "A", key: "review_4" },
-  { name: "Sophie Laurent", location: "Fransiya", rating: 5, initial: "S", key: "review_5" },
-];
+interface TestimonialsProps {
+  reviews: Review[];
+}
 
-export function Testimonials() {
+export function Testimonials({ reviews }: TestimonialsProps) {
   const { t } = useT("home");
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
-  // Sichqoncha bilan tortib surish
   const isDragging = useRef(false);
   const wasDragged = useRef(false);
   const startX = useRef(0);
@@ -78,6 +74,8 @@ export function Testimonials() {
     el.scrollLeft = startScrollLeft.current - walk;
   }
 
+  if (reviews.length === 0) return null;
+
   return (
     <section className="py-10 md:py-8 bg-background">
       <div className="mx-auto max-w-6xl px-4">
@@ -104,9 +102,9 @@ export function Testimonials() {
           isMouseDown ? "cursor-grabbing scroll-auto" : "cursor-grab"
         )}
       >
-        {REVIEWS.map((review, i) => (
+        {reviews.map((review, i) => (
           <div
-            key={review.key}
+            key={review.id}
             onClickCapture={(e) => {
               if (wasDragged.current) e.preventDefault();
             }}
@@ -119,11 +117,15 @@ export function Testimonials() {
                   AVATAR_COLORS[i % AVATAR_COLORS.length]
                 )}
               >
-                {review.initial}
+                {review.reviewer_name?.charAt(0).toUpperCase() ?? "?"}
               </div>
               <div>
-                <div className="font-bold text-primary text-sm leading-tight">{review.name}</div>
-                <div className="text-xs text-muted-foreground">{review.location}</div>
+                <div className="font-bold text-primary text-sm leading-tight">
+                  {review.reviewer_name}
+                </div>
+                {review.reviewer_country && (
+                  <div className="text-xs text-muted-foreground">{review.reviewer_country}</div>
+                )}
               </div>
             </div>
 
@@ -140,14 +142,14 @@ export function Testimonials() {
             </div>
 
             <p className="text-sm text-foreground/80 leading-relaxed line-clamp-4 pointer-events-none">
-              {t(`testimonials.${review.key}`)}
+              {review.text}
             </p>
           </div>
         ))}
       </div>
 
       <div className="flex items-center justify-center gap-2 mt-8">
-        {REVIEWS.map((_, i) => (
+        {reviews.map((_, i) => (
           <button
             key={i}
             type="button"

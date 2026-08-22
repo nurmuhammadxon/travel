@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useT } from "next-i18next/client";
-import { Menu, User as UserIcon, ShoppingBag } from "lucide-react";
+import { Menu, User as UserIcon } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -56,8 +56,11 @@ export function Header() {
     ? segments.slice(1)
     : segments;
 
-  const isTransparent = !scrolled;
-
+  const DARK_HERO_ROUTES = ["", "about", "contact", "services", "tours", "login"];
+  const isDarkHeroRoute =
+    pathWithoutLocale.length <= 1 && DARK_HERO_ROUTES.includes(pathWithoutLocale[0] ?? "");
+  const isTransparent = isDarkHeroRoute && !scrolled;
+  
   function switchLocale(locale: string) {
     const rest = pathWithoutLocale;
     const nextPath =
@@ -68,8 +71,8 @@ export function Header() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${isTransparent
-          ? "bg-transparent"
-          : "bg-background backdrop-blur-md shadow-md"
+        ? "bg-transparent"
+        : "bg-background backdrop-blur-md shadow-md"
         }`}
     >
       <nav className="mx-auto max-w-7xl px-4 flex items-center justify-between h-16 md:h-20">
@@ -132,13 +135,6 @@ export function Header() {
             <UserIcon className="h-4.5 w-4.5" />
           </Link>
 
-          <Link
-            href="/tours"
-            className="p-2.5 rounded-full bg-primary text-white hover:bg-primary/90 transition-all duration-200 hover:scale-110"
-            aria-label={t("nav.book")}
-          >
-            <ShoppingBag className="h-4.5 w-4.5" />
-          </Link>
         </div>
 
         {/* Mobile */}
@@ -200,14 +196,6 @@ export function Header() {
                   >
                     <UserIcon className="h-4 w-4" />
                     {t("nav.login")}
-                  </Link>
-                  <Link
-                    href="/tours"
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(buttonVariants(), "gap-2 rounded-full bg-primary text-white hover:bg-primary/90")}
-                  >
-                    <ShoppingBag className="h-4 w-4" />
-                    {t("nav.book")}
                   </Link>
                 </div>
               </div>

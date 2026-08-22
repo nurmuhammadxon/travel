@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { User, LoginPayload, RegisterPayload } from "@/types";
 import {
     loginRequest,
@@ -10,6 +11,7 @@ import {
     hasStoredSession,
     clearTokens,
 } from "@/lib/api";
+import { showInfo } from "@/lib/toast";
 
 interface AuthContextType {
     user: User | null;
@@ -21,9 +23,15 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// 30 daqiqa faolsizlikdan keyin avtomatik chiqarish
+const INACTIVITY_LIMIT_MS = 30 * 60 * 1000;
+const ACTIVITY_EVENTS = ["mousemove", "keydown", "click", "scroll", "touchstart"];
+
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
+    const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         if (!hasStoredSession()) {
@@ -54,6 +62,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await logoutRequest();
         setUser(null);
     }
+
+    // Faolsizlik taymerini boshqarish — faqat login qilingan holatda ishlaydi
+    useEffect(() => {
+        if (!user) return;
+
+        function resetTimer() {
+            if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+            inactivityTimer.current = setTimeout(async () => {
+                await logoutRequest();
+                setUser(null);
+                showInfo("Faolsizlik tufayli tizimdan chiqarildingiz");
+                router.push("/login");
+            }, INACTIVITY_LIMIT_MS);
+        }
+
+        ACTIVITY_EVENTS.forEach((event) => window.addEventListener(event, resetTimer));
+        resetTimer(); // birinchi marta taymerni ishga tushirish
+
+        return () => {
+            ACTIVITY_EVENTS.forEach((event) => window.removeEventListener(event, resetTimer));
+            if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+        };
+    }, [user, router]);
 
     return (
         <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useT } from "next-i18next/client";
 import { useForm } from "react-hook-form";
@@ -13,12 +13,13 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { loginSchema, registerSchema, type LoginValues, type RegisterValues } from "@/lib/validations/auth";
+import { showSuccess, showError } from "@/lib/toast";
+import { Loading } from "@/components/_components/loading";
 
 export default function LoginPage() {
     const { t } = useT("auth");
     const router = useRouter();
-    const { login, register: registerUser } = useAuth();
-    const [serverError, setServerError] = useState<string | null>(null);
+    const { login, register: registerUser, user, isLoading: authLoading } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
@@ -34,54 +35,75 @@ export default function LoginPage() {
     } = useForm<RegisterValues>({ resolver: zodResolver(registerSchema) });
 
     async function onLogin(values: LoginValues) {
-        setServerError(null);
         setIsSubmitting(true);
         try {
             await login(values);
+            showSuccess(t("login_success"));
             router.push("/");
         } catch (err) {
-            setServerError(err instanceof Error ? err.message : t("error_generic"));
+            showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
             setIsSubmitting(false);
         }
     }
 
     async function onRegister(values: RegisterValues) {
-        setServerError(null);
         setIsSubmitting(true);
         try {
             await registerUser(values);
+            showSuccess(t("register_success"));
             router.push("/");
         } catch (err) {
-            setServerError(err instanceof Error ? err.message : t("error_generic"));
+            showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
             setIsSubmitting(false);
         }
     }
 
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.push("/");
+        }
+    }, [user, authLoading, router]);
+
+    if (authLoading || user) {
+        return (
+            <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+                <img
+                    src="/images/login_image.png"
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/50 to-black/60" />
+                <Loading className="relative z-10 h-10 w-10 text-white" />
+            </div>
+        );
+    }
+
     return (
-        <div className="min-h-screen bg-muted/40 flex items-center justify-center px-4 py-28">
-            <div className="w-full max-w-md">
+        <div className="relative min-h-screen flex items-center justify-center px-4 py-28 overflow-hidden">
+            <img
+                src="/images/login_image.png"
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/50 to-black/60" />
+
+            <div className="relative z-10 w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center gap-2 text-primary font-bold text-2xl mb-2">
+                    <div className="inline-flex items-center gap-2 text-white font-bold text-2xl mb-2">
                         <MapPin className="h-6 w-6 text-accent" />
-                        Sayohat<span className="text-accent">Yoli</span>
+                        Discover<span className="text-accent">Stans</span>
                     </div>
-                    <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
+                    <p className="text-white/70 text-sm">{t("subtitle")}</p>
                 </div>
 
-                <div className="bg-card rounded-2xl ring-1 ring-border p-6 md:p-8 shadow-sm">
+                <div className="bg-card rounded-2xl ring-1 ring-border p-6 md:p-8 shadow-xl">
                     <Tabs defaultValue="login" className="w-full">
                         <TabsList className="grid w-full grid-cols-2 mb-6">
                             <TabsTrigger value="login">{t("tab_login")}</TabsTrigger>
                             <TabsTrigger value="register">{t("tab_register")}</TabsTrigger>
                         </TabsList>
-
-                        {serverError && (
-                            <div className="mb-4 rounded-lg bg-destructive/10 text-destructive text-sm px-3 py-2">
-                                {serverError}
-                            </div>
-                        )}
 
                         <TabsContent value="login">
                             <form onSubmit={handleLoginSubmit(onLogin)} className="space-y-4">

@@ -76,7 +76,7 @@ export async function Footer({ lng }: { lng: string }) {
 
             <div className="border-t border-primary-foreground/10">
                 <div className="mx-auto max-w-7xl px-4 py-4 text-xs text-primary-foreground/60 text-center">
-                    © {new Date().getFullYear()} SayohatYoli. {t("footer.rights")}
+                    © {new Date().getFullYear()} DiscoverStans. {t("footer.rights")}
                 </div>
             </div>
         </footer>
