@@ -10,6 +10,10 @@ import {
     Star,
     Users,
     ArrowUpRight,
+    Wallet,
+    CheckCircle2,
+    Clock,
+    XCircle,
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,12 +39,56 @@ interface DashboardStats {
     pendingBookingsCount: number;
 }
 
+interface RevenueGroup {
+    count: number;
+    amount: number;
+}
+
+interface RevenueStats {
+    currency: string;
+    total: RevenueGroup;
+    paid: RevenueGroup; // confirmed + completed
+    pending: RevenueGroup;
+    cancelled: RevenueGroup;
+}
+
 const STATUS_VARIANT: Record<Booking["status"], "default" | "secondary" | "destructive" | "outline"> = {
     pending: "outline",
     confirmed: "default",
     completed: "secondary",
     cancelled: "destructive",
 };
+
+function computeRevenue(bookings: Booking[]): RevenueStats {
+    const currency = bookings.find((b) => b.currency)?.currency ?? "USD";
+
+    const acc: RevenueStats = {
+        currency,
+        total: { count: 0, amount: 0 },
+        paid: { count: 0, amount: 0 },
+        pending: { count: 0, amount: 0 },
+        cancelled: { count: 0, amount: 0 },
+    };
+
+    for (const b of bookings) {
+        const amount = Number(b.total_price) || 0;
+        acc.total.count += 1;
+        acc.total.amount += amount;
+
+        if (b.status === "confirmed" || b.status === "completed") {
+            acc.paid.count += 1;
+            acc.paid.amount += amount;
+        } else if (b.status === "pending") {
+            acc.pending.count += 1;
+            acc.pending.amount += amount;
+        } else if (b.status === "cancelled") {
+            acc.cancelled.count += 1;
+            acc.cancelled.amount += amount;
+        }
+    }
+
+    return acc;
+}
 
 export default function AdminDashboardPage() {
     const params = useParams<{ lng: string }>();
@@ -49,6 +97,7 @@ export default function AdminDashboardPage() {
     const { t } = useT("admin");
 
     const [stats, setStats] = useState<DashboardStats | null>(null);
+    const [revenue, setRevenue] = useState<RevenueStats | null>(null);
     const [recentBookings, setRecentBookings] = useState<Booking[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -80,10 +129,11 @@ export default function AdminDashboardPage() {
                     reviewsCount: reviews.length,
                     pendingBookingsCount: bookings.filter((b) => b.status === "pending").length,
                 });
+                setRevenue(computeRevenue(bookings));
                 setRecentBookings(sortedBookings.slice(0, 8));
             } catch (err) {
                 if (!cancelled) {
-                    setError(err instanceof Error ? err.message : "Xatolik yuz berdi");
+                    setError(err instanceof Error ? err.message : t("dashboard.error_generic"));
                 }
             } finally {
                 if (!cancelled) setIsLoading(false);
@@ -94,7 +144,7 @@ export default function AdminDashboardPage() {
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [t]);
 
     const cards = [
         {
@@ -123,13 +173,46 @@ export default function AdminDashboardPage() {
         },
     ];
 
+    const revenueCards = revenue
+        ? [
+            {
+                key: "total",
+                title: t("dashboard.revenue.total"),
+                icon: Wallet,
+                data: revenue.total,
+                className: "text-primary",
+            },
+            {
+                key: "paid",
+                title: t("dashboard.revenue.paid"),
+                icon: CheckCircle2,
+                data: revenue.paid,
+                className: "text-emerald-600",
+            },
+            {
+                key: "pending",
+                title: t("dashboard.revenue.pending"),
+                icon: Clock,
+                data: revenue.pending,
+                className: "text-amber-600",
+            },
+            {
+                key: "cancelled",
+                title: t("dashboard.revenue.cancelled"),
+                icon: XCircle,
+                data: revenue.cancelled,
+                className: "text-destructive",
+            },
+        ]
+        : [];
+
+    const statusLabel = (status: Booking["status"]) => t(`dashboard.status.${status}`);
+
     return (
         <div className="flex flex-col gap-6">
             <div>
                 <h1 className="text-2xl font-semibold">{t("sidebar.dashboard")}</h1>
-                <p className="text-sm text-muted-foreground">
-                    DiscoverStans admin paneliga xush kelibsiz
-                </p>
+                <p className="text-sm text-muted-foreground">{t("dashboard.welcome")}</p>
             </div>
 
             {error && (
@@ -160,14 +243,49 @@ export default function AdminDashboardPage() {
                 ))}
             </div>
 
+            {/* Daromad / statistika bo'limi */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("dashboard.revenue.title")}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                        {isLoading || !revenue
+                            ? Array.from({ length: 4 }).map((_, i) => (
+                                <Skeleton key={i} className="h-20 w-full" />
+                            ))
+                            : revenueCards.map((card) => (
+                                <div
+                                    key={card.key}
+                                    className="rounded-lg border border-border p-4 flex items-start gap-3"
+                                >
+                                    <card.icon className={`h-5 w-5 mt-0.5 shrink-0 ${card.className}`} />
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">{card.title}</p>
+                                        <p className="text-lg font-bold">
+                                            {card.data.amount.toLocaleString(
+                                                lng === "uz" ? "uz-UZ" : lng === "ru" ? "ru-RU" : "en-US"
+                                            )}{" "}
+                                            {revenue.currency}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {t("dashboard.revenue.count_label", { count: card.data.count })}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                    </div>
+                </CardContent>
+            </Card>
+
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>So'nggi buyurtmalar</CardTitle>
+                    <CardTitle>{t("dashboard.recent_bookings")}</CardTitle>
                     <Link
                         href={`${prefix}/admin/bookings`}
                         className="flex items-center gap-1 text-sm text-primary hover:underline"
                     >
-                        Barchasi <ArrowUpRight className="h-3.5 w-3.5" />
+                        {t("dashboard.view_all")} <ArrowUpRight className="h-3.5 w-3.5" />
                     </Link>
                 </CardHeader>
                 <CardContent>
@@ -179,17 +297,17 @@ export default function AdminDashboardPage() {
                         </div>
                     ) : recentBookings.length === 0 ? (
                         <p className="text-sm text-muted-foreground py-6 text-center">
-                            Hozircha buyurtmalar yo'q
+                            {t("dashboard.no_bookings")}
                         </p>
                     ) : (
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Buyurtma №</TableHead>
-                                    <TableHead>Sana</TableHead>
-                                    <TableHead>Mehmonlar</TableHead>
-                                    <TableHead>Narx</TableHead>
-                                    <TableHead>Holat</TableHead>
+                                    <TableHead>{t("dashboard.col_number")}</TableHead>
+                                    <TableHead>{t("dashboard.col_date")}</TableHead>
+                                    <TableHead>{t("dashboard.col_guests")}</TableHead>
+                                    <TableHead>{t("dashboard.col_price")}</TableHead>
+                                    <TableHead>{t("dashboard.col_status")}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -199,17 +317,21 @@ export default function AdminDashboardPage() {
                                             {booking.booking_number}
                                         </TableCell>
                                         <TableCell>
-                                            {new Date(booking.tour_date).toLocaleDateString("uz-UZ")}
+                                            {new Date(booking.tour_date).toLocaleDateString(
+                                                lng === "uz" ? "uz-UZ" : lng === "ru" ? "ru-RU" : "en-US"
+                                            )}
                                         </TableCell>
                                         <TableCell>
                                             {booking.num_adults + booking.num_children}
                                         </TableCell>
                                         <TableCell>
-                                            {Number(booking.total_price).toLocaleString("uz-UZ")}
+                                            {Number(booking.total_price).toLocaleString(
+                                                lng === "uz" ? "uz-UZ" : lng === "ru" ? "ru-RU" : "en-US"
+                                            )}
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant={STATUS_VARIANT[booking.status]}>
-                                                {booking.status}
+                                                {statusLabel(booking.status)}
                                             </Badge>
                                         </TableCell>
                                     </TableRow>

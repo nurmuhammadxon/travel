@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Star, Trash2 } from "lucide-react";
+import { useT } from "next-i18next/client";
 import {
     Table,
     TableHeader,
@@ -25,6 +26,8 @@ import { showError, showSuccess } from "@/lib/toast";
 import type { Review } from "@/types";
 
 export default function AdminReviewsPage() {
+    const { t } = useT("admin");
+
     const [reviews, setReviews] = useState<Review[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
@@ -38,7 +41,7 @@ export default function AdminReviewsPage() {
             const data = await getAllReviews();
             setReviews(data);
         } catch (err) {
-            setLoadError(err instanceof Error ? err.message : "Sharhlarni yuklab bo'lmadi");
+            setLoadError(err instanceof Error ? err.message : t("reviews.load_error"));
         } finally {
             setIsLoading(false);
         }
@@ -46,6 +49,7 @@ export default function AdminReviewsPage() {
 
     useEffect(() => {
         load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function handleDelete() {
@@ -53,11 +57,11 @@ export default function AdminReviewsPage() {
         setIsDeleting(true);
         try {
             await deleteReview(deleteTarget.id);
-            showSuccess("Sharh o'chirildi");
+            showSuccess(t("reviews.delete_success"));
             setDeleteTarget(null);
             setReviews((prev) => prev.filter((r) => r.id !== deleteTarget.id));
         } catch (err) {
-            showError(err instanceof Error ? err.message : "O'chirishda xatolik yuz berdi");
+            showError(err instanceof Error ? err.message : t("reviews.delete_error"));
         } finally {
             setIsDeleting(false);
         }
@@ -66,8 +70,10 @@ export default function AdminReviewsPage() {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-2xl font-bold">Sharhlar</h1>
-                <p className="text-sm text-muted-foreground mt-1">Jami {reviews.length} ta sharh</p>
+                <h1 className="text-2xl font-bold">{t("reviews.title")}</h1>
+                <p className="text-sm text-muted-foreground mt-1">
+                    {t("reviews.total", { count: reviews.length })}
+                </p>
             </div>
 
             {isLoading ? (
@@ -81,12 +87,12 @@ export default function AdminReviewsPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Muallif</TableHead>
-                                <TableHead>Baho</TableHead>
-                                <TableHead>Matn</TableHead>
-                                <TableHead>Manba</TableHead>
-                                <TableHead>Tasdiqlangan</TableHead>
-                                <TableHead className="text-right">Amallar</TableHead>
+                                <TableHead>{t("reviews.col_author")}</TableHead>
+                                <TableHead>{t("reviews.col_rating")}</TableHead>
+                                <TableHead>{t("reviews.col_text")}</TableHead>
+                                <TableHead>{t("reviews.col_source")}</TableHead>
+                                <TableHead>{t("reviews.col_verified")}</TableHead>
+                                <TableHead className="text-right">{t("reviews.col_actions")}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -110,7 +116,7 @@ export default function AdminReviewsPage() {
                                     <TableCell>{review.source ?? "—"}</TableCell>
                                     <TableCell>
                                         {review.is_verified ? (
-                                            <Badge>Ha</Badge>
+                                            <Badge>{t("reviews.verified_yes")}</Badge>
                                         ) : (
                                             <span className="text-muted-foreground">—</span>
                                         )}
@@ -121,7 +127,7 @@ export default function AdminReviewsPage() {
                                             variant="ghost"
                                             className="text-destructive hover:bg-destructive/10"
                                             onClick={() => setDeleteTarget(review)}
-                                            aria-label="O'chirish"
+                                            aria-label={t("reviews.delete_label")}
                                         >
                                             <Trash2 className="h-3.5 w-3.5" />
                                         </Button>
@@ -131,7 +137,7 @@ export default function AdminReviewsPage() {
                             {reviews.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
-                                        Sharhlar topilmadi
+                                        {t("reviews.not_found")}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -143,17 +149,17 @@ export default function AdminReviewsPage() {
             <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
                 <DialogContent className="sm:max-w-sm">
                     <DialogHeader>
-                        <DialogTitle>Sharhni o&apos;chirish</DialogTitle>
+                        <DialogTitle>{t("reviews.delete_title")}</DialogTitle>
                     </DialogHeader>
                     <p className="text-sm text-muted-foreground">
-                        &quot;{deleteTarget?.reviewer_name}&quot; sharhini o&apos;chirishga aminmisiz?
+                        {t("reviews.delete_confirm", { name: deleteTarget?.reviewer_name ?? "" })}
                     </p>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setDeleteTarget(null)}>
-                            Bekor qilish
+                            {t("reviews.cancel")}
                         </Button>
                         <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-                            {isDeleting ? "O'chirilmoqda..." : "O'chirish"}
+                            {isDeleting ? t("reviews.deleting") : t("reviews.delete_label")}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

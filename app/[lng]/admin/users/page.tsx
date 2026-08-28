@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "next-i18next/client";
 import {
     Table,
     TableHeader,
@@ -12,7 +13,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Loading } from "@/components/_components/loading";
 import { getUsers } from "@/lib/api";
-import { isAdminUser } from "@/lib/auth";
 import type { User, UserRole } from "@/types";
 
 const ROLE_VARIANT: Record<UserRole, "default" | "secondary" | "outline"> = {
@@ -21,13 +21,15 @@ const ROLE_VARIANT: Record<UserRole, "default" | "secondary" | "outline"> = {
     customer: "outline",
 };
 
-const ROLE_LABEL: Record<UserRole, string> = {
-    admin: "Admin",
-    agent: "Agent",
-    customer: "Mijoz",
-};
-
 export default function AdminUsersPage() {
+    const { t } = useT("admin");
+
+    const ROLE_LABEL: Record<UserRole, string> = {
+        admin: t("users.role_admin"),
+        agent: t("users.role_agent"),
+        customer: t("users.role_customer"),
+    };
+
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
@@ -36,8 +38,9 @@ export default function AdminUsersPage() {
     useEffect(() => {
         getUsers()
             .then(setUsers)
-            .catch((err) => setLoadError(err instanceof Error ? err.message : "Ro'yxatni yuklab bo'lmadi"))
+            .catch((err) => setLoadError(err instanceof Error ? err.message : t("users.load_error")))
             .finally(() => setIsLoading(false));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const filtered = users.filter((u) =>
@@ -48,13 +51,13 @@ export default function AdminUsersPage() {
         <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                    <h1 className="text-2xl font-bold">Foydalanuvchilar</h1>
+                    <h1 className="text-2xl font-bold">{t("users.title")}</h1>
                     <p className="text-sm text-muted-foreground mt-1">
-                        Jami {users.length} ta ro&apos;yxatdan o&apos;tgan foydalanuvchi
+                        {t("users.total", { count: users.length })}
                     </p>
                 </div>
                 <input
-                    placeholder="Ism yoki email bo'yicha qidirish..."
+                    placeholder={t("users.search_placeholder")}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="h-8 w-64 max-w-full rounded-md border border-input bg-input/20 px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
@@ -72,12 +75,12 @@ export default function AdminUsersPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Ism</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Telefon</TableHead>
-                                <TableHead>Til</TableHead>
-                                <TableHead>Ro&apos;yxatdan o&apos;tgan</TableHead>
-                                <TableHead>Rol</TableHead>
+                                <TableHead>{t("users.col_name")}</TableHead>
+                                <TableHead>{t("users.col_email")}</TableHead>
+                                <TableHead>{t("users.col_phone")}</TableHead>
+                                <TableHead>{t("users.col_language")}</TableHead>
+                                <TableHead>{t("users.col_created")}</TableHead>
+                                <TableHead>{t("users.col_role")}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -92,7 +95,7 @@ export default function AdminUsersPage() {
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant={ROLE_VARIANT[user.role] ?? "outline"}>
-                                            {isAdminUser(user) ? (ROLE_LABEL[user.role] ?? "Admin") : (ROLE_LABEL[user.role] ?? "Mijoz")}
+                                            {ROLE_LABEL[user.role] ?? user.role}
                                         </Badge>
                                     </TableCell>
                                 </TableRow>
@@ -100,7 +103,7 @@ export default function AdminUsersPage() {
                             {filtered.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
-                                        Foydalanuvchi topilmadi
+                                        {t("users.not_found")}
                                     </TableCell>
                                 </TableRow>
                             )}

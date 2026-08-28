@@ -325,7 +325,11 @@ export const autoCompleteBookings = () =>
     api.post<unknown, { message: string }>("/bookings/auto-complete");
 
 // Admin: Reviews & Locations
-export const getAllReviews = () => api.get<unknown, Review[]>("/reviews");
+export const getAllReviews = async (): Promise<Review[]> => {
+    const res = await api.get<unknown, Review[] | { items: Review[] }>("/reviews");
+    if (Array.isArray(res)) return res;
+    return res?.items ?? [];
+};
 
 export const deleteReview = (reviewId: string) =>
     api.delete<unknown, void>(`/reviews/${reviewId}`);

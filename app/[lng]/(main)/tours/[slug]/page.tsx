@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getT } from "next-i18next/server";
 import { MapPin, Clock } from "lucide-react";
 import { getTourBySlug } from "@/lib/api";
+import { localizedText } from "@/lib/utils";
 import { TourGallery } from "@/components/tours/TourGallery";
 import { ReviewsSection } from "@/components/tours/ReviewsSection";
 import { BookingCard } from "@/components/tours/BookingCard";
@@ -23,15 +24,20 @@ export default async function TourDetailPage({ params }: Props) {
     if (!tour) notFound();
 
     const reviews = tour.reviews ?? [];
+    const title = localizedText(tour.title, lng);
+    const description = localizedText(tour.description, lng);
+    const countryName = tour.countries?.[0] ? localizedText(tour.countries[0].name, lng) : "";
 
     return (
         <div className="min-h-screen bg-background pt-28 md:pt-32 pb-20">
             <div className="mx-auto max-w-7xl px-4">
                 <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                    <span className="flex items-center gap-1.5">
-                        <MapPin className="h-4 w-4" />
-                        {tour.country}
-                    </span>
+                    {countryName && (
+                        <span className="flex items-center gap-1.5">
+                            <MapPin className="h-4 w-4" />
+                            {countryName}
+                        </span>
+                    )}
                     {tour.itinerary && tour.itinerary.length > 0 && (
                         <span className="flex items-center gap-1.5">
                             <Clock className="h-4 w-4" />
@@ -40,15 +46,14 @@ export default async function TourDetailPage({ params }: Props) {
                     )}
                 </div>
 
-                <h1 className="text-3xl md:text-4xl font-bold text-primary mb-8">{tour.title}</h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-primary mb-8">{title}</h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     <div className="lg:col-span-2">
-                        <TourGallery images={tour.images} title={tour.title} />
-
+                        <TourGallery images={tour.images ?? (tour.cover_image ? [tour.cover_image] : [])} title={title} />
                         <div className="mt-10">
                             <h2 className="text-2xl font-bold text-primary mb-3">{t("about_tour")}</h2>
-                            <p className="text-foreground/80 leading-relaxed">{tour.description}</p>
+                            <p className="text-foreground/80 leading-relaxed">{description}</p>
                         </div>
 
                         {tour.itinerary && tour.itinerary.length > 0 && (
@@ -61,8 +66,8 @@ export default async function TourDetailPage({ params }: Props) {
                                                 {day.day}
                                             </div>
                                             <div className="pb-4 border-b border-border flex-1">
-                                                <h3 className="font-semibold text-foreground">{day.title}</h3>
-                                                <p className="text-sm text-muted-foreground mt-1">{day.description}</p>
+                                                <h3 className="font-semibold text-foreground">{localizedText(day.title, lng)}</h3>
+                                                <p className="text-sm text-muted-foreground mt-1">{localizedText(day.description, lng)}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -93,7 +98,7 @@ export default async function TourDetailPage({ params }: Props) {
                     <div className="lg:col-span-1">
                         <BookingCard
                             tourId={tour.id}
-                            price={tour.price}
+                            price={Number(tour.price)}
                             currency={tour.currency}
                             labels={{
                                 from: t("from"),

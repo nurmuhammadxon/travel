@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
+import { useT } from "next-i18next/client";
 import {
     Table,
     TableHeader,
@@ -19,13 +20,6 @@ import type { Booking } from "@/types";
 
 const STATUS_OPTIONS: Booking["status"][] = ["pending", "confirmed", "completed", "cancelled"];
 
-const STATUS_LABEL: Record<Booking["status"], string> = {
-    pending: "Kutilmoqda",
-    confirmed: "Tasdiqlangan",
-    completed: "Yakunlangan",
-    cancelled: "Bekor qilingan",
-};
-
 const STATUS_VARIANT: Record<Booking["status"], "default" | "secondary" | "destructive" | "outline"> = {
     pending: "outline",
     confirmed: "secondary",
@@ -34,6 +28,15 @@ const STATUS_VARIANT: Record<Booking["status"], "default" | "secondary" | "destr
 };
 
 export default function AdminBookingsPage() {
+    const { t } = useT("admin");
+
+    const STATUS_LABEL: Record<Booking["status"], string> = {
+        pending: t("bookings.status_pending"),
+        confirmed: t("bookings.status_confirmed"),
+        completed: t("bookings.status_completed"),
+        cancelled: t("bookings.status_cancelled"),
+    };
+
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
@@ -48,7 +51,7 @@ export default function AdminBookingsPage() {
             const data = await getAllBookings();
             setBookings(data);
         } catch (err) {
-            setLoadError(err instanceof Error ? err.message : "Buyurtmalarni yuklab bo'lmadi");
+            setLoadError(err instanceof Error ? err.message : t("bookings.load_error"));
         } finally {
             setIsLoading(false);
         }
@@ -68,9 +71,9 @@ export default function AdminBookingsPage() {
         try {
             await updateBookingStatus(booking.id, status);
             setBookings((prev) => prev.map((b) => (b.id === booking.id ? { ...b, status } : b)));
-            showSuccess("Holat yangilandi");
+            showSuccess(t("bookings.status_updated"));
         } catch (err) {
-            showError(err instanceof Error ? err.message : "Holatni yangilab bo'lmadi");
+            showError(err instanceof Error ? err.message : t("bookings.status_update_error"));
         } finally {
             setUpdatingId(null);
         }
@@ -80,10 +83,10 @@ export default function AdminBookingsPage() {
         setIsAutoCompleting(true);
         try {
             await autoCompleteBookings();
-            showSuccess("Muddati o'tgan buyurtmalar yakunlandi");
+            showSuccess(t("bookings.auto_complete_success"));
             await load();
         } catch (err) {
-            showError(err instanceof Error ? err.message : "Amalni bajarib bo'lmadi");
+            showError(err instanceof Error ? err.message : t("bookings.auto_complete_error"));
         } finally {
             setIsAutoCompleting(false);
         }
@@ -93,8 +96,10 @@ export default function AdminBookingsPage() {
         <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                    <h1 className="text-2xl font-bold">Buyurtmalar</h1>
-                    <p className="text-sm text-muted-foreground mt-1">Jami {bookings.length} ta buyurtma</p>
+                    <h1 className="text-2xl font-bold">{t("bookings.title")}</h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        {t("bookings.total", { count: bookings.length })}
+                    </p>
                 </div>
                 <Button
                     variant="outline"
@@ -103,7 +108,7 @@ export default function AdminBookingsPage() {
                     className="gap-1.5"
                 >
                     <RefreshCw className={`h-3.5 w-3.5 ${isAutoCompleting ? "animate-spin" : ""}`} />
-                    Muddati o&apos;tganlarni yakunlash
+                    {t("bookings.auto_complete")}
                 </Button>
             </div>
 
@@ -111,19 +116,19 @@ export default function AdminBookingsPage() {
                 <button
                     onClick={() => setStatusFilter("all")}
                     className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${statusFilter === "all"
-                            ? "bg-primary text-white border-primary"
-                            : "border-border text-muted-foreground"
+                        ? "bg-primary text-white border-primary"
+                        : "border-border text-muted-foreground"
                         }`}
                 >
-                    Barchasi
+                    {t("bookings.filter_all")}
                 </button>
                 {STATUS_OPTIONS.map((s) => (
                     <button
                         key={s}
                         onClick={() => setStatusFilter(s)}
                         className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${statusFilter === s
-                                ? "bg-primary text-white border-primary"
-                                : "border-border text-muted-foreground"
+                            ? "bg-primary text-white border-primary"
+                            : "border-border text-muted-foreground"
                             }`}
                     >
                         {STATUS_LABEL[s]}
@@ -142,12 +147,12 @@ export default function AdminBookingsPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Buyurtma №</TableHead>
-                                <TableHead>Mijoz</TableHead>
-                                <TableHead>Sana</TableHead>
-                                <TableHead>Odam soni</TableHead>
-                                <TableHead>Narx</TableHead>
-                                <TableHead>Holat</TableHead>
+                                <TableHead>{t("bookings.col_number")}</TableHead>
+                                <TableHead>{t("bookings.col_customer")}</TableHead>
+                                <TableHead>{t("bookings.col_date")}</TableHead>
+                                <TableHead>{t("bookings.col_people")}</TableHead>
+                                <TableHead>{t("bookings.col_price")}</TableHead>
+                                <TableHead>{t("bookings.col_status")}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -162,12 +167,19 @@ export default function AdminBookingsPage() {
                                                     {booking.email}
                                                 </span>
                                             )}
+                                            {booking.phone && (
+                                                <span className="text-[0.7rem] text-muted-foreground">
+                                                    {booking.phone}
+                                                </span>
+                                            )}
                                         </div>
                                     </TableCell>
                                     <TableCell>{booking.tour_date}</TableCell>
                                     <TableCell>
-                                        {booking.num_adults} kattalar
-                                        {booking.num_children ? `, ${booking.num_children} bola` : ""}
+                                        {booking.num_adults} {t("bookings.adults_short")}
+                                        {booking.num_children
+                                            ? `, ${booking.num_children} ${t("bookings.children_short")}`
+                                            : ""}
                                     </TableCell>
                                     <TableCell>
                                         {booking.total_price} {booking.currency ?? ""}
@@ -198,7 +210,7 @@ export default function AdminBookingsPage() {
                             {filtered.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
-                                        Buyurtmalar topilmadi
+                                        {t("bookings.not_found")}
                                     </TableCell>
                                 </TableRow>
                             )}

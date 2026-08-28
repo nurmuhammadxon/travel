@@ -30,5 +30,10 @@
     "full_name": "Ism Familiya",
     "email": "Email",
     "phone": "Telefon raqam",
-    "booking_success": "Buyurtmangiz qabul qilindi! Tez orada siz bilan bog'lanamiz."
+    "booking_success": "Buyurtmangiz qabul qilindi! Tez orada siz bilan bog'lanamiz.",
+    "filter_button": "Filtr",
+    "country_label": "Davlat",
+    "destination_label": "Yo'nalish",
+    "show": "Ko'rsatish",
+    "tours_word": "tur"
 }

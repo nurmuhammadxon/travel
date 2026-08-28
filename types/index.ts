@@ -38,17 +38,29 @@ export interface TourItineraryDay {
 export interface Tour {
     id: string;
     slug: string;
-    title: string;
-    description: string;
-    short_description?: string;
-    price: number;
-    currency: string;
-    country: string;
+    title: string | { uz: string; ru: string; en: string };
+    short_description?: string | { uz?: string; ru?: string; en?: string };
+    description?: string | { uz?: string; ru?: string; en?: string };
     category: string;
-    images: string[];
+    duration_days?: number;
+    duration_nights?: number;
+    price: string | number;
+    currency: string;
+    cover_image?: string;
+    max_group_size?: number;
+    is_featured?: boolean;
+    is_active?: boolean;
+    countries?: {
+        id: string;
+        name: { uz: string; ru: string; en: string };
+        slug: string;
+        cover_image?: string | null;
+        tour_count?: number;
+    }[];
     itinerary?: TourItineraryDay[];
     reviews?: Review[];
-    is_featured?: boolean;
+    images?: string[];
+    country?: string;
 }
 
 export interface Country {
@@ -124,4 +136,11 @@ export interface AdminTourDetail {
     country_ids: string[];
     destination_ids: string[];
     itinerary: unknown[];
+}
+
+export interface SiteStats {
+    years_experience: number;
+    satisfaction_percent: number;
+    completed_trips: number;
+    happy_travelers: number;
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useT } from "next-i18next/client";
 import { Loader2, Upload, X } from "lucide-react";
 
 import { createTour, updateTour, uploadReviewImage, TourPayload } from "@/lib/api";
@@ -23,7 +24,7 @@ import {
 } from "@/components/ui/select";
 
 interface TourFormProps {
-    initialData?: AdminTourDetail; // bo'lsa - edit rejimi, bo'lmasa - create
+    initialData?: AdminTourDetail;
 }
 
 function slugify(text: string) {
@@ -35,6 +36,7 @@ function slugify(text: string) {
 }
 
 export function TourForm({ initialData }: TourFormProps) {
+    const { t } = useT("admin");
     const router = useRouter();
     const params = useParams<{ lng: string }>();
     const lng = params.lng ?? "uz";
@@ -91,7 +93,7 @@ export function TourForm({ initialData }: TourFormProps) {
             const { url } = await uploadReviewImage(file);
             setCoverImage(url);
         } catch (err) {
-            showError(err instanceof Error ? err.message : "Rasm yuklab bo'lmadi");
+            showError(err instanceof Error ? err.message : t("tours.form.upload_error"));
         } finally {
             setIsUploading(false);
         }
@@ -135,14 +137,14 @@ export function TourForm({ initialData }: TourFormProps) {
         try {
             if (isEdit) {
                 await updateTour(initialData.id, payload);
-                showSuccess("Tur yangilandi");
+                showSuccess(t("tours.form.update_success"));
             } else {
                 await createTour(payload);
-                showSuccess("Tur yaratildi");
+                showSuccess(t("tours.form.create_success"));
             }
             router.push(`${prefix}/admin/tours`);
         } catch (err) {
-            showError(err instanceof Error ? err.message : "Xatolik yuz berdi");
+            showError(err instanceof Error ? err.message : t("tours.form.save_error"));
         } finally {
             setIsSaving(false);
         }
@@ -152,12 +154,12 @@ export function TourForm({ initialData }: TourFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
             <Card>
                 <CardHeader>
-                    <CardTitle>Asosiy ma&apos;lumot</CardTitle>
+                    <CardTitle>{t("tours.form.main_info")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div className="space-y-2">
-                            <Label>Nomi (UZ)</Label>
+                            <Label>{t("tours.form.name_uz")}</Label>
                             <Input
                                 value={titleUz}
                                 onChange={(e) => handleTitleUzChange(e.target.value)}
@@ -165,17 +167,17 @@ export function TourForm({ initialData }: TourFormProps) {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Nomi (RU)</Label>
+                            <Label>{t("tours.form.name_ru")}</Label>
                             <Input value={titleRu} onChange={(e) => setTitleRu(e.target.value)} />
                         </div>
                         <div className="space-y-2">
-                            <Label>Nomi (EN)</Label>
+                            <Label>{t("tours.form.name_en")}</Label>
                             <Input value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <Label>Slug</Label>
+                        <Label>{t("tours.form.slug")}</Label>
                         <Input
                             value={slug}
                             onChange={(e) => {
@@ -187,37 +189,37 @@ export function TourForm({ initialData }: TourFormProps) {
                         />
                         {isEdit && (
                             <p className="text-xs text-muted-foreground">
-                                Slug yaratilgandan keyin o&apos;zgartirilmaydi.
+                                {t("tours.form.slug_hint")}
                             </p>
                         )}
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div className="space-y-2">
-                            <Label>Qisqa tavsif (UZ)</Label>
+                            <Label>{t("tours.form.short_desc_uz")}</Label>
                             <Textarea value={shortDescUz} onChange={(e) => setShortDescUz(e.target.value)} rows={2} />
                         </div>
                         <div className="space-y-2">
-                            <Label>Qisqa tavsif (RU)</Label>
+                            <Label>{t("tours.form.short_desc_ru")}</Label>
                             <Textarea value={shortDescRu} onChange={(e) => setShortDescRu(e.target.value)} rows={2} />
                         </div>
                         <div className="space-y-2">
-                            <Label>Qisqa tavsif (EN)</Label>
+                            <Label>{t("tours.form.short_desc_en")}</Label>
                             <Textarea value={shortDescEn} onChange={(e) => setShortDescEn(e.target.value)} rows={2} />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div className="space-y-2">
-                            <Label>To&apos;liq tavsif (UZ)</Label>
+                            <Label>{t("tours.form.full_desc_uz")}</Label>
                             <Textarea value={descUz} onChange={(e) => setDescUz(e.target.value)} rows={5} required />
                         </div>
                         <div className="space-y-2">
-                            <Label>To&apos;liq tavsif (RU)</Label>
+                            <Label>{t("tours.form.full_desc_ru")}</Label>
                             <Textarea value={descRu} onChange={(e) => setDescRu(e.target.value)} rows={5} />
                         </div>
                         <div className="space-y-2">
-                            <Label>To&apos;liq tavsif (EN)</Label>
+                            <Label>{t("tours.form.full_desc_en")}</Label>
                             <Textarea value={descEn} onChange={(e) => setDescEn(e.target.value)} rows={5} />
                         </div>
                     </div>
@@ -226,62 +228,65 @@ export function TourForm({ initialData }: TourFormProps) {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Narx va parametrlar</CardTitle>
+                    <CardTitle>{t("tours.form.price_params")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                         <div className="space-y-2">
-                            <Label>Kategoriya</Label>
+                            <Label>{t("tours.form.category")}</Label>
                             <Input
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                placeholder="masalan: multi_day"
+                                placeholder={t("tours.form.category_placeholder")}
                                 required
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Kunlar soni</Label>
+                            <Label>{t("tours.form.duration_days")}</Label>
                             <Input
                                 type="number"
                                 min={0}
                                 value={durationDays}
-                                onChange={(e) => setDurationDays(Number(e.target.value))}
+                                onFocus={(e) => e.target.select()}
+                                onChange={(e) => setDurationDays(e.target.value === "" ? 0 : Number(e.target.value))}
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Tunlar soni</Label>
+                            <Label>{t("tours.form.duration_nights")}</Label>
                             <Input
                                 type="number"
                                 min={0}
                                 value={durationNights}
-                                onChange={(e) => setDurationNights(Number(e.target.value))}
+                                onFocus={(e) => e.target.select()}
+                                onChange={(e) => setDurationNights(e.target.value === "" ? 0 : Number(e.target.value))}
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Guruh maksimal hajmi</Label>
+                            <Label>{t("tours.form.max_group_size")}</Label>
                             <Input
                                 type="number"
                                 min={0}
                                 value={maxGroupSize}
-                                onChange={(e) => setMaxGroupSize(Number(e.target.value))}
+                                onFocus={(e) => e.target.select()}
+                                onChange={(e) => setMaxGroupSize(e.target.value === "" ? 0 : Number(e.target.value))}
                             />
                         </div>
                     </div>
-
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div className="space-y-2">
-                            <Label>Narx</Label>
+                            <Label>{t("tours.form.price")}</Label>
                             <Input
                                 type="number"
                                 min={0}
                                 step="0.01"
                                 value={price}
-                                onChange={(e) => setPrice(Number(e.target.value))}
+                                onFocus={(e) => e.target.select()}
+                                onChange={(e) => setPrice(e.target.value === "" ? 0 : Number(e.target.value))}
                                 required
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Valyuta</Label>
+                            <Label>{t("tours.form.currency")}</Label>
                             <Select value={currency} onValueChange={(value) => setCurrency(value ?? "USD")}>
                                 <SelectTrigger className="w-full">
                                     <SelectValue />
@@ -298,11 +303,11 @@ export function TourForm({ initialData }: TourFormProps) {
                     <div className="flex items-center gap-6 pt-2">
                         <div className="flex items-center gap-2">
                             <Switch checked={isFeatured} onCheckedChange={setIsFeatured} id="is_featured" />
-                            <Label htmlFor="is_featured">Mashhur turlarda ko&apos;rsatilsin</Label>
+                            <Label htmlFor="is_featured">{t("tours.form.is_featured")}</Label>
                         </div>
                         <div className="flex items-center gap-2">
                             <Switch checked={isActive} onCheckedChange={setIsActive} id="is_active" />
-                            <Label htmlFor="is_active">Faol (saytda ko&apos;rinadi)</Label>
+                            <Label htmlFor="is_active">{t("tours.form.is_active")}</Label>
                         </div>
                     </div>
                 </CardContent>
@@ -310,11 +315,11 @@ export function TourForm({ initialData }: TourFormProps) {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Rasm</CardTitle>
+                    <CardTitle>{t("tours.form.image_section")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <Label>Muqova rasmi</Label>
+                        <Label>{t("tours.form.cover_image")}</Label>
                         <div className="flex items-center gap-4">
                             {coverImage && (
                                 // eslint-disable-next-line @next/next/no-img-element
@@ -331,7 +336,7 @@ export function TourForm({ initialData }: TourFormProps) {
                                     ) : (
                                         <Upload className="h-4 w-4" />
                                     )}
-                                    Rasm tanlash
+                                    {t("tours.form.select_image")}
                                     <input
                                         type="file"
                                         accept="image/jpeg,image/png,image/webp,image/heic"
@@ -345,7 +350,7 @@ export function TourForm({ initialData }: TourFormProps) {
                                         onClick={() => setCoverImage("")}
                                         className="inline-flex items-center gap-1 text-xs text-destructive hover:underline"
                                     >
-                                        <X className="h-3 w-3" /> O&apos;chirish
+                                        <X className="h-3 w-3" /> {t("tours.form.remove_image")}
                                     </button>
                                 )}
                             </div>
@@ -356,16 +361,14 @@ export function TourForm({ initialData }: TourFormProps) {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Geografiya</CardTitle>
+                    <CardTitle>{t("tours.form.geography")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <p className="text-xs text-muted-foreground">
-                        Hozircha backendda davlat/yo&apos;nalish ro&apos;yxati endpointi yo&apos;q -
-                        shuning uchun ID&apos;larni qo&apos;lda kiriting (vergul bilan ajratib). Endpoint
-                        qo&apos;shilgach, bu yer dropdown&apos;ga almashtiriladi.
+                        {t("tours.form.geography_hint")}
                     </p>
                     <div className="space-y-2">
-                        <Label>Davlat ID&apos;lari</Label>
+                        <Label>{t("tours.form.country_ids")}</Label>
                         <Input
                             value={countryIdsRaw}
                             onChange={(e) => setCountryIdsRaw(e.target.value)}
@@ -373,7 +376,7 @@ export function TourForm({ initialData }: TourFormProps) {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label>Yo&apos;nalish ID&apos;lari</Label>
+                        <Label>{t("tours.form.destination_ids")}</Label>
                         <Input
                             value={destinationIdsRaw}
                             onChange={(e) => setDestinationIdsRaw(e.target.value)}
@@ -389,10 +392,10 @@ export function TourForm({ initialData }: TourFormProps) {
                     variant="outline"
                     onClick={() => router.push(`${prefix}/admin/tours`)}
                 >
-                    Bekor qilish
+                    {t("tours.form.cancel")}
                 </Button>
                 <Button type="submit" disabled={isSaving || isUploading}>
-                    {isSaving ? "Saqlanmoqda..." : isEdit ? "Saqlash" : "Yaratish"}
+                    {isSaving ? t("tours.form.saving") : isEdit ? t("tours.form.save") : t("tours.form.create")}
                 </Button>
             </div>
         </form>

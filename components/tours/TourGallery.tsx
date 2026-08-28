@@ -11,7 +11,6 @@ export function TourGallery({ images, title }: { images: string[]; title: string
     return (
         <div>
             <div className="relative aspect-video rounded-2xl overflow-hidden bg-muted">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={getMediaUrl(list[active])}
                     alt={title}
@@ -30,7 +29,6 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                                 i === active ? "ring-primary" : "ring-transparent opacity-70 hover:opacity-100"
                             )}
                         >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={getMediaUrl(img)} alt="" className="h-full w-full object-cover" />
                         </button>
                     ))}

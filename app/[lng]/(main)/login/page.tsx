@@ -16,10 +16,16 @@ import { loginSchema, registerSchema, type LoginValues, type RegisterValues } fr
 import { showSuccess, showError } from "@/lib/toast";
 import { Loading } from "@/components/_components/loading";
 import { isAdminUser } from "@/lib/auth";
+import { useParams } from "next/navigation";
+import type { User } from "@/types";
 
 export default function LoginPage() {
     const { t } = useT("auth");
     const router = useRouter();
+    const params = useParams<{ lng: string }>();
+    const lng = params.lng ?? "uz";
+    const prefix = lng === "uz" ? "" : `/${lng}`;
+
     const { login, register: registerUser, user, isLoading: authLoading } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,14 +41,16 @@ export default function LoginPage() {
         formState: { errors: registerErrors },
     } = useForm<RegisterValues>({ resolver: zodResolver(registerSchema) });
 
+    function redirectAfterAuth(u: User) {
+        router.push(isAdminUser(u) ? `${prefix}/admin` : `${prefix}/profile`);
+    }
 
     async function onLogin(values: LoginValues) {
         setIsSubmitting(true);
         try {
             const loggedInUser = await login(values);
             showSuccess(t("login_success"));
-
-            router.push(isAdminUser(loggedInUser) ? "/admin" : "/");
+            redirectAfterAuth(loggedInUser);
         } catch (err) {
             showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
@@ -53,10 +61,9 @@ export default function LoginPage() {
     async function onRegister(values: RegisterValues) {
         setIsSubmitting(true);
         try {
-            await registerUser(values);
+            const registeredUser = await registerUser(values);
             showSuccess(t("register_success"));
-
-            router.push("/"); 
+            redirectAfterAuth(registeredUser);
         } catch (err) {
             showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
@@ -66,9 +73,9 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (!authLoading && user) {
-            router.push(isAdminUser(user) ? "/admin" : "/");
+            redirectAfterAuth(user);
         }
-    }, [user, authLoading, router]);
+    }, [user, authLoading]);
 
     if (authLoading || user) {
         return (
@@ -164,4 +171,4 @@ export default function LoginPage() {
             </div>
         </div>
     );
-}
+};

@@ -112,11 +112,23 @@ export function BookingCard({ tourId, price, currency, labels }: BookingCardProp
                             <Users className="h-3.5 w-3.5" />
                             {labels.adults}
                         </label>
-                        <Input type="number" min={1} value={adults} onChange={(e) => setAdults(Number(e.target.value))} />
+                        <Input
+                            type="number"
+                            min={1}
+                            value={adults}
+                            onFocus={(e) => e.target.select()}
+                            onChange={(e) => setAdults(e.target.value === "" ? 0 : Number(e.target.value))}
+                        />
                     </div>
                     <div>
                         <label className="text-xs text-muted-foreground block mb-1.5">{labels.children}</label>
-                        <Input type="number" min={0} value={children} onChange={(e) => setChildren(Number(e.target.value))} />
+                        <Input
+                            type="number"
+                            min={0}
+                            value={children}
+                            onFocus={(e) => e.target.select()}
+                            onChange={(e) => setChildren(e.target.value === "" ? 0 : Number(e.target.value))}
+                        />
                     </div>
                 </div>
 

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useT } from "next-i18next/client";
 import { cn } from "@/lib/utils";
+import type { SiteStats } from "@/types";
 
 interface Review {
     rating: number;
@@ -11,6 +12,7 @@ interface Review {
 interface StatsProps {
     totalTours: number;
     reviews?: Review[];
+    siteStats?: SiteStats | null;
 }
 
 function useCountUp(target: number, start: boolean, duration = 1500) {
@@ -67,7 +69,7 @@ function StatCircle({
     );
 }
 
-export function Stats({ totalTours, reviews = [] }: StatsProps) {
+export function Stats({ totalTours, reviews = [], siteStats }: StatsProps) {
     const { t } = useT("home");
     const ref = useRef<HTMLDivElement>(null);
     const [started, setStarted] = useState(false);
@@ -88,22 +90,26 @@ export function Stats({ totalTours, reviews = [] }: StatsProps) {
         return () => observer.disconnect();
     }, []);
 
-    // reviews[].rating backenddan 1-5 oralig'ida keladi, foizga o'giramiz
-    const satisfactionPct =
+    const fallbackSatisfaction =
         reviews.length > 0
-            ? Math.round(
-                (reviews.reduce((sum, r) => sum + r.rating, 0) /
-                    reviews.length /
-                    5) *
-                100
-            )
-            : 95; // reviews hali bo'lmasa fallback
+            ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length / 5) * 100)
+            : 95;
 
     const stats = [
-        { key: "years", value: 12, suffix: "", offset: "md:mt-16" },
-        { key: "satisfaction", value: satisfactionPct, suffix: "%", offset: "" },
-        { key: "adventures", value: totalTours, suffix: "+", offset: "md:mt-16" },
-        { key: "travelers", value: 9431, suffix: "+", offset: "" },
+        { key: "years", value: siteStats?.years_experience ?? 12, suffix: "", offset: "md:mt-16" },
+        {
+            key: "satisfaction",
+            value: siteStats?.satisfaction_percent ?? fallbackSatisfaction,
+            suffix: "%",
+            offset: "",
+        },
+        {
+            key: "adventures",
+            value: siteStats?.completed_trips ?? totalTours,
+            suffix: "+",
+            offset: "md:mt-16",
+        },
+        { key: "travelers", value: siteStats?.happy_travelers ?? 9431, suffix: "+", offset: "" },
     ];
 
     return (

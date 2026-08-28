@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useParams } from "next/navigation";
+import { usePathname, useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ import {
     Star,
     Users,
     LogOut,
+    Globe,
 } from "lucide-react";
 
 import {
@@ -24,10 +25,23 @@ import {
     SidebarMenu,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
+
+const LANGUAGES = [
+    { code: "uz", label: "O'zbekcha" },
+    { code: "ru", label: "Русский" },
+    { code: "en", label: "English" },
+];
 
 export function AppSidebar() {
     const pathname = usePathname();
+    const router = useRouter();
     const params = useParams<{ lng: string }>();
     const lng = params.lng ?? "uz";
     const prefix = lng === "uz" ? "" : `/${lng}`;
@@ -42,13 +56,18 @@ export function AppSidebar() {
         { title: t("sidebar.users"), url: `${prefix}/admin/users`, icon: Users },
     ];
 
-    // SidebarMenuButton class'lariga o'xshash klasslarni to'g'ridan-to'g'ri Link'ga qo'yamiz
     const linkClass = (isActive: boolean) =>
         cn(
             "flex w-full items-center gap-2 overflow-hidden rounded-md px-2 py-1.5 text-sm outline-none transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2",
             "[&>svg]:size-4 [&>svg]:shrink-0",
             isActive && "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
         );
+
+    function switchLocale(locale: string) {
+        const withoutPrefix = prefix && pathname.startsWith(prefix) ? pathname.slice(prefix.length) : pathname;
+        const newPrefix = locale === "uz" ? "" : `/${locale}`;
+        router.push(`${newPrefix}${withoutPrefix}` || "/");
+    }
 
     return (
         <Sidebar collapsible="icon">
@@ -108,13 +127,31 @@ export function AppSidebar() {
                         </Link>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
-                        <button
-                            onClick={logout}
-                            className={cn(linkClass(false), "cursor-pointer")}
-                        >
-                            <LogOut />
-                            <span>{t("sidebar.logout")}</span>
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger
+                                    className={cn(linkClass(false), "cursor-pointer flex-1 justify-center")}
+                                >
+                                    <Globe />
+                                    <span className="uppercase">{lng}</span>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start">
+                                    {LANGUAGES.map((l) => (
+                                        <DropdownMenuItem key={l.code} onClick={() => switchLocale(l.code)}>
+                                            {l.label}
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <button
+                                onClick={logout}
+                                className={cn(linkClass(false), "cursor-pointer flex-1 justify-center")}
+                            >
+                                <LogOut />
+                                <span>{t("sidebar.logout")}</span>
+                            </button>
+                        </div>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>

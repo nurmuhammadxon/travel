@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useT } from "next-i18next/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { getProfile, updateProfile } from "@/lib/api";
@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/dialog";
 
 export default function ProfilePage() {
-    const { user: authUser, isLoading: authLoading } = useAuth();
+    const { user: authUser, isLoading: authLoading, logout } = useAuth();
     const router = useRouter();
     const params = useParams<{ lng: string }>();
     const lng = params.lng ?? "uz";
@@ -109,6 +109,11 @@ export default function ProfilePage() {
         }
     }
 
+    async function handleLogout() {
+        await logout();
+        router.push(`${prefix}/login`);
+    }
+
     if (authLoading || isLoading) {
         return (
             <div className="flex h-[60vh] w-full items-center justify-center">
@@ -151,7 +156,6 @@ export default function ProfilePage() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
-                            <p className="text-xs text-muted-foreground">{t("email_hint")}</p>
                         </div>
 
                         <div className="space-y-2">
@@ -184,13 +188,22 @@ export default function ProfilePage() {
                         <div className="space-y-2">
                             <Label>{t("role")}</Label>
                             <Input value={ROLE_LABEL[profile.role] ?? profile.role} disabled />
-                            <p className="text-xs text-muted-foreground">{t("role_hint")}</p>
                         </div>
 
                         <Button type="submit" disabled={isSaving} className="w-full">
                             {isSaving ? t("saving") : t("save")}
                         </Button>
                     </form>
+
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleLogout}
+                        className="w-full mt-3 gap-2 text-destructive hover:text-destructive"
+                    >
+                        <LogOut className="h-4 w-4" />
+                        {t("logout")}
+                    </Button>
                 </CardContent>
             </Card>
 

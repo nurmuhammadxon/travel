@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useT } from "next-i18next/client";
 
 import { getTourRaw } from "@/lib/api";
 import { showError } from "@/lib/toast";
@@ -10,6 +11,7 @@ import type { AdminTourDetail } from "@/types";
 import { TourForm } from "@/components/admin/tours/tour-form";
 
 export default function EditTourPage() {
+    const { t } = useT("admin");
     const params = useParams<{ slug: string }>();
     const [tour, setTour] = useState<AdminTourDetail | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -18,9 +20,10 @@ export default function EditTourPage() {
         getTourRaw(params.slug)
             .then(setTour)
             .catch((err) => {
-                showError(err instanceof Error ? err.message : "Turni yuklab bo'lmadi");
+                showError(err instanceof Error ? err.message : t("tours.load_tour_error"));
             })
             .finally(() => setIsLoading(false));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.slug]);
 
     if (isLoading) {
@@ -32,13 +35,13 @@ export default function EditTourPage() {
     }
 
     if (!tour) {
-        return <p className="text-sm text-muted-foreground">Tur topilmadi</p>;
+        return <p className="text-sm text-muted-foreground">{t("tours.not_found")}</p>;
     }
 
     return (
         <div className="flex flex-col gap-6 max-w-4xl">
             <div>
-                <h1 className="text-2xl font-semibold">Turni tahrirlash</h1>
+                <h1 className="text-2xl font-semibold">{t("tours.edit_page_title")}</h1>
                 <p className="text-sm text-muted-foreground">{tour.title.uz}</p>
             </div>
             <TourForm initialData={tour} />

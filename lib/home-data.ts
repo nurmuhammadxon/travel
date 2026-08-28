@@ -1,11 +1,12 @@
-import { getTours, getCountries, getAllReviews } from "@/lib/api";
-import type { Tour, Country, Review } from "@/types";
+import { getTours, getCountries, getAllReviews, getSiteStats } from "@/lib/api";
+import type { Tour, Country, Review, SiteStats } from "@/types";
 
 export interface HomePageData {
     featuredTours: Tour[];
     totalTours: number;
     countries: (Country & { tourCount: number })[];
     reviews: Review[];
+    siteStats: SiteStats | null;
 }
 
 export async function getHomePageData(lng: string): Promise<HomePageData> {
@@ -13,12 +14,14 @@ export async function getHomePageData(lng: string): Promise<HomePageData> {
     let totalTours = 0;
     let countries: (Country & { tourCount: number })[] = [];
     let reviews: Review[] = [];
+    let siteStats: SiteStats | null = null;
 
     // Barcha ochiq API so'rovlarini parallel tartibda yuboramiz
-    const [toursRes, countryList, allReviews] = await Promise.allSettled([
+    const [toursRes, countryList, allReviews, statsRes] = await Promise.allSettled([
         getTours({ lang: lng, page_size: 6 }),
         getCountries(lng),
         getAllReviews(),
+        getSiteStats(),
     ]);
 
     // 1. Turlar natijasi
@@ -56,5 +59,12 @@ export async function getHomePageData(lng: string): Promise<HomePageData> {
         console.error("getAllReviews xatosi:", allReviews.reason);
     }
 
-    return { featuredTours, totalTours, countries, reviews };
+    // 4. Sayt statistikasi
+    if (statsRes.status === "fulfilled" && statsRes.value) {
+        siteStats = statsRes.value;
+    } else if (statsRes.status === "rejected") {
+        console.error("getSiteStats xatosi:", statsRes.reason);
+    }
+
+    return { featuredTours, totalTours, countries, reviews, siteStats };
 }

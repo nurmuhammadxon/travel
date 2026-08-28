@@ -11,16 +11,17 @@ interface Props {
 
 export default async function Home({ params }: Props) {
   const { lng } = await params;
-  const { featuredTours, totalTours, countries, reviews } = await getHomePageData(lng);
+  const { featuredTours, totalTours, countries, reviews, siteStats } = await getHomePageData(lng);
 
   return (
     <>
       <Hero />
       <div className="max-w-7xl mx-auto px-4 py-16">
         {featuredTours.length > 0 && <PopularTours tours={featuredTours} />}
-        <Stats totalTours={totalTours} reviews={reviews} />
+        <Stats totalTours={totalTours} reviews={reviews} siteStats={siteStats} />
         {countries.length > 0 && <Destinations countries={countries} />}
-        {reviews.length > 0 && <Testimonials reviews={reviews} />}      </div>
+        {reviews.length > 0 && <Testimonials reviews={reviews} />}
+      </div>
     </>
   );
 }

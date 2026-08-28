@@ -6,12 +6,12 @@ import { TourFilters } from "@/components/tours/TourFilters";
 
 interface Props {
     params: Promise<{ lng: string }>;
-    searchParams: Promise<{ search?: string; category?: string }>;
+    searchParams: Promise<{ search?: string; category?: string; country?: string }>;
 }
 
 export default async function ToursPage({ params, searchParams }: Props) {
     const { lng } = await params;
-    const { search, category } = await searchParams;
+    const { search, category, country } = await searchParams;
     const { t } = await getT("tours", { lng });
 
     let tours: Awaited<ReturnType<typeof getTours>>["items"] = [];
@@ -22,6 +22,7 @@ export default async function ToursPage({ params, searchParams }: Props) {
             lang: lng,
             search,
             category,
+            country,
             page_size: 24,
         });
         tours = response.items;
@@ -31,7 +32,6 @@ export default async function ToursPage({ params, searchParams }: Props) {
 
     return (
         <div className="min-h-screen bg-background pb-20">
-            {/* Hero */}
             <div className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden -mx-4 mb-12">
                 <img
                     src="/images/tours_image.png"
@@ -53,13 +53,7 @@ export default async function ToursPage({ params, searchParams }: Props) {
             <div className="mx-auto max-w-7xl px-4">
                 <div className="mb-10">
                     <Suspense fallback={null}>
-                        <TourFilters
-                            labels={{
-                                search: t("search_placeholder"),
-                                all_categories: t("all_categories"),
-                                clear: t("clear_filters"),
-                            }}
-                        />
+                        <TourFilters resultCount={tours.length} />
                     </Suspense>
                 </div>
 

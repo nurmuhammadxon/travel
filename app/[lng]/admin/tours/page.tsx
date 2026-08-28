@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Plus, Pencil, Trash2, Star, Loader2 } from "lucide-react";
+import { useT } from "next-i18next/client";
 
 import { getTours, deleteTour, updateTour } from "@/lib/api";
 import { showSuccess, showError } from "@/lib/toast";
 import type { Tour } from "@/types";
 import { cn } from "@/lib/utils";
 
-import { buttonVariants } from "@/components/ui/button";
-import { Button } from "@/components/ui/button";
+import { buttonVariants, Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function AdminToursPage() {
+    const { t } = useT("admin");
     const params = useParams<{ lng: string }>();
     const lng = params.lng ?? "uz";
     const prefix = lng === "uz" ? "" : `/${lng}`;
@@ -53,7 +54,7 @@ export default function AdminToursPage() {
             const res = await getTours({ page_size: 50 });
             setTours(res.items);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Turlarni yuklab bo'lmadi");
+            setError(err instanceof Error ? err.message : t("tours.load_error"));
         } finally {
             setIsLoading(false);
         }
@@ -61,6 +62,7 @@ export default function AdminToursPage() {
 
     useEffect(() => {
         loadTours();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function handleToggleFeatured(tour: Tour, value: boolean) {
@@ -71,7 +73,7 @@ export default function AdminToursPage() {
                 prev.map((t) => (t.id === tour.id ? { ...t, is_featured: value } : t))
             );
         } catch (err) {
-            showError(err instanceof Error ? err.message : "Xatolik yuz berdi");
+            showError(err instanceof Error ? err.message : t("tours.toggle_error"));
         } finally {
             setTogglingId(null);
         }
@@ -83,9 +85,9 @@ export default function AdminToursPage() {
         try {
             await deleteTour(deleteTarget.id);
             setTours((prev) => prev.filter((t) => t.id !== deleteTarget.id));
-            showSuccess("Tur o'chirildi");
+            showSuccess(t("tours.delete_success"));
         } catch (err) {
-            showError(err instanceof Error ? err.message : "Xatolik yuz berdi");
+            showError(err instanceof Error ? err.message : t("tours.toggle_error"));
         } finally {
             setIsDeleting(false);
             setDeleteTarget(null);
@@ -96,9 +98,9 @@ export default function AdminToursPage() {
         <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-semibold">Turlar</h1>
+                    <h1 className="text-2xl font-semibold">{t("tours.title")}</h1>
                     <p className="text-sm text-muted-foreground">
-                        Jami: {isLoading ? "..." : tours.length} ta tur
+                        {t("tours.total", { count: isLoading ? t("tours.loading_count") : tours.length })}
                     </p>
                 </div>
                 <Link
@@ -106,7 +108,7 @@ export default function AdminToursPage() {
                     className={cn(buttonVariants(), "gap-1.5")}
                 >
                     <Plus className="h-4 w-4" />
-                    Yangi tur
+                    {t("tours.new_tour")}
                 </Link>
             </div>
 
@@ -124,19 +126,19 @@ export default function AdminToursPage() {
                 </div>
             ) : tours.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-10 text-center">
-                    Hozircha turlar yo&apos;q
+                    {t("tours.empty")}
                 </p>
             ) : (
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Nomi</TableHead>
-                            <TableHead>Kategoriya</TableHead>
-                            <TableHead>Narx</TableHead>
+                            <TableHead>{t("tours.col_name")}</TableHead>
+                            <TableHead>{t("tours.col_category")}</TableHead>
+                            <TableHead>{t("tours.col_price")}</TableHead>
                             <TableHead className="text-center">
                                 <Star className="h-4 w-4 inline" />
                             </TableHead>
-                            <TableHead className="text-right">Amallar</TableHead>
+                            <TableHead className="text-right">{t("tours.col_actions")}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -186,19 +188,17 @@ export default function AdminToursPage() {
             <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Turni o&apos;chirish</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {"Ushbu turni o'chirmoqchimisiz? Bu amalni ortga qaytarib bo'lmaydi."}
-                        </AlertDialogDescription>
+                        <AlertDialogTitle>{t("tours.delete_title")}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("tours.delete_confirm")}</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel disabled={isDeleting}>Bekor qilish</AlertDialogCancel>
+                        <AlertDialogCancel disabled={isDeleting}>{t("tours.cancel")}</AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleDeleteConfirm}
                             disabled={isDeleting}
                             className="bg-destructive text-white hover:bg-destructive/90"
                         >
-                            {isDeleting ? "O'chirilmoqda..." : "O'chirish"}
+                            {isDeleting ? t("tours.deleting") : t("tours.delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
