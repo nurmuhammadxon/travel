@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { loginSchema, registerSchema, type LoginValues, type RegisterValues } from "@/lib/validations/auth";
 import { showSuccess, showError } from "@/lib/toast";
 import { Loading } from "@/components/_components/loading";
+import { isAdminUser } from "@/lib/auth";
 
 export default function LoginPage() {
     const { t } = useT("auth");
@@ -34,12 +35,14 @@ export default function LoginPage() {
         formState: { errors: registerErrors },
     } = useForm<RegisterValues>({ resolver: zodResolver(registerSchema) });
 
+
     async function onLogin(values: LoginValues) {
         setIsSubmitting(true);
         try {
-            await login(values);
+            const loggedInUser = await login(values);
             showSuccess(t("login_success"));
-            router.push("/");
+
+            router.push(isAdminUser(loggedInUser) ? "/admin" : "/");
         } catch (err) {
             showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
@@ -52,7 +55,8 @@ export default function LoginPage() {
         try {
             await registerUser(values);
             showSuccess(t("register_success"));
-            router.push("/");
+
+            router.push("/"); 
         } catch (err) {
             showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
@@ -62,7 +66,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (!authLoading && user) {
-            router.push("/");
+            router.push(isAdminUser(user) ? "/admin" : "/");
         }
     }, [user, authLoading, router]);
 

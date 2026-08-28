@@ -48,6 +48,7 @@ export interface Tour {
     images: string[];
     itinerary?: TourItineraryDay[];
     reviews?: Review[];
+    is_featured?: boolean;
 }
 
 export interface Country {
@@ -64,12 +65,18 @@ export interface Destination {
 export interface Booking {
     id: string;
     booking_number: string;
-    status: "pending" | "confirmed" | "completed" | "cancelled";
-    total_price: number;
+    tour_id: string;
+    full_name: string;
+    email: string;
+    phone: string;
     tour_date: string;
     num_adults: number;
     num_children: number;
-    can_review?: boolean;
+    total_price: string;
+    currency: string;
+    status: "pending" | "confirmed" | "completed" | "cancelled";
+    created_at: string;
+    can_review: boolean;
 }
 
 export interface Review {
@@ -91,4 +98,30 @@ export interface PaginatedResponse<T> {
     total: number;
     page: number;
     pages: number;
+}
+
+export interface LocalizedText {
+    uz: string;
+    ru: string;
+    en: string;
+}
+
+export interface AdminTourDetail {
+    id: string;
+    slug: string;
+    title: LocalizedText;
+    short_description: LocalizedText;
+    description: LocalizedText;
+    category: string;
+    duration_days: number;
+    duration_nights: number;
+    price: number;
+    currency: string;
+    cover_image: string;
+    max_group_size: number;
+    is_featured: boolean;
+    is_active: boolean;
+    country_ids: string[];
+    destination_ids: string[];
+    itinerary: unknown[];
 }

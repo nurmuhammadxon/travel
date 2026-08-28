@@ -1,0 +1,14 @@
+{
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "tours": "Tours",
+        "bookings": "Bookings",
+        "reviews": "Reviews",
+        "users": "Users",
+        "logout": "Log out"
+    },
+    "guard": {
+        "checking": "Checking...",
+        "forbidden": "You don't have access to the admin panel"
+    }
+}

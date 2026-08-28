@@ -1,9 +1,9 @@
 "use client";
 
 export function Loading(props: React.ComponentProps<"svg">) {
-    return (
-        <>
-            <style>{`
+  return (
+    <>
+      <style>{`
         @keyframes loading-ui-swirling-spin {
           to {
             transform: rotate(360deg);
@@ -32,18 +32,18 @@ export function Loading(props: React.ComponentProps<"svg">) {
             loading-ui-swirling-spin calc(var(--duration, 1.5s) * 1.333333) linear infinite;
         }
       `}</style>
-            <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" {...props}>
-                <circle
-                    className="loading-ui-swirling-circle"
-                    cx="400"
-                    cy="400"
-                    r="200"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeWidth="50"
-                />
-            </svg>
-        </>
-    );
+      <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <circle
+          className="loading-ui-swirling-circle"
+          cx="400"
+          cy="400"
+          r="200"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth="50"
+        />
+      </svg>
+    </>
+  );
 }

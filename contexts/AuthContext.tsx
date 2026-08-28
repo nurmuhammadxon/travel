@@ -16,8 +16,8 @@ import { showInfo } from "@/lib/toast";
 interface AuthContextType {
     user: User | null;
     isLoading: boolean;
-    login: (payload: LoginPayload) => Promise<void>;
-    register: (payload: RegisterPayload) => Promise<void>;
+    login: (payload: LoginPayload) => Promise<User>;
+    register: (payload: RegisterPayload) => Promise<User>;
     logout: () => Promise<void>;
 }
 
@@ -48,14 +48,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .finally(() => setIsLoading(false));
     }, []);
 
-    async function login(payload: LoginPayload) {
+    async function login(payload: LoginPayload): Promise<User> {
         const loggedInUser = await loginRequest(payload);
         setUser(loggedInUser);
+        return loggedInUser; // <-- endi User qaytaradi
     }
 
-    async function register(payload: RegisterPayload) {
+    async function register(payload: RegisterPayload): Promise<User> {
         await registerRequest(payload);
-        await login({ email: payload.email, password: payload.password });
+        return login({ email: payload.email, password: payload.password }); // <-- login natijasini qaytaradi
     }
 
     async function logout() {

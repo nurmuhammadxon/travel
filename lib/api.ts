@@ -1,38 +1,60 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import Cookies from "js-cookie";
 import type {
     User, LoginPayload, RegisterPayload, AuthTokens,
     Tour, Country, Destination, Booking, Review, PaginatedResponse,
+    LocalizedText, AdminTourDetail,
 } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// --- Axios Instance ---
-const api = axios.create({
+if (!API_URL && process.env.NODE_ENV === "development") {
+    console.warn("DIQQAT: NEXT_PUBLIC_API_URL faylida ko'rsatilmagan!");
+}
+
+export const api = axios.create({
     baseURL: API_URL,
+    timeout: 60000,
     headers: {
         "Content-Type": "application/json",
     },
 });
 
-// --- Helper Functions ---
-function getAccessToken(): string | null {
-    if (typeof window === "undefined") return null;
-    return localStorage.getItem("access_token");
-}
-
-function getRefreshToken(): string | null {
-    if (typeof window === "undefined") return null;
-    return localStorage.getItem("refresh_token");
-}
-
+// --- Helper Functions (Cookies) ---
 export function setTokens(tokens: AuthTokens) {
-    localStorage.setItem("access_token", tokens.access_token);
-    localStorage.setItem("refresh_token", tokens.refresh_token);
+    if (typeof window === "undefined" || !tokens) return;
+
+    const isSecure = window.location.protocol === "https:";
+
+    if (tokens.access_token) {
+        Cookies.set("access_token", tokens.access_token, {
+            expires: 7,
+            secure: isSecure,
+            sameSite: "lax",
+        });
+    }
+    if (tokens.refresh_token) {
+        Cookies.set("refresh_token", tokens.refresh_token, {
+            expires: 7,
+            secure: isSecure,
+            sameSite: "lax",
+        });
+    }
+}
+function getAccessToken(): string | undefined {
+    if (typeof window === "undefined") return undefined;
+    return Cookies.get("access_token");
+}
+
+function getRefreshToken(): string | undefined {
+    if (typeof window === "undefined") return undefined;
+    return Cookies.get("refresh_token");
 }
 
 export function clearTokens() {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+    if (typeof window === "undefined") return;
+    Cookies.remove("access_token");
+    Cookies.remove("refresh_token");
 }
 
 export function hasStoredSession(): boolean {
@@ -40,21 +62,76 @@ export function hasStoredSession(): boolean {
 }
 
 // --- Request Interceptor ---
-api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    const token = getAccessToken();
-    if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+api.interceptors.request.use(
+    (config) => {
+        if (typeof window !== "undefined") {
+            const token = getAccessToken();
+
+            // LOG: Token bor yoki yo'qligini tekshirish uchun
+            if (process.env.NODE_ENV === "development") {
+                console.log(`[Request: ${config.method?.toUpperCase()}] ${config.url} | Token:`, token ? "Mavjud" : "TOPILMADI!");
+            }
+
+            if (token && config.headers) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+
+// --- Single Response Interceptor (Data Unwrap + Refresh Token Logic) ---
+function formatErrorDetail(detail: unknown): string {
+    if (!detail) return "Xatolik yuz berdi";
+
+    if (typeof detail === "string") return detail;
+
+    if (Array.isArray(detail)) {
+        const messages = detail.map((item) => {
+            if (item && typeof item === "object") {
+                const loc = Array.isArray((item as { loc?: unknown[] }).loc)
+                    ? (item as { loc: unknown[] }).loc
+                        .filter((part) => part !== "body")
+                        .join(".")
+                    : "";
+                const msg = (item as { msg?: string }).msg ?? JSON.stringify(item);
+                return loc ? `${loc}: ${msg}` : msg;
+            }
+            return String(item);
+        });
+        return messages.join("; ");
     }
-    return config;
-});
+
+    if (typeof detail === "object") {
+        try {
+            return JSON.stringify(detail);
+        } catch {
+            return "Xatolik yuz berdi";
+        }
+    }
+
+    return "Xatolik yuz berdi";
+}
+
+export interface ApiError extends Error {
+    status?: number;
+    detail?: unknown;
+}
 
 // --- Response Interceptor (Refresh Token & Error Handling) ---
 api.interceptors.response.use(
     (response) => response.data,
-    async (error: AxiosError<{ detail?: string }>) => {
-        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    async (error: AxiosError<{ detail?: unknown }>) => {
+        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean; _timeoutRetry?: boolean };
 
-        // 401 xatolik bo'lsa va bu so'rov hali qayta urinilmagan bo'lsa
+        if (error.code === "ECONNABORTED" && originalRequest && !originalRequest._timeoutRetry) {
+            originalRequest._timeoutRetry = true;
+            originalRequest.timeout = 60000;
+            return api(originalRequest);
+        }
+
         if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
             originalRequest._retry = true;
             const refreshToken = getRefreshToken();
@@ -69,7 +146,6 @@ api.interceptors.response.use(
                     setTokens(res.data);
                     originalRequest.headers.Authorization = `Bearer ${res.data.access_token}`;
 
-                    // Qayta so'rov yuborish
                     return api(originalRequest);
                 } catch (refreshError) {
                     clearTokens();
@@ -78,12 +154,22 @@ api.interceptors.response.use(
             }
         }
 
-        // Xatolik xabarini formatlash
         const detail = error.response?.data?.detail;
-        const message = typeof detail === "string" ? detail : "Xatolik yuz berdi";
-        return Promise.reject(new Error(message));
-    }
-);
+        const message = error.response
+            ? formatErrorDetail(detail)
+            : `Server bilan bog'lanib bo'lmadi (${error.code ?? "network error"}: ${error.message}). Sabablari: CORS ruxsat yo'q, backend o'chgan/uxlab yotibdi (Render cold start), yoki internet aloqasi yo'q.`;
+
+        if (process.env.NODE_ENV !== "production") {
+            console.error(
+                `[API xatosi ${error.response?.status ?? "NO RESPONSE"}] ${originalRequest?.method?.toUpperCase() ?? ""} ${originalRequest?.url ?? ""}\n${message}`
+            );
+        }
+
+        const formattedError: ApiError = new Error(message);
+        formattedError.status = error.response?.status;
+        formattedError.detail = detail;
+        return Promise.reject(formattedError);
+    });
 
 // --- Auth ---
 export const registerRequest = (payload: RegisterPayload) =>
@@ -166,17 +252,59 @@ export interface CreateReviewPayload {
     reviewer_country?: string;
 }
 
-// --- Admin: Tours ---
+export const createReview = (payload: CreateReviewPayload) =>
+    api.post<unknown, Review>("/reviews", payload);
+
+export const getReviews = (tourId: string) =>
+    api.get<unknown, Review[]>("/reviews", { params: { tour_id: tourId } });
+
+// --- Admin Interface & API Methods ---
+
 export interface TourPayload {
-    title: string;
-    description: string;
-    short_description?: string;
+    title: LocalizedText;
+    slug?: string;
+    short_description: LocalizedText;
+    description: LocalizedText;
+    category: string;
+    duration_days: number;
+    duration_nights: number;
     price: number;
     currency: string;
-    country: string;
-    category: string;
-    images: string[];
+    cover_image: string;
+    max_group_size: number;
+    is_featured?: boolean;
+    is_active?: boolean;
+    country_ids: string[];
+    destination_ids: string[];
+    itinerary: unknown[];
 }
+
+export interface SiteStats {
+    years_experience: number;
+    satisfaction_percent: number;
+    completed_trips: number;
+    happy_travelers: number;
+}
+
+// --- Profile  ---
+export interface UpdateProfilePayload {
+    full_name?: string;
+    email?: string;
+    phone?: string;
+    preferred_language?: "uz" | "ru" | "en";
+}
+
+export const getProfile = () => api.get<unknown, User>("/users/me");
+
+export const updateProfile = (payload: UpdateProfilePayload) =>
+    api.patch<unknown, User>("/users/me", payload);
+
+// Admin: Users
+export const getUsers = () => api.get<unknown, User[]>("/users");
+
+// Admin: Tours
+export const getTourRaw = (slug: string) =>
+    api.get<unknown, AdminTourDetail>(`/tours/${slug}`);
 
 export const createTour = (payload: TourPayload) =>
     api.post<unknown, Tour>("/tours", payload);
@@ -187,23 +315,32 @@ export const updateTour = (tourId: string, payload: Partial<TourPayload>) =>
 export const deleteTour = (tourId: string) =>
     api.delete<unknown, void>(`/tours/${tourId}`);
 
-// --- Admin: Users ---
-export const getUsers = () => api.get<unknown, User[]>("/users");
-
-// --- Admin: Bookings ---
+// Admin: Bookings
 export const getAllBookings = () => api.get<unknown, Booking[]>("/bookings");
 
 export const updateBookingStatus = (bookingId: string, status: Booking["status"]) =>
     api.patch<unknown, Booking>(`/bookings/${bookingId}/status`, { status });
 
-// --- Admin: Reviews ---
+export const autoCompleteBookings = () =>
+    api.post<unknown, { message: string }>("/bookings/auto-complete");
+
+// Admin: Reviews & Locations
+export const getAllReviews = () => api.get<unknown, Review[]>("/reviews");
+
 export const deleteReview = (reviewId: string) =>
     api.delete<unknown, void>(`/reviews/${reviewId}`);
 
-export const createReview = (payload: CreateReviewPayload) =>
-    api.post<unknown, Review>("/reviews", payload);
+export const createCountry = (payload: { name: Record<string, string>; slug: string }) =>
+    api.post<unknown, Country>("/countries", payload);
 
-export const getReviews = (tourId: string) =>
-    api.get<unknown, Review[]>("/reviews", { params: { tour_id: tourId } });
+export const createDestination = (payload: { name: Record<string, string>; country_slug: string; slug: string }) =>
+    api.post<unknown, Destination>("/destinations", payload);
 
-export const getAllReviews = () => api.get<unknown, Review[]>("/reviews");
+// Admin: Site Stats
+export const getSiteStats = () =>
+    api.get<unknown, SiteStats>("/site-stats");
+
+export const updateSiteStats = (payload: Partial<SiteStats>) =>
+    api.patch<unknown, SiteStats>("/site-stats", payload);
+
+export default api;

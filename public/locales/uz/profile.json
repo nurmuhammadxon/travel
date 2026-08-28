@@ -1,0 +1,29 @@
+{
+    "title": "Mening profilim",
+    "full_name": "To'liq ism",
+    "email": "Email",
+    "email_hint": "Email o'zgartirilsa, saqlashdan oldin tasdiqlash so'raladi.",
+    "phone": "Telefon",
+    "language": "Til",
+    "language_uz": "O'zbekcha",
+    "language_ru": "Русский",
+    "language_en": "English",
+    "role": "Rol",
+    "role_hint": "Rolni faqat administrator o'zgartira oladi.",
+    "role_admin": "Admin",
+    "role_agent": "Agent",
+    "role_customer": "Mijoz",
+    "save": "Saqlash",
+    "saving": "Saqlanmoqda...",
+    "success": "Profil yangilandi",
+    "error_generic": "Xatolik yuz berdi",
+    "error_load": "Profilni yuklab bo'lmadi",
+    "email_dialog": {
+        "title": "Email manzilini o'zgartirasizmi?",
+        "current": "Joriy email",
+        "next": "Yangi email",
+        "description": "Bu amalni tasdiqlaganingizdan so'ng, tizimga kirish uchun yangi email ishlatiladi.",
+        "cancel": "Bekor qilish",
+        "confirm": "Tasdiqlash"
+    }
+}

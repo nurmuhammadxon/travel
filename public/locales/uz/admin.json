@@ -1,0 +1,14 @@
+{
+    "sidebar": {
+        "dashboard": "Bosh sahifa",
+        "tours": "Turlar",
+        "bookings": "Buyurtmalar",
+        "reviews": "Sharhlar",
+        "users": "Foydalanuvchilar",
+        "logout": "Chiqish"
+    },
+    "guard": {
+        "checking": "Tekshirilmoqda...",
+        "forbidden": "Sizda admin panelga kirish huquqi yo'q"
+    }
+}

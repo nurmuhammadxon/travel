@@ -4,7 +4,7 @@ const i18nConfig: I18nConfig = {
   supportedLngs: ["uz", "ru", "en"],
   fallbackLng: "uz",
   defaultNS: "common",
-  ns: ["common", "home", "tours", "about", "contact", "auth", "services"],
+  ns: ["common", "home", "tours", "about", "contact", "auth", "services", "admin", "profile"],
   hideDefaultLocale: true,
   ...(process.env.NODE_ENV === "production"
     ? {
