@@ -61,6 +61,22 @@ export interface Tour {
     reviews?: Review[];
     images?: string[];
     country?: string;
+    technical_level?: number; // 1-5
+    min_age?: number;
+    fitness_level?: number; // 1-5
+    highlights?: string[] | { uz?: string[]; ru?: string[]; en?: string[] };
+    included?: string[] | { uz?: string[]; ru?: string[]; en?: string[] };
+    excluded?: string[] | { uz?: string[]; ru?: string[]; en?: string[] };
+    faqs?: {
+        question: string | { uz?: string; ru?: string; en?: string };
+        answer: string | { uz?: string; ru?: string; en?: string };
+    }[];
+    map_embed_url?: string;
+    destinations?: {
+        id: string;
+        name: { uz: string; ru: string; en: string };
+        slug: string;
+    }[];
 }
 
 export interface Country {

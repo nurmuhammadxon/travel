@@ -35,5 +35,18 @@
     "country_label": "Страна",
     "destination_label": "Направление",
     "show": "Показать",
-    "tours_word": "туров"
+    "tours_word": "туров",
+    "highlights_title": "Особенности тура",
+    "whats_included": "Включено в цену",
+    "whats_excluded": "Не включено в цену",
+    "technical_level": "Технический уровень",
+    "min_age": "Мин. возраст",
+    "fitness_level": "Физическая подготовка",
+    "destinations_title": "Направления",
+    "tab_overview": "Обзор",
+    "tab_itinerary": "Программа",
+    "tab_included": "Цена",
+    "tab_faqs": "Вопросы",
+    "related_title": "Вам может понравиться",
+    "related_subtitle": "Другие приключения"
 }

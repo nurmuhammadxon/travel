@@ -35,5 +35,18 @@
     "country_label": "Country",
     "destination_label": "Destination",
     "show": "Show",
-    "tours_word": "tours"
+    "tours_word": "tours",
+    "highlights_title": "Tour Highlights",
+    "whats_included": "What's Included",
+    "whats_excluded": "What's Not Included",
+    "technical_level": "Technical Level",
+    "min_age": "Min Age",
+    "fitness_level": "Fitness Level",
+    "destinations_title": "Destinations",
+    "tab_overview": "Overview",
+    "tab_itinerary": "Itinerary",
+    "tab_included": "Pricing",
+    "tab_faqs": "FAQs",
+    "related_title": "You Might Also Like",
+    "related_subtitle": "More Adventures For You"
 }

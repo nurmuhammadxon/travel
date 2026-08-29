@@ -35,5 +35,18 @@
     "country_label": "Davlat",
     "destination_label": "Yo'nalish",
     "show": "Ko'rsatish",
-    "tours_word": "tur"
+    "tours_word": "tur",
+    "highlights_title": "Tur xususiyatlari",
+    "whats_included": "Narxga kiradi",
+    "whats_excluded": "Narxga kirmaydi",
+    "technical_level": "Texnik daraja",
+    "min_age": "Min. yosh",
+    "fitness_level": "Jismoniy tayyorgarlik",
+    "destinations_title": "Yo'nalishlar",
+    "tab_overview": "Umumiy",
+    "tab_itinerary": "Kunlik dastur",
+    "tab_included": "Narxga kiradi",
+    "tab_faqs": "Savol-javob",
+    "related_title": "Sizga yoqishi mumkin",
+    "related_subtitle": "Boshqa sarguzashtlar"
 }
