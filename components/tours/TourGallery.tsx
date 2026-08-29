@@ -29,7 +29,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                 {/* Asosiy katta rasm */}
                 <button
                     onClick={() => openLightbox(0)}
-                    className="md:col-span-2 md:row-span-2 relative aspect-video md:aspect-auto h-full min-h-[260px] bg-muted overflow-hidden group"
+                    className="md:col-span-2 md:row-span-2 relative aspect-video md:aspect-auto h-full min-h-65 bg-muted overflow-hidden group"
                 >
                     <img
                         src={getMediaUrl(list[0])}
