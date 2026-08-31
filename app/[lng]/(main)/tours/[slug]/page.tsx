@@ -88,7 +88,16 @@ export default async function TourDetailPage({ params }: Props) {
 
                 <h1 className="text-3xl md:text-4xl font-bold text-primary mb-6">{title}</h1>
 
-                <TourGallery images={tour.images ?? (tour.cover_image ? [tour.cover_image] : [])} title={title} />
+                <TourGallery
+                    images={
+                        tour.images && tour.images.length > 0
+                            ? tour.images
+                            : tour.cover_image
+                                ? [tour.cover_image]
+                                : []
+                    }
+                    title={title}
+                />
 
                 {/* Tezkor ma'lumot qatori */}
                 {quickInfo.length > 0 && (

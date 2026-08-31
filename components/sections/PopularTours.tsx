@@ -1,14 +1,19 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useT } from "next-i18next/client";
-import { ChevronLeft, ChevronRight, MapPin, Clock, ArrowUpRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, ArrowUpRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/media";
+import { localizedText } from "@/lib/utils";
+import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 import type { Tour } from "@/types";
 
 export function PopularTours({ tours }: { tours: Tour[] }) {
     const { t } = useT("home");
+    const params = useParams<{ lng: string }>();
+    const lng = params.lng ?? "uz";
     const scrollerRef = useRef<HTMLDivElement>(null);
 
     const isDragging = useRef(false);
@@ -96,51 +101,66 @@ export function PopularTours({ tours }: { tours: Tour[] }) {
                 className={`flex gap-5 overflow-x-auto pb-4 px-4 md:px-[max(1rem,calc((100vw-80rem)/2+1rem))] snap-x snap-mandatory scroll-smooth select-none [-ms-overflow-style:none] scrollbar-none [&::-webkit-scrollbar]:hidden ${isMouseDown ? "cursor-grabbing scroll-auto" : "cursor-grab"
                     }`}
             >
-                {tours.map((tour) => (
-                    <Link
-                        key={tour.id}
-                        href={`/tours/${tour.slug}`}
-                        onClick={onCardClick}
-                        draggable={false}
-                        className="group snap-start shrink-0 w-70 md:w-[320px] rounded-2xl overflow-hidden bg-card ring-1 ring-border hover:ring-primary/30 transition-all duration-300"
-                    >
-                        <div className="relative h-52 bg-muted overflow-hidden">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src={getMediaUrl(tour.images?.[0])}
-                                alt={tour.title}
-                                draggable={false}
-                                className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
-                            />
-                            <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm font-bold text-primary">
-                                ${tour.price}
-                            </div>
-                        </div>
+                {tours.map((tour) => {
+                    const title = localizedText(tour.title, lng);
+                    const shortDescription = localizedText(tour.short_description, lng);
+                    const countryName = tour.countries?.[0]
+                        ? localizedText(tour.countries[0].name, lng)
+                        : "";
+                    const imageUrl = getMediaUrl(tour.cover_image ?? tour.images?.[0]);
 
-                        <div className="p-5">
-                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
-                                <MapPin className="h-3.5 w-3.5" />
-                                {tour.country}
-                            </div>
-                            <h3 className="text-base font-bold text-foreground leading-snug mb-3 group-hover:text-primary transition-colors">
-                                {tour.title}
-                            </h3>
-                            <div className="flex items-center justify-between">
-                                {tour.short_description ? (
-                                    <p className="text-xs text-muted-foreground line-clamp-1 flex-1 mr-2">
-                                        {tour.short_description}
-                                    </p>
+                    return (
+                        <Link
+                            key={tour.id}
+                            href={`/tours/${tour.slug}`}
+                            onClick={onCardClick}
+                            draggable={false}
+                            className="group snap-start shrink-0 w-70 md:w-[320px] rounded-2xl overflow-hidden bg-card ring-1 ring-border hover:ring-primary/30 transition-all duration-300"
+                        >
+                            <div className="relative h-52 bg-muted overflow-hidden">
+                                {imageUrl ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img
+                                        src={imageUrl}
+                                        alt={title}
+                                        draggable={false}
+                                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
+                                    />
                                 ) : (
-                                    <span />
+                                    <TourImagePlaceholder className="h-full w-full" />
                                 )}
-                                <span className="flex items-center gap-1 text-sm font-semibold text-accent shrink-0">
-                                    {t("popular.view")}
-                                    <ArrowUpRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                                </span>
+                                <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm font-bold text-primary">
+                                    ${tour.price}
+                                </div>
                             </div>
-                        </div>
-                    </Link>
-                ))}
+
+                            <div className="p-5">
+                                {countryName && (
+                                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
+                                        <MapPin className="h-3.5 w-3.5" />
+                                        {countryName}
+                                    </div>
+                                )}
+                                <h3 className="text-base font-bold text-foreground leading-snug mb-3 group-hover:text-primary transition-colors">
+                                    {title}
+                                </h3>
+                                <div className="flex items-center justify-between">
+                                    {shortDescription ? (
+                                        <p className="text-xs text-muted-foreground line-clamp-1 flex-1 mr-2">
+                                            {shortDescription}
+                                        </p>
+                                    ) : (
+                                        <span />
+                                    )}
+                                    <span className="flex items-center gap-1 text-sm font-semibold text-accent shrink-0">
+                                        {t("popular.view")}
+                                        <ArrowUpRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                    </span>
+                                </div>
+                            </div>
+                        </Link>
+                    );
+                })}
 
                 <Link
                     href="/tours"
