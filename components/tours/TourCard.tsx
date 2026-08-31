@@ -6,10 +6,12 @@ import { MapPin, ArrowUpRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/media";
 import { localizedText } from "@/lib/utils";
 import type { Tour } from "@/types";
+import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 
 export function TourCard({ tour, viewLabel }: { tour: Tour; viewLabel: string }) {
     const params = useParams<{ lng: string }>();
     const lng = params.lng ?? "uz";
+    const imageUrl = getMediaUrl(tour.cover_image ?? tour.images?.[0]);
 
     const title = localizedText(tour.title, lng);
     const shortDescription = localizedText(tour.short_description, lng);
@@ -21,11 +23,15 @@ export function TourCard({ tour, viewLabel }: { tour: Tour; viewLabel: string })
             className="group rounded-2xl overflow-hidden bg-card ring-1 ring-border hover:ring-primary/30 transition-all duration-300"
         >
             <div className="relative h-52 bg-muted overflow-hidden">
-                <img
-                    src={getMediaUrl(tour.cover_image ?? tour.images?.[0])}
-                    alt={title}
-                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                {imageUrl ? (
+                    <img
+                        src={imageUrl}
+                        alt={title}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                ) : (
+                    <TourImagePlaceholder className="h-full w-full" />
+                )}
                 <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm font-bold text-primary">
                     ${tour.price}
                 </div>

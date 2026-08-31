@@ -198,12 +198,12 @@ export function getTours(params: Record<string, string | number | undefined> = {
 export const getTourBySlug = (slug: string, lang: string) =>
     api.get<unknown, Tour>(`/tours/${slug}`, { params: { lang } });
 
-export const getCountries = (lang: string) =>
-    api.get<unknown, Country[]>("/countries", { params: { lang } });
+export const getCountries = (lang?: string) =>
+    api.get<unknown, Country[]>("/countries", { params: lang ? { lang } : {} });
 
-export const getDestinations = (lang: string, countrySlug?: string) =>
+export const getDestinations = (lang?: string, countryId?: string) =>
     api.get<unknown, Destination[]>("/destinations", {
-        params: { lang, country_slug: countrySlug },
+        params: { lang, country_id: countryId },
     });
 
 // --- Bookings ---
@@ -334,10 +334,24 @@ export const getAllReviews = async (): Promise<Review[]> => {
 export const deleteReview = (reviewId: string) =>
     api.delete<unknown, void>(`/reviews/${reviewId}`);
 
-export const createCountry = (payload: { name: Record<string, string>; slug: string }) =>
+export interface CountryPayload {
+    name: string;
+    slug: string;
+    cover_image?: string;
+}
+
+export const createCountry = (payload: CountryPayload) =>
     api.post<unknown, Country>("/countries", payload);
 
-export const createDestination = (payload: { name: Record<string, string>; country_slug: string; slug: string }) =>
+export interface DestinationPayload {
+    name: string;
+    slug: string;
+    description?: string;
+    cover_image?: string;
+    country_id: string;
+}
+
+export const createDestination = (payload: DestinationPayload) =>
     api.post<unknown, Destination>("/destinations", payload);
 
 // Admin: Site Stats
@@ -348,3 +362,30 @@ export const updateSiteStats = (payload: Partial<SiteStats>) =>
     api.patch<unknown, SiteStats>("/site-stats", payload);
 
 export default api;
+
+// --- Contact Messages ---
+export interface ContactMessagePayload {
+    name: string;
+    email: string;
+    message: string;
+    source: "contact" | "service";
+}
+
+export interface ContactMessage {
+    id: string;
+    name: string;
+    email: string;
+    message: string;
+    source: string;
+    is_read: boolean;
+    created_at: string;
+}
+
+export const sendContactMessage = (payload: ContactMessagePayload) =>
+    api.post<unknown, ContactMessage>("/contact-messages", payload);
+
+export const getContactMessages = () =>
+    api.get<unknown, ContactMessage[]>("/contact-messages");
+
+export const markMessageRead = (id: string) =>
+    api.patch<unknown, ContactMessage>(`/contact-messages/${id}`, { is_read: true });

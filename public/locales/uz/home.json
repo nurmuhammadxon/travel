@@ -16,7 +16,10 @@
     "cta_primary": "Turlarni korish",
     "cta_secondary": "Biz haqimizda",
     "search_placeholder": "Qaysi tur yoki shahar qiziqtiradi?",
-    "search_button": "Qidirish"
+    "search_button": "Qidirish",
+    "search_destinations_label": "Yo'nalishlar",
+    "search_tours_label": "Turlar",
+    "search_no_results": "Hech narsa topilmadi"
   },
   "popular": {
     "eyebrow": "Tanlangan yonalishlar",

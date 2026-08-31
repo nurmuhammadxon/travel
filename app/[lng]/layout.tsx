@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | DiscoverStans`,
     },
     description: "O'zbekiston va Markaziy Osiyo bo'ylab tanlangan sayohat turlari.",
-    metadataBase: new URL("https://travel-lake-rho-83.vercel.app"),
+    metadataBase: new URL("https://discover-stans.uz"),
     openGraph: {
       title: "DiscoverStans",
       description: "O'zbekiston va Markaziy Osiyo bo'ylab tanlangan sayohat turlari.",

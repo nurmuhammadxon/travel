@@ -6,9 +6,9 @@ import { useT } from "next-i18next/client";
 import { Loader2, LogOut } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { getProfile, updateProfile } from "@/lib/api";
+import { getProfile, updateProfile, getMyBookings } from "@/lib/api";
 import { showSuccess, showError } from "@/lib/toast";
-import type { User } from "@/types";
+import type { User, Booking } from "@/types";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,14 +22,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-} from "@/components/ui/dialog";
+
+const STATUS_VARIANT: Record<Booking["status"], "default" | "secondary" | "destructive" | "outline"> = {
+    pending: "outline",
+    confirmed: "default",
+    completed: "secondary",
+    cancelled: "destructive",
+};
 
 export default function ProfilePage() {
     const { user: authUser, isLoading: authLoading, logout } = useAuth();
@@ -41,17 +40,26 @@ export default function ProfilePage() {
 
     const [profile, setProfile] = useState<User | null>(null);
     const [fullName, setFullName] = useState("");
-    const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [preferredLanguage, setPreferredLanguage] = useState<"uz" | "ru" | "en">("uz");
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
-    const [emailConfirmOpen, setEmailConfirmOpen] = useState(false);
+
+    const [bookings, setBookings] = useState<Booking[]>([]);
+    const [isLoadingBookings, setIsLoadingBookings] = useState(true);
+    const [bookingsError, setBookingsError] = useState<string | null>(null);
 
     const ROLE_LABEL: Record<string, string> = {
         admin: t("role_admin"),
         agent: t("role_agent"),
         customer: t("role_customer"),
+    };
+
+    const STATUS_LABEL: Record<Booking["status"], string> = {
+        pending: t("bookings.status_pending"),
+        confirmed: t("bookings.status_confirmed"),
+        completed: t("bookings.status_completed"),
+        cancelled: t("bookings.status_cancelled"),
     };
 
     useEffect(() => {
@@ -65,7 +73,6 @@ export default function ProfilePage() {
             .then((data) => {
                 setProfile(data);
                 setFullName(data.full_name);
-                setEmail(data.email);
                 setPhone(data.phone ?? "");
                 setPreferredLanguage((data.preferred_language as "uz" | "ru" | "en") ?? "uz");
             })
@@ -73,39 +80,32 @@ export default function ProfilePage() {
                 showError(err instanceof Error ? err.message : t("error_load"));
             })
             .finally(() => setIsLoading(false));
+
+        getMyBookings()
+            .then(setBookings)
+            .catch((err) => {
+                setBookingsError(err instanceof Error ? err.message : t("bookings.error_load"));
+            })
+            .finally(() => setIsLoadingBookings(false));
     }, [authUser, authLoading, router, prefix, t]);
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (!profile) return;
-
-        if (email !== profile.email) {
-            setEmailConfirmOpen(true);
-            return;
-        }
-
-        void saveProfile();
-    }
-
-    async function saveProfile() {
         if (!profile) return;
 
         setIsSaving(true);
         try {
             const updated = await updateProfile({
                 full_name: fullName,
-                email,
                 phone: phone || undefined,
                 preferred_language: preferredLanguage,
             });
             setProfile(updated);
-            setEmail(updated.email);
             showSuccess(t("success"));
         } catch (err) {
             showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
             setIsSaving(false);
-            setEmailConfirmOpen(false);
         }
     }
 
@@ -125,7 +125,7 @@ export default function ProfilePage() {
     if (!profile) return null;
 
     return (
-        <div className="mx-auto max-w-xl px-4 py-24">
+        <div className="mx-auto max-w-xl px-4 py-24 space-y-6">
             <Card>
                 <CardHeader>
                     <div className="flex items-center justify-between">
@@ -149,13 +149,7 @@ export default function ProfilePage() {
 
                         <div className="space-y-2">
                             <Label htmlFor="email">{t("email")}</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
+                            <Input id="email" type="email" value={profile.email} disabled />
                         </div>
 
                         <div className="space-y-2">
@@ -172,7 +166,7 @@ export default function ProfilePage() {
                             <Label htmlFor="preferred_language">{t("language")}</Label>
                             <Select
                                 value={preferredLanguage}
-                                onValueChange={(v) => setPreferredLanguage(v as "uz" | "ru" | "en")}
+                                onValueChange={(v) => setPreferredLanguage((v ?? "uz") as "uz" | "ru" | "en")}
                             >
                                 <SelectTrigger id="preferred_language" className="w-full">
                                     <SelectValue />
@@ -207,34 +201,50 @@ export default function ProfilePage() {
                 </CardContent>
             </Card>
 
-            <Dialog open={emailConfirmOpen} onOpenChange={setEmailConfirmOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>{t("email_dialog.title")}</DialogTitle>
-                        <DialogDescription>
-                            {t("email_dialog.current")}:{" "}
-                            <span className="font-medium">{profile.email}</span>
-                            <br />
-                            {t("email_dialog.next")}:{" "}
-                            <span className="font-medium">{email}</span>
-                            <br />
-                            {t("email_dialog.description")}
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setEmailConfirmOpen(false)}
-                            disabled={isSaving}
-                        >
-                            {t("email_dialog.cancel")}
-                        </Button>
-                        <Button onClick={() => void saveProfile()} disabled={isSaving}>
-                            {isSaving ? t("saving") : t("email_dialog.confirm")}
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            {/* Mening buyurtmalarim */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("bookings.title")}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {isLoadingBookings ? (
+                        <div className="flex justify-center py-8">
+                            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                        </div>
+                    ) : bookingsError ? (
+                        <p className="text-sm text-destructive">{bookingsError}</p>
+                    ) : bookings.length === 0 ? (
+                        <p className="text-sm text-muted-foreground text-center py-6">
+                            {t("bookings.empty")}
+                        </p>
+                    ) : (
+                        <div className="space-y-3">
+                            {bookings.map((booking) => (
+                                <div
+                                    key={booking.id}
+                                    className="rounded-lg border border-border p-4 flex items-center justify-between gap-3"
+                                >
+                                    <div>
+                                        <p className="font-medium text-sm">{booking.booking_number}</p>
+                                        <p className="text-xs text-muted-foreground mt-0.5">
+                                            {booking.tour_date} · {booking.num_adults} {t("bookings.adults_short")}
+                                            {booking.num_children
+                                                ? `, ${booking.num_children} ${t("bookings.children_short")}`
+                                                : ""}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground mt-0.5">
+                                            {booking.total_price} {booking.currency ?? ""}
+                                        </p>
+                                    </div>
+                                    <Badge variant={STATUS_VARIANT[booking.status]}>
+                                        {STATUS_LABEL[booking.status]}
+                                    </Badge>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
         </div>
     );
 }

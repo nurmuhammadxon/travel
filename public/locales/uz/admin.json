@@ -5,7 +5,9 @@
         "bookings": "Buyurtmalar",
         "reviews": "Sharhlar",
         "users": "Foydalanuvchilar",
-        "logout": "Chiqish"
+        "logout": "Chiqish",
+        "messages": "Xabarlar",
+        "settings": "Sozlamalar"
     },
     "guard": {
         "checking": "Tekshirilmoqda...",
@@ -159,5 +161,59 @@
         "update_success": "Tur yangilandi",
         "create_success": "Tur yaratildi",
         "save_error": "Xatolik yuz berdi"
+    },
+    "messages": {
+        "title": "Xabarlar",
+        "total": "Jami {{count}} ta xabar",
+        "unread_count": "{{count}} ta o'qilmagan",
+        "col_name": "Ism",
+        "col_email": "Email",
+        "col_source": "Manba",
+        "col_message": "Xabar",
+        "col_date": "Sana",
+        "col_status": "Holat",
+        "source_contact": "Aloqa sahifasi",
+        "source_service": "Xizmatlar sahifasi",
+        "status_read": "O'qilgan",
+        "status_unread": "O'qilmagan",
+        "mark_read": "O'qilgan deb belgilash",
+        "not_found": "Xabarlar topilmadi",
+        "load_error": "Xabarlarni yuklab bo'lmadi",
+        "mark_read_error": "Belgilab bo'lmadi",
+        "view": "Ko'rish"
+    },
+    "settings": {
+        "title": "Sozlamalar",
+        "subtitle": "Sayt sozlamalarini shu yerdan boshqaring",
+        "error_generic": "Xatolik yuz berdi",
+        "site_stats": {
+            "title": "Bosh sahifa statistikasi",
+            "subtitle": "Bu raqamlar saytning bosh sahifasida ko'rsatiladi (yillik tajriba, mijozlar mamnunligi va h.k.)",
+            "years_experience": "Yillik tajriba",
+            "satisfaction_percent": "Mijozlar mamnunligi (%)",
+            "completed_trips": "Yakunlangan sayohatlar",
+            "happy_travelers": "Baxtli sayohatchilar",
+            "save": "Saqlash",
+            "saving": "Saqlanmoqda...",
+            "save_success": "Statistika yangilandi"
+        },
+        "geography": {
+            "countries_title": "Davlatlar",
+            "countries_subtitle": "Tur yaratishda tanlanadigan davlatlar ro'yxati",
+            "destinations_title": "Yo'nalishlar",
+            "destinations_subtitle": "Har bir davlat ichidagi shahar/hudud yo'nalishlari",
+            "name": "Nomi",
+            "slug": "Slug",
+            "country": "Davlat",
+            "select_country": "Tanlang",
+            "select_country_first": "Avval davlatni tanlang",
+            "add": "Qo'shish",
+            "saving": "Saqlanmoqda...",
+            "country_created": "Davlat qo'shildi",
+            "destination_created": "Yo'nalish qo'shildi",
+            "no_countries": "Hozircha davlatlar yo'q",
+            "no_destinations": "Hozircha yo'nalishlar yo'q",
+            "tour_count": "{{count}} ta tur"
+        }
     }
 }

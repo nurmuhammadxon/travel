@@ -16,7 +16,10 @@
         "cta_primary": "View tours",
         "cta_secondary": "About us",
         "search_placeholder": "Which tour or city interests you?",
-        "search_button": "Search"
+        "search_button": "Search",
+        "search_destinations_label": "Destinations",
+        "search_tours_label": "Tours",
+        "search_no_results": "No results found"
     },
     "popular": {
         "eyebrow": "Selected destinations",

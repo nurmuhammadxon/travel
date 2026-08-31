@@ -50,7 +50,7 @@ export default async function ServicesPage({ params }: Props) {
                 </div>
             </div>
 
-            <GetInTouchSection lng={lng} />
+            <GetInTouchSection lng={lng} source="service" />
         </div>
     );
 }

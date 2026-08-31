@@ -3,20 +3,18 @@
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useT } from "next-i18next/client";
-import { MapPin, Compass, Search, ChevronUp, ChevronDown } from "lucide-react";
+import { MapPin, Compass, ChevronUp, ChevronDown } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { HeroSearch } from "./HeroSearch";
 
 const SLIDE_COUNT = 6;
-const ROTATE_INTERVAL = 4500; 
+const ROTATE_INTERVAL = 4500;
 
 export function Hero() {
     const { t } = useT("home");
-    const router = useRouter();
     const [index, setIndex] = useState(0);
-    const [query, setQuery] = useState("");
 
     const goTo = useCallback((next: number) => {
         setIndex(((next % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT);
@@ -28,11 +26,6 @@ export function Hero() {
         }, ROTATE_INTERVAL);
         return () => clearInterval(id);
     }, [index]);
-
-    function handleSearch(e: React.FormEvent) {
-        e.preventDefault();
-        router.push(query ? `/tours?q=${encodeURIComponent(query)}` : "/tours");
-    }
 
     return (
         <section className="relative min-h-screen flex flex-col overflow-hidden">
@@ -127,28 +120,7 @@ export function Hero() {
             </div>
 
             {/* Qidiruv paneli */}
-            <div className="relative z-10 mx-auto max-w-2xl w-full px-4 pb-14 md:pb-20">
-                <form
-                    onSubmit={handleSearch}
-                    className="flex items-center gap-2 bg-white rounded-full p-2 pl-5 shadow-xl"
-                >
-                    <Search className="h-5 w-5 text-muted-foreground shrink-0" />
-                    <input
-                        type="text"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder={t("hero.search_placeholder")}
-                        className="flex-1 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground py-2 min-w-0"
-                    />
-                    <button
-                        type="submit"
-                        aria-label={t("hero.search_button")}
-                        className="h-10 w-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center hover:bg-accent/90 transition-colors shrink-0"
-                    >
-                        <Search className="h-4 w-4" />
-                    </button>
-                </form>
-            </div>
+            <HeroSearch />
         </section>
     );
 }

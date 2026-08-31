@@ -1,31 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { sendContactMessage } from "@/lib/api";
+import { showSuccess, showError } from "@/lib/toast";
 
 interface ContactFormProps {
+    source: "contact" | "service";
     labels: {
         name: string;
         email: string;
         message: string;
         submit: string;
+        submitting?: string;
+        success?: string;
     };
 }
 
-export function ContactForm({ labels }: ContactFormProps) {
+export function ContactForm({ source, labels }: ContactFormProps) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        const subject = encodeURIComponent(`Sayt orqali xabar — ${name}`);
-        const body = encodeURIComponent(`${message}\n\nEmail: ${email}`);
-        window.location.href = `mailto:info@sayt.uz?subject=${subject}&body=${body}`;
+        setIsSubmitting(true);
+        try {
+            await sendContactMessage({ name, email, message, source });
+            showSuccess(labels.success ?? "Xabar yuborildi");
+            setName("");
+            setEmail("");
+            setMessage("");
+        } catch (err) {
+            showError(err instanceof Error ? err.message : "Xatolik yuz berdi");
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -54,9 +69,17 @@ export function ContactForm({ labels }: ContactFormProps) {
                     required
                 />
             </div>
-            <Button type="submit" className="w-full rounded-full bg-primary text-white hover:bg-primary/90 gap-2">
-                <Send className="h-4 w-4" />
-                {labels.submit}
+            <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full rounded-full bg-primary text-white hover:bg-primary/90 gap-2"
+            >
+                {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                    <Send className="h-4 w-4" />
+                )}
+                {isSubmitting ? (labels.submitting ?? "...") : labels.submit}
             </Button>
         </form>
     );

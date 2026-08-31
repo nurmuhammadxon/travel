@@ -16,7 +16,10 @@
         "cta_primary": "Смотреть туры",
         "cta_secondary": "О нас",
         "search_placeholder": "Какой тур или город вас интересует?",
-        "search_button": "Поиск"
+        "search_button": "Поиск",
+        "search_destinations_label": "Направления",
+        "search_tours_label": "Туры",
+        "search_no_results": "Ничего не найдено"
     },
     "popular": {
         "eyebrow": "Избранные направления",

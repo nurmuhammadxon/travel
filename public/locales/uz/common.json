@@ -3,10 +3,13 @@
     "home": "Bosh sahifa",
     "tours": "Turlar",
     "about": "Biz haqimizda",
-    "service": "Service",
+    "service": "Xizmatlar",
     "contact": "Aloqa",
     "login": "Kirish",
-    "book": "Tur band qilish"
+    "book": "Tur band qilish",
+    "admin_panel": "Admin panel",
+    "profile": "Mening profilim",
+    "logout": "Chiqish"
   },
   "footer": {
     "about": "Samarqand va O'zbekiston bo'ylab unutilmas sayohatlar tashkil qilamiz - tarix, madaniyat va mehmondo'stlik bir joyda.",

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useT } from "next-i18next/client";
-import { Menu, User as UserIcon } from "lucide-react";
+import { Menu, User as UserIcon, LayoutDashboard, LogOut, ClipboardList } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -12,10 +12,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { GirihBorder } from "./GirihBorder";
 import i18nConfig from "../../i18n.config";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { isAdminUser } from "@/lib/auth";
 
 const NAV_LINKS = [
   { href: "/", key: "nav.home" },
@@ -35,8 +38,15 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { t } = useT("common");
+  const { user, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  async function handleLogout() {
+    await logout();
+    setMobileOpen(false);
+    router.push("/");
+  }
 
   useEffect(() => {
     function onScroll() {
@@ -59,7 +69,7 @@ export function Header() {
   const isDarkHeroRoute =
     pathWithoutLocale.length <= 1 && DARK_HERO_ROUTES.includes(pathWithoutLocale[0] ?? "");
   const isTransparent = isDarkHeroRoute && !scrolled;
-  
+
   function switchLocale(locale: string) {
     const rest = pathWithoutLocale;
     const nextPath =
@@ -126,13 +136,50 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Link
-            href="/login"
-            className="p-2.5 rounded-full bg-primary text-white hover:bg-primary/90 transition-all duration-200 hover:scale-110"
-            aria-label={t("nav.login")}
-          >
-            <UserIcon className="h-4.5 w-4.5" />
-          </Link>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                style={{ borderRadius: "9999px" }}
+                className={cn(
+                  buttonVariants({ size: "sm" }),
+                  "rounded-full! w-10 h-10 aspect-square p-0 flex items-center justify-center bg-primary text-white hover:bg-primary/90 hover:scale-110 transition-transform duration-200"
+                )}
+                aria-label={user.full_name}
+              >
+                <UserIcon className="h-4.5 w-4.5" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-48">
+                <div className="px-2 py-1.5">
+                  <p className="text-xs font-medium truncate">{user.full_name}</p>
+                  <p className="text-[0.65rem] text-muted-foreground truncate">{user.email}</p>
+                </div>
+                <DropdownMenuSeparator />
+                {isAdminUser(user) && (
+                  <DropdownMenuItem onClick={() => router.push("/admin")} className="gap-2">
+                    <LayoutDashboard className="h-3.5 w-3.5" />
+                    {t("nav.admin_panel")}
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem onClick={() => router.push("/profile")} className="gap-2">
+                  <ClipboardList className="h-3.5 w-3.5" />
+                  {t("nav.profile")}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="gap-2 text-destructive">
+                  <LogOut className="h-3.5 w-3.5" />
+                  {t("nav.logout")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link
+              href="/login"
+              className="p-2.5 rounded-full bg-primary text-white hover:bg-primary/90 transition-all duration-200 hover:scale-110"
+              aria-label={t("nav.login")}
+            >
+              <UserIcon className="h-4.5 w-4.5" />
+            </Link>
+          )}
 
         </div>
 
@@ -188,14 +235,48 @@ export function Header() {
                 </ul>
 
                 <div className="flex flex-col gap-3 pt-4 border-t">
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full")}
-                  >
-                    <UserIcon className="h-4 w-4" />
-                    {t("nav.login")}
-                  </Link>
+                  {user ? (
+                    <>
+                      <div className="px-1">
+                        <p className="text-sm font-medium truncate">{user.full_name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                      </div>
+                      {isAdminUser(user) && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setMobileOpen(false)}
+                          className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full")}
+                        >
+                          <LayoutDashboard className="h-4 w-4" />
+                          {t("nav.admin_panel")}
+                        </Link>
+                      )}
+                      <Link
+                        href="/profile"
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full")}
+                      >
+                        <ClipboardList className="h-4 w-4" />
+                        {t("nav.profile")}
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full text-destructive")}
+                      >
+                        <LogOut className="h-4 w-4" />
+                        {t("nav.logout")}
+                      </button>
+                    </>
+                  ) : (
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full")}
+                    >
+                      <UserIcon className="h-4 w-4" />
+                      {t("nav.login")}
+                    </Link>
+                  )}
                 </div>
               </div>
             </SheetContent>

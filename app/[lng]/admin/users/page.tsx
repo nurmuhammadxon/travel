@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useT } from "next-i18next/client";
 import {
     Table,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Loading } from "@/components/_components/loading";
+import { useFetch } from "@/hooks/use-fetch";
 import { getUsers } from "@/lib/api";
 import type { User, UserRole } from "@/types";
 
@@ -30,18 +31,13 @@ export default function AdminUsersPage() {
         customer: t("users.role_customer"),
     };
 
-    const [users, setUsers] = useState<User[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [loadError, setLoadError] = useState<string | null>(null);
     const [search, setSearch] = useState("");
 
-    useEffect(() => {
-        getUsers()
-            .then(setUsers)
-            .catch((err) => setLoadError(err instanceof Error ? err.message : t("users.load_error")))
-            .finally(() => setIsLoading(false));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const {
+        data: users,
+        isLoading,
+        error: loadError,
+    } = useFetch(getUsers, [] as User[], "Ro'yxatni yuklab bo'lmadi");
 
     const filtered = users.filter((u) =>
         `${u.full_name} ${u.email}`.toLowerCase().includes(search.toLowerCase())

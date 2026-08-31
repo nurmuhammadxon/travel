@@ -12,6 +12,8 @@ import {
     Users,
     LogOut,
     Globe,
+    MessageSquare,
+    Settings
 } from "lucide-react";
 
 import {
@@ -54,6 +56,7 @@ export function AppSidebar() {
         { title: t("sidebar.bookings"), url: `${prefix}/admin/bookings`, icon: ClipboardList },
         { title: t("sidebar.reviews"), url: `${prefix}/admin/reviews`, icon: Star },
         { title: t("sidebar.users"), url: `${prefix}/admin/users`, icon: Users },
+        { title: t("sidebar.settings"), url: `${prefix}/admin/settings`, icon: Settings },
     ];
 
     const linkClass = (isActive: boolean) =>
@@ -127,13 +130,16 @@ export function AppSidebar() {
                         </Link>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 group-data-[collapsible=icon]:flex-col">
                             <DropdownMenu>
                                 <DropdownMenuTrigger
-                                    className={cn(linkClass(false), "cursor-pointer flex-1 justify-center")}
+                                    className={cn(
+                                        linkClass(false),
+                                        "cursor-pointer flex-1 justify-center group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:px-0"
+                                    )}
                                 >
                                     <Globe />
-                                    <span className="uppercase">{lng}</span>
+                                    <span className="uppercase group-data-[collapsible=icon]:hidden">{lng}</span>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start">
                                     {LANGUAGES.map((l) => (
@@ -146,10 +152,13 @@ export function AppSidebar() {
 
                             <button
                                 onClick={logout}
-                                className={cn(linkClass(false), "cursor-pointer flex-1 justify-center")}
+                                className={cn(
+                                    linkClass(false),
+                                    "cursor-pointer flex-1 justify-center group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:px-0"
+                                )}
                             >
                                 <LogOut />
-                                <span>{t("sidebar.logout")}</span>
+                                <span className="group-data-[collapsible=icon]:hidden">{t("sidebar.logout")}</span>
                             </button>
                         </div>
                     </SidebarMenuItem>

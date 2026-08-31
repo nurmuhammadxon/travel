@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams, useParams } from "next/navigation";
 import { useT } from "next-i18next/client";
-import { SlidersHorizontal, Search, X } from "lucide-react";
+import { SlidersHorizontal, Search, } from "lucide-react";
+import { localizedText } from "@/lib/utils";
 
-import { getTours } from "@/lib/api";
+import { getCountries, getDestinations } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,34 +17,11 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import type { Country, Destination } from "@/types";
 
-// TODO: backend /countries endpointi tayyor bo'lgach, dinamik ro'yxatga almashtiring
-const COUNTRIES = [
-    { slug: "uzbekistan", label: "Uzbekistan" },
-    { slug: "tajikistan", label: "Tajikistan" },
-    { slug: "kazakhstan", label: "Kazakhstan" },
-    { slug: "kyrgyzstan", label: "Kyrgyzstan" },
-];
-
-// TODO: backend /destinations endpointi tayyor bo'lgach, dinamik ro'yxatga almashtiring
-// Hozircha "search" orqali ishlaydi (tur nomi/tavsifida shahar nomi uchrasa mos keladi)
-const DESTINATIONS = [
-    { key: "Samarkand", label: "Samarkand" },
-    { key: "Tashkent", label: "Tashkent" },
-    { key: "Bukhara", label: "Bukhara" },
-    { key: "Khiva", label: "Khiva" },
-    { key: "Almaty", label: "Almaty" },
-    { key: "Issyk-Kul", label: "Issyk-Kul" },
-];
-
-// TODO: backend'dagi haqiqiy category enum qiymatlari bilan almashtiring
 const CATEGORIES = [
-    { value: "multi_day", label: "Multi-day" },
     { value: "day_trip", label: "Day trip" },
-    { value: "adventure", label: "Adventure" },
-    { value: "cultural", label: "Cultural" },
-    { value: "expedition", label: "Expedition" },
-    { value: "hiking", label: "Hiking" },
+    { value: "multi_day", label: "Multi-day" },
 ];
 
 interface TourFiltersProps {
@@ -55,6 +33,8 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const params = useParams<{ lng: string }>();
+    const lng = params.lng ?? "uz";
     const [, startTransition] = useTransition();
 
     const currentSearch = searchParams.get("search") ?? "";
@@ -64,57 +44,48 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
     const [searchValue, setSearchValue] = useState(currentSearch);
     const [modalOpen, setModalOpen] = useState(false);
     const [draftCountries, setDraftCountries] = useState<string[]>(currentCountries);
-    const [draftDestination, setDraftDestination] = useState<string | null>(
-        DESTINATIONS.some((d) => d.key === currentSearch) ? currentSearch : null
-    );
+    const [draftDestination, setDraftDestination] = useState<string | null>(null);
 
-    const [countryCounts, setCountryCounts] = useState<Record<string, number | null>>({});
-    const [destinationCounts, setDestinationCounts] = useState<Record<string, number | null>>({});
-    const [countsLoading, setCountsLoading] = useState(false);
+    const [countries, setCountries] = useState<Country[]>([]);
+    const [destinations, setDestinations] = useState<Destination[]>([]);
+    const [isLoadingLists, setIsLoadingLists] = useState(true);
+
+    const currentDestination = searchParams.get("destination") ?? "";
 
     const activeFilterCount =
         (currentCountries.length > 0 ? 1 : 0) +
         (currentCategory ? 1 : 0) +
-        (DESTINATIONS.some((d) => d.key === currentSearch) ? 1 : 0);
+        (currentDestination ? 1 : 0);
 
-    // Modal ochilganda har bir davlat/yo'nalish uchun tur sonini yuklaymiz
     useEffect(() => {
-        if (!modalOpen) return;
         let cancelled = false;
-        setCountsLoading(true);
+        setIsLoadingLists(true);
 
-        async function loadCounts() {
-            const countryEntries = await Promise.all(
-                COUNTRIES.map(async (c) => {
-                    try {
-                        const res = await getTours({ country: c.slug, page_size: 1 });
-                        return [c.slug, res.total] as const;
-                    } catch {
-                        return [c.slug, null] as const;
-                    }
-                })
-            );
-            const destinationEntries = await Promise.all(
-                DESTINATIONS.map(async (d) => {
-                    try {
-                        const res = await getTours({ search: d.key, page_size: 1 });
-                        return [d.key, res.total] as const;
-                    } catch {
-                        return [d.key, null] as const;
-                    }
-                })
-            );
+        Promise.all([getCountries(lng), getDestinations(lng)])
+            .then(([countriesRes, destinationsRes]) => {
+                if (cancelled) return;
+                setCountries(countriesRes);
+                setDestinations(destinationsRes);
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setCountries([]);
+                    setDestinations([]);
+                }
+            })
+            .finally(() => {
+                if (!cancelled) setIsLoadingLists(false);
+            });
 
-            if (cancelled) return;
-            setCountryCounts(Object.fromEntries(countryEntries));
-            setDestinationCounts(Object.fromEntries(destinationEntries));
-            setCountsLoading(false);
-        }
-
-        loadCounts();
         return () => {
             cancelled = true;
         };
+    }, [lng]);
+
+    useEffect(() => {
+        if (!modalOpen) return;
+        setDraftCountries(currentCountries);
+        setDraftDestination(currentDestination || null);
     }, [modalOpen]);
 
     function updateParams(next: Record<string, string | null>) {
@@ -146,32 +117,23 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
         );
     }
 
-    function toggleDraftDestination(key: string) {
-        setDraftDestination((prev) => (prev === key ? null : key));
+    function toggleDraftDestination(slug: string) {
+        setDraftDestination((prev) => (prev === slug ? null : slug));
     }
 
     function applyFilters() {
         updateParams({
             country: draftCountries.length > 0 ? draftCountries.join(",") : null,
-            search: draftDestination ?? null,
+            destination: draftDestination ?? null,
         });
         setModalOpen(false);
     }
 
-    // Filtr(lar)ni darhol tozalab, modalni yopadi
     function handleClear() {
         setDraftCountries([]);
         setDraftDestination(null);
-        updateParams({ country: null, search: null });
-        setSearchValue("");
+        updateParams({ country: null, destination: null });
         setModalOpen(false);
-    }
-
-    function clearAllFilters() {
-        setSearchValue("");
-        setDraftCountries([]);
-        setDraftDestination(null);
-        router.push(pathname);
     }
 
     return (
@@ -191,13 +153,7 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
                     variant="outline"
                     size="sm"
                     className="gap-1.5 shrink-0 rounded-full"
-                    onClick={() => {
-                        setDraftCountries(currentCountries);
-                        setDraftDestination(
-                            DESTINATIONS.some((d) => d.key === currentSearch) ? currentSearch : null
-                        );
-                        setModalOpen(true);
-                    }}
+                    onClick={() => setModalOpen(true)}
                 >
                     <SlidersHorizontal className="h-3.5 w-3.5" />
                     {t("filter_button")}
@@ -247,52 +203,51 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
                     <div className="space-y-5 max-h-96 overflow-y-auto pr-1">
                         <div className="space-y-2">
                             <p className="text-sm font-semibold">{t("country_label")}</p>
-                            {COUNTRIES.map((c) => (
-                                <label
-                                    key={c.slug}
-                                    className="flex items-center justify-between gap-2 cursor-pointer py-1"
-                                >
-                                    <span className="flex items-center gap-2 text-sm">
-                                        <Checkbox
-                                            checked={draftCountries.includes(c.slug)}
-                                            onCheckedChange={() => toggleDraftCountry(c.slug)}
-                                        />
-                                        {c.label}
-                                    </span>
-                                    {countsLoading ? (
-                                        <Skeleton className="h-5 w-6 rounded-full" />
-                                    ) : (
-                                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-muted px-1 text-[11px] text-muted-foreground">
-                                            {countryCounts[c.slug] ?? "—"}
+                            {isLoadingLists ? (
+                                Array.from({ length: 4 }).map((_, i) => (
+                                    <Skeleton key={i} className="h-7 w-full" />
+                                ))
+                            ) : (
+                                countries.map((c) => (
+                                    <label
+                                        key={c.slug}
+                                        className="flex items-center justify-between gap-2 cursor-pointer py-1"
+                                    >
+                                        <span className="flex items-center gap-2 text-sm">
+                                            <Checkbox
+                                                checked={draftCountries.includes(c.slug)}
+                                                onCheckedChange={() => toggleDraftCountry(c.slug)}
+                                            />
+                                            {localizedText(c.name, lng)}
                                         </span>
-                                    )}
-                                </label>
-                            ))}
+                                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-muted px-1 text-[11px] text-muted-foreground">
+                                            {c.tour_count ?? "—"}
+                                        </span>
+                                    </label>
+                                ))
+                            )}
                         </div>
 
                         <div className="space-y-2 border-t pt-4">
                             <p className="text-sm font-semibold">{t("destination_label")}</p>
-                            {DESTINATIONS.map((d) => (
-                                <label
-                                    key={d.key}
-                                    className="flex items-center justify-between gap-2 cursor-pointer py-1"
-                                >
-                                    <span className="flex items-center gap-2 text-sm">
+                            {isLoadingLists ? (
+                                Array.from({ length: 6 }).map((_, i) => (
+                                    <Skeleton key={i} className="h-7 w-full" />
+                                ))
+                            ) : (
+                                destinations.map((d) => (
+                                    <label
+                                        key={d.id}
+                                        className="flex items-center gap-2 cursor-pointer py-1"
+                                    >
                                         <Checkbox
-                                            checked={draftDestination === d.key}
-                                            onCheckedChange={() => toggleDraftDestination(d.key)}
+                                            checked={draftDestination === d.slug}
+                                            onCheckedChange={() => toggleDraftDestination(d.slug)}
                                         />
-                                        {d.label}
-                                    </span>
-                                    {countsLoading ? (
-                                        <Skeleton className="h-5 w-6 rounded-full" />
-                                    ) : (
-                                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-muted px-1 text-[11px] text-muted-foreground">
-                                            {destinationCounts[d.key] ?? "—"}
-                                        </span>
-                                    )}
-                                </label>
-                            ))}
+                                        <span className="text-sm">{localizedText(d.name, lng)}</span>
+                                    </label>
+                                ))
+                            )}
                         </div>
                     </div>
 

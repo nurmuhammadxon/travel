@@ -41,7 +41,11 @@ export default function LoginPage() {
         formState: { errors: registerErrors },
     } = useForm<RegisterValues>({ resolver: zodResolver(registerSchema) });
 
-    function redirectAfterAuth(u: User) {
+    function redirectAfterLogin(u: User) {
+        router.push(isAdminUser(u) ? `${prefix}/admin` : prefix || "/");
+    }
+
+    function redirectIfAlreadyAuthenticated(u: User) {
         router.push(isAdminUser(u) ? `${prefix}/admin` : `${prefix}/profile`);
     }
 
@@ -50,7 +54,7 @@ export default function LoginPage() {
         try {
             const loggedInUser = await login(values);
             showSuccess(t("login_success"));
-            redirectAfterAuth(loggedInUser);
+            redirectAfterLogin(loggedInUser);
         } catch (err) {
             showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
@@ -63,7 +67,7 @@ export default function LoginPage() {
         try {
             const registeredUser = await registerUser(values);
             showSuccess(t("register_success"));
-            redirectAfterAuth(registeredUser);
+            redirectAfterLogin(registeredUser);
         } catch (err) {
             showError(err instanceof Error ? err.message : t("error_generic"));
         } finally {
@@ -73,7 +77,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (!authLoading && user) {
-            redirectAfterAuth(user);
+            redirectIfAlreadyAuthenticated(user);
         }
     }, [user, authLoading]);
 

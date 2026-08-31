@@ -55,7 +55,6 @@ export default async function TourDetailPage({ params }: Props) {
     const excluded = localizedList(tour.excluded, lng);
     const destinationChips = tour.destinations ?? [];
 
-    // Tezkor ma'lumot bloki - faqat backend'dan kelgan maydonlar ko'rsatiladi
     const quickInfo = [
         tour.duration_days
             ? {

@@ -107,7 +107,7 @@ export default async function ContactPage({ params }: Props) {
                 </div>
             </div>
 
-            <GetInTouchSection lng={lng} />
+            <GetInTouchSection lng={lng} source="contact" />
         </div>
     );
 }

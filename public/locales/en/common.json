@@ -6,7 +6,10 @@
         "service": "Service",
         "contact": "Contact",
         "login": "Log in",
-        "book": "Book a tour"
+        "book": "Book a tour",
+        "admin_panel": "Admin panel",
+        "profile": "My profile",
+        "logout": "Logout"
     },
     "footer": {
         "about": "We organize unforgettable journeys across Samarkand and Uzbekistan - history, culture, and hospitality all in one place.",

@@ -23,5 +23,16 @@
         "description": "Bu amalni tasdiqlaganingizdan so'ng, tizimga kirish uchun yangi email ishlatiladi.",
         "cancel": "Bekor qilish",
         "confirm": "Tasdiqlash"
+    },
+    "bookings": {
+        "title": "Mening buyurtmalarim",
+        "empty": "Hozircha buyurtmalaringiz yo'q",
+        "error_load": "Buyurtmalarni yuklab bo'lmadi",
+        "adults_short": "kattalar",
+        "children_short": "bola",
+        "status_pending": "Kutilmoqda",
+        "status_confirmed": "Tasdiqlangan",
+        "status_completed": "Yakunlangan",
+        "status_cancelled": "Bekor qilingan"
     }
 }

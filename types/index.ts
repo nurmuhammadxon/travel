@@ -50,20 +50,14 @@ export interface Tour {
     max_group_size?: number;
     is_featured?: boolean;
     is_active?: boolean;
-    countries?: {
-        id: string;
-        name: { uz: string; ru: string; en: string };
-        slug: string;
-        cover_image?: string | null;
-        tour_count?: number;
-    }[];
+    countries?: Country[];
     itinerary?: TourItineraryDay[];
     reviews?: Review[];
     images?: string[];
     country?: string;
-    technical_level?: number; // 1-5
+    technical_level?: number;
     min_age?: number;
-    fitness_level?: number; // 1-5
+    fitness_level?: number;
     highlights?: string[] | { uz?: string[]; ru?: string[]; en?: string[] };
     included?: string[] | { uz?: string[]; ru?: string[]; en?: string[] };
     excluded?: string[] | { uz?: string[]; ru?: string[]; en?: string[] };
@@ -72,22 +66,24 @@ export interface Tour {
         answer: string | { uz?: string; ru?: string; en?: string };
     }[];
     map_embed_url?: string;
-    destinations?: {
-        id: string;
-        name: { uz: string; ru: string; en: string };
-        slug: string;
-    }[];
+    destinations?: Destination[];
 }
 
 export interface Country {
-    slug: string;
+    id: string;
     name: string;
+    slug: string;
+    cover_image?: string;
+    tour_count?: number;
 }
 
 export interface Destination {
-    slug: string;
+    id: string;
     name: string;
-    country_slug: string;
+    slug: string;
+    description?: string;
+    cover_image?: string;
+    country_id: string;
 }
 
 export interface Booking {

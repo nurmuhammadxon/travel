@@ -5,7 +5,9 @@
         "bookings": "Bookings",
         "reviews": "Reviews",
         "users": "Users",
-        "logout": "Log out"
+        "logout": "Log out",
+        "messages": "Messages",
+        "settings": "Settings"
     },
     "guard": {
         "checking": "Checking...",
@@ -159,5 +161,59 @@
         "update_success": "Tour updated",
         "create_success": "Tour created",
         "save_error": "Something went wrong"
+    },
+    "messages": {
+        "title": "Messages",
+        "total": "{{count}} messages total",
+        "unread_count": "{{count}} unread",
+        "col_name": "Name",
+        "col_email": "Email",
+        "col_source": "Source",
+        "col_message": "Message",
+        "col_date": "Date",
+        "col_status": "Status",
+        "source_contact": "Contact page",
+        "source_service": "Services page",
+        "status_read": "Read",
+        "status_unread": "Unread",
+        "mark_read": "Mark as read",
+        "not_found": "No messages found",
+        "load_error": "Couldn't load messages",
+        "mark_read_error": "Couldn't mark as read",
+        "view": "View"
+    },
+    "settings": {
+        "title": "Settings",
+        "subtitle": "Manage your site settings here",
+        "error_generic": "Something went wrong",
+        "site_stats": {
+            "title": "Homepage statistics",
+            "subtitle": "These numbers are shown on the site's homepage",
+            "years_experience": "Years of experience",
+            "satisfaction_percent": "Customer satisfaction (%)",
+            "completed_trips": "Completed trips",
+            "happy_travelers": "Happy travelers",
+            "save": "Save",
+            "saving": "Saving...",
+            "save_success": "Statistics updated"
+        },
+        "geography": {
+            "countries_title": "Countries",
+            "countries_subtitle": "Countries selectable when creating a tour",
+            "destinations_title": "Destinations",
+            "destinations_subtitle": "Cities/regions within each country",
+            "name": "Name",
+            "slug": "Slug",
+            "country": "Country",
+            "select_country": "Select",
+            "select_country_first": "Select a country first",
+            "add": "Add",
+            "saving": "Saving...",
+            "country_created": "Country added",
+            "destination_created": "Destination added",
+            "no_countries": "No countries yet",
+            "no_destinations": "No destinations yet",
+            "tour_count": "{{count}} tours"
+        }
     }
 }

@@ -6,12 +6,17 @@ import { TourFilters } from "@/components/tours/TourFilters";
 
 interface Props {
     params: Promise<{ lng: string }>;
-    searchParams: Promise<{ search?: string; category?: string; country?: string }>;
+    searchParams: Promise<{
+        search?: string;
+        category?: string;
+        country?: string;
+        destination?: string;
+    }>;
 }
 
 export default async function ToursPage({ params, searchParams }: Props) {
     const { lng } = await params;
-    const { search, category, country } = await searchParams;
+    const { search, category, country, destination } = await searchParams;
     const { t } = await getT("tours", { lng });
 
     let tours: Awaited<ReturnType<typeof getTours>>["items"] = [];
@@ -23,6 +28,7 @@ export default async function ToursPage({ params, searchParams }: Props) {
             search,
             category,
             country,
+            destination,
             page_size: 24,
         });
         tours = response.items;

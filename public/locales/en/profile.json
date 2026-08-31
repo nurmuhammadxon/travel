@@ -23,5 +23,16 @@
         "description": "Once confirmed, the new email will be used to sign in.",
         "cancel": "Cancel",
         "confirm": "Confirm"
+    },
+    "bookings": {
+        "title": "My bookings",
+        "empty": "You don't have any bookings yet",
+        "error_load": "Couldn't load bookings",
+        "adults_short": "adults",
+        "children_short": "children",
+        "status_pending": "Pending",
+        "status_confirmed": "Confirmed",
+        "status_completed": "Completed",
+        "status_cancelled": "Cancelled"
     }
 }

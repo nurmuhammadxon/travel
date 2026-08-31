@@ -1,7 +1,12 @@
 import { getT } from "next-i18next/server";
 import { ContactForm } from "@/components/contact/ContactForm";
 
-export async function GetInTouchSection({ lng }: { lng: string }) {
+interface GetInTouchSectionProps {
+    lng: string;
+    source: "contact" | "service";
+}
+
+export async function GetInTouchSection({ lng, source }: GetInTouchSectionProps) {
     const { t } = await getT("contact", { lng });
 
     return (
@@ -13,6 +18,7 @@ export async function GetInTouchSection({ lng }: { lng: string }) {
 
                 <div className="mt-8 text-left">
                     <ContactForm
+                        source={source}
                         labels={{
                             name: t("form_name"),
                             email: t("form_email"),

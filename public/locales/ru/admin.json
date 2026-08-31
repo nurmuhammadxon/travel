@@ -5,7 +5,9 @@
         "bookings": "Заказы",
         "reviews": "Отзывы",
         "users": "Пользователи",
-        "logout": "Выйти"
+        "logout": "Выйти",
+        "messages": "Сообщения",
+        "settings": "Настройки"
     },
     "guard": {
         "checking": "Проверка...",
@@ -159,5 +161,59 @@
         "update_success": "Тур обновлён",
         "create_success": "Тур создан",
         "save_error": "Произошла ошибка"
+    },
+    "messages": {
+        "title": "Сообщения",
+        "total": "Всего сообщений: {{count}}",
+        "unread_count": "Непрочитано: {{count}}",
+        "col_name": "Имя",
+        "col_email": "Email",
+        "col_source": "Источник",
+        "col_message": "Сообщение",
+        "col_date": "Дата",
+        "col_status": "Статус",
+        "source_contact": "Страница контактов",
+        "source_service": "Страница услуг",
+        "status_read": "Прочитано",
+        "status_unread": "Непрочитано",
+        "mark_read": "Отметить как прочитанное",
+        "not_found": "Сообщения не найдены",
+        "load_error": "Не удалось загрузить сообщения",
+        "mark_read_error": "Не удалось отметить",
+        "view": "Просмотр"
+    },
+    "settings": {
+        "title": "Настройки",
+        "subtitle": "Управляйте настройками сайта здесь",
+        "error_generic": "Произошла ошибка",
+        "site_stats": {
+            "title": "Статистика главной страницы",
+            "subtitle": "Эти цифры отображаются на главной странице сайта",
+            "years_experience": "Лет опыта",
+            "satisfaction_percent": "Удовлетворённость клиентов (%)",
+            "completed_trips": "Завершённых поездок",
+            "happy_travelers": "Довольных путешественников",
+            "save": "Сохранить",
+            "saving": "Сохранение...",
+            "save_success": "Статистика обновлена"
+        },
+        "geography": {
+            "countries_title": "Страны",
+            "countries_subtitle": "Список стран, доступных при создании тура",
+            "destinations_title": "Направления",
+            "destinations_subtitle": "Города/регионы внутри каждой страны",
+            "name": "Название",
+            "slug": "Slug",
+            "country": "Страна",
+            "select_country": "Выберите",
+            "select_country_first": "Сначала выберите страну",
+            "add": "Добавить",
+            "saving": "Сохранение...",
+            "country_created": "Страна добавлена",
+            "destination_created": "Направление добавлено",
+            "no_countries": "Стран пока нет",
+            "no_destinations": "Направлений пока нет",
+            "tour_count": "{{count}} туров"
+        }
     }
 }
