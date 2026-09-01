@@ -133,7 +133,6 @@ export interface TourPayload {
         question: LocalizedText;
         answer: LocalizedText;
     }[];
-    map_embed_url: string | null;
     pricing_options: {
         type: string;
         label: LocalizedText;
@@ -146,18 +145,18 @@ export interface TourPayload {
 
 export interface Country {
     id: string;
-    name: string;
+    name: LocalizedText;
     slug: string;
-    cover_image?: string;
-    tour_count?: number;
+    cover_image: string | null;
+    tour_count: number;
 }
 
 export interface Destination {
     id: string;
-    name: string;
+    name: LocalizedText;
     slug: string;
-    description?: string;
-    cover_image?: string;
+    description: string | null;
+    cover_image: string | null;
     country_id: string;
 }
 
@@ -230,8 +229,6 @@ export interface AdminTourDetail {
     country_ids: string[];
     destination_ids: string[];
     itinerary: unknown[];
-
-    // Yangi qo'shilgan maydonlar
     images: string[];
     technical_level: number | null;
     min_age: number | null;
@@ -243,7 +240,6 @@ export interface AdminTourDetail {
         question: LocalizedText;
         answer: LocalizedText;
     }[];
-    map_embed_url: string | null;
     pricing_options: {
         type: string;
         label: LocalizedText;

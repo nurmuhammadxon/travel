@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Expand } from "lucide-react";
+import { useState, useCallback, useEffect } from "react";
+import { Expand, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { getMediaUrl } from "@/lib/media";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
@@ -16,13 +16,40 @@ export function TourGallery({ images, title }: { images: string[]; title: string
         return <TourImagePlaceholder className="aspect-video rounded-2xl" />;
     }
 
-    const visibleThumbs = list.slice(1, 5); 
-    const remainingCount = list.length - 5; 
+    const visibleThumbs = list.slice(1, 5);
+    const remainingCount = list.length - 5;
 
     function openLightbox(index: number) {
         setActiveIndex(index);
         setLightboxOpen(true);
     }
+
+    const goPrev = useCallback(() => {
+        setActiveIndex((i) => (i === 0 ? list.length - 1 : i - 1));
+    }, [list.length]);
+
+    const goNext = useCallback(() => {
+        setActiveIndex((i) => (i === list.length - 1 ? 0 : i + 1));
+    }, [list.length]);
+
+    useEffect(() => {
+        if (!lightboxOpen) return;
+        function handleKey(e: KeyboardEvent) {
+            if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                goPrev();
+            }
+            if (e.key === "ArrowRight") {
+                e.preventDefault();
+                goNext();
+            }
+            if (e.key === "Escape") {
+                setLightboxOpen(false);
+            }
+        }
+        document.addEventListener("keydown", handleKey, true);
+        return () => document.removeEventListener("keydown", handleKey, true);
+    }, [lightboxOpen, goPrev, goNext]);
 
     return (
         <>
@@ -76,38 +103,60 @@ export function TourGallery({ images, title }: { images: string[]; title: string
             </div>
 
             <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-                <DialogContent className="max-w-4xl p-2">
-                    <div className="relative aspect-video rounded-lg overflow-hidden bg-black">
+                <DialogContent className="fixed! inset-0! left-0! top-0! translate-x-0! translate-y-0! w-screen! h-screen! max-w-none! max-h-none! rounded-none! border-0! p-0! m-0! gap-0! bg-black! [&>button]:hidden">
+                    <div className="relative w-full h-full">
                         {getMediaUrl(list[activeIndex]) ? (
                             <img
                                 src={getMediaUrl(list[activeIndex])!}
                                 alt=""
-                                className="h-full w-full object-contain"
+                                className="absolute inset-0 h-full w-full object-cover!"
                             />
                         ) : (
                             <TourImagePlaceholder className="h-full w-full" />
                         )}
-                    </div>
-                    <div className="flex gap-2 overflow-x-auto pt-2 pb-1 px-1">
-                        {list.map((img, i) => {
-                            const thumbUrl = getMediaUrl(img);
-                            return (
+
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setLightboxOpen(false);
+                            }}
+                            className="absolute z-50 top-4 right-4 h-10 w-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer"
+                            aria-label="Yopish"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+
+                        <span className="absolute z-50 top-4 left-4 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white">
+                            {activeIndex + 1} / {list.length}
+                        </span>
+
+                        {list.length > 1 && (
+                            <>
                                 <button
-                                    key={img + i}
-                                    onClick={() => setActiveIndex(i)}
-                                    className={cn(
-                                        "relative shrink-0 h-14 w-20 rounded-md overflow-hidden ring-2 transition-all",
-                                        i === activeIndex ? "ring-primary" : "ring-transparent opacity-60 hover:opacity-100"
-                                    )}
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        goPrev();
+                                    }}
+                                    className="absolute z-50 left-2 md:left-6 top-1/2 -translate-y-1/2 h-11 w-11 md:h-14 md:w-14 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer"
+                                    aria-label="Oldingi rasm"
                                 >
-                                    {thumbUrl ? (
-                                        <img src={thumbUrl} alt="" className="h-full w-full object-cover" />
-                                    ) : (
-                                        <TourImagePlaceholder className="h-full w-full" />
-                                    )}
+                                    <ChevronLeft className="h-6 w-6 md:h-7 md:w-7" />
                                 </button>
-                            );
-                        })}
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        goNext();
+                                    }}
+                                    className="absolute z-50 right-2 md:right-6 top-1/2 -translate-y-1/2 h-11 w-11 md:h-14 md:w-14 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer"
+                                    aria-label="Keyingi rasm"
+                                >
+                                    <ChevronRight className="h-6 w-6 md:h-7 md:w-7" />
+                                </button>
+                            </>
+                        )}
                     </div>
                 </DialogContent>
             </Dialog>

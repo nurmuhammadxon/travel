@@ -198,13 +198,13 @@ export function getTours(params: Record<string, string | number | undefined> = {
 export const getTourBySlug = (slug: string, lang: string) =>
     api.get<unknown, Tour>(`/tours/${slug}`, { params: { lang } });
 
-export const getCountries = (lang?: string) =>
-    api.get<unknown, Country[]>("/countries", { params: lang ? { lang } : {} });
+export const getCountries = () =>
+    api.get<unknown, Country[]>("/countries");
 
-export const getDestinations = (lang?: string, countryId?: string) =>
-    api.get<unknown, Destination[]>("/destinations", {
-        params: { lang, country_id: countryId },
-    });
+export const getDestinations = (countryId?: string) =>
+    api.get<unknown, Destination[]>(
+        countryId ? `/destinations?country_id=${countryId}` : "/destinations"
+    );
 
 // --- Bookings ---
 export interface CreateBookingPayload {
