@@ -54,6 +54,7 @@ export function AppSidebar() {
         { title: t("sidebar.dashboard"), url: `${prefix}/admin`, icon: LayoutDashboard },
         { title: t("sidebar.tours"), url: `${prefix}/admin/tours`, icon: Compass },
         { title: t("sidebar.bookings"), url: `${prefix}/admin/bookings`, icon: ClipboardList },
+        { title: t("sidebar.messages"), url: `${prefix}/admin/messages`, icon: MessageSquare },
         { title: t("sidebar.reviews"), url: `${prefix}/admin/reviews`, icon: Star },
         { title: t("sidebar.users"), url: `${prefix}/admin/users`, icon: Users },
         { title: t("sidebar.settings"), url: `${prefix}/admin/settings`, icon: Settings },
