@@ -17,6 +17,7 @@ import { Loading } from "@/components/_components/loading";
 import { getAllBookings, updateBookingStatus, autoCompleteBookings } from "@/lib/api";
 import { showError, showSuccess } from "@/lib/toast";
 import type { Booking } from "@/types";
+import { BookingNoteCell } from "@/components/admin/bookings/BookingNoteCell";
 
 const STATUS_OPTIONS: Booking["status"][] = ["pending", "confirmed", "completed", "cancelled"];
 
@@ -183,6 +184,9 @@ export default function AdminBookingsPage() {
                                     </TableCell>
                                     <TableCell>
                                         {booking.total_price} {booking.currency ?? ""}
+                                    </TableCell>
+                                    <TableCell className="max-w-45">
+                                        <BookingNoteCell notes={booking.notes} />
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">

@@ -25,6 +25,7 @@ interface BookingCardProps {
         phone: string;
         success: string;
     };
+    pricingOptionId?: string;
 }
 
 export function BookingCard({ tourId, price, currency, labels }: BookingCardProps) {

@@ -30,9 +30,37 @@ export interface RegisterPayload {
 }
 
 export interface TourItineraryDay {
-    day: number;
-    title: string;
-    description: string;
+    day_number: number;
+    title: string | { uz?: string; ru?: string; en?: string };
+    description?: string | { uz?: string; ru?: string; en?: string };
+    what_to_expect?: string | { uz?: string; ru?: string; en?: string };
+    meals_included?: string[];
+    transportation?: {
+        type?: string;
+        duration?: string;
+        distance?: string;
+    };
+    gallery?: string[];
+    accommodation?: {
+        name?: string;
+        stars?: number;
+        address?: string;
+        map_url?: string;
+        check_in?: string;
+        check_out?: string;
+        room_type?: string;
+        photos?: string[];
+    };
+}
+
+export interface TourPricingOption {
+    id: string;
+    type: "group" | "private";
+    label: string | { uz?: string; ru?: string; en?: string };
+    price: number;
+    currency: string;
+    min_people?: number;
+    max_people?: number;
 }
 
 export interface Tour {
@@ -67,6 +95,53 @@ export interface Tour {
     }[];
     map_embed_url?: string;
     destinations?: Destination[];
+    route_points?: {
+        order: number;
+        type: "start" | "stop" | "end";
+        title: string | { uz?: string; ru?: string; en?: string };
+        subtitle?: string | { uz?: string; ru?: string; en?: string };
+        has_extra_fee?: boolean;
+    }[];
+    pricing_options?: TourPricingOption[];
+}
+
+export interface TourPayload {
+    title: LocalizedText;
+    slug?: string;
+    short_description: LocalizedText;
+    description: LocalizedText;
+    category: string;
+    duration_days: number;
+    duration_nights: number;
+    price: number;
+    currency: string;
+    cover_image: string;
+    max_group_size: number;
+    is_featured: boolean;
+    is_active: boolean;
+    country_ids: string[];
+    destination_ids: string[];
+    itinerary: unknown[];
+    images: string[];
+    technical_level: number | null;
+    min_age: number | null;
+    fitness_level: number | null;
+    highlights: LocalizedList | null;
+    included: LocalizedList | null;
+    excluded: LocalizedList | null;
+    faqs: {
+        question: LocalizedText;
+        answer: LocalizedText;
+    }[];
+    map_embed_url: string | null;
+    pricing_options: {
+        type: string;
+        label: LocalizedText;
+        price: number;
+        currency: string;
+        min_people: number;
+        max_people: number | null;
+    }[];
 }
 
 export interface Country {
@@ -99,6 +174,7 @@ export interface Booking {
     total_price: string;
     currency: string;
     status: "pending" | "confirmed" | "completed" | "cancelled";
+    notes?: string | null;
     created_at: string;
     can_review: boolean;
 }
@@ -130,6 +206,12 @@ export interface LocalizedText {
     en: string;
 }
 
+export interface LocalizedList {
+    uz: string[];
+    ru: string[];
+    en: string[];
+}
+
 export interface AdminTourDetail {
     id: string;
     slug: string;
@@ -148,6 +230,32 @@ export interface AdminTourDetail {
     country_ids: string[];
     destination_ids: string[];
     itinerary: unknown[];
+
+    // Yangi qo'shilgan maydonlar
+    images: string[];
+    technical_level: number | null;
+    min_age: number | null;
+    fitness_level: number | null;
+    highlights: LocalizedList | null;
+    included: LocalizedList | null;
+    excluded: LocalizedList | null;
+    faqs: {
+        question: LocalizedText;
+        answer: LocalizedText;
+    }[];
+    map_embed_url: string | null;
+    pricing_options: {
+        type: string;
+        label: LocalizedText;
+        price: number;
+        currency: string;
+        min_people: number;
+        max_people: number | null;
+    }[];
+
+    countries?: unknown[];
+    destinations?: unknown[];
+    reviews?: unknown[];
 }
 
 export interface SiteStats {

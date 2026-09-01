@@ -23,7 +23,6 @@ export default function EditTourPage() {
                 showError(err instanceof Error ? err.message : t("tours.load_tour_error"));
             })
             .finally(() => setIsLoading(false));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.slug]);
 
     if (isLoading) {

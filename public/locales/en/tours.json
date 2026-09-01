@@ -48,5 +48,18 @@
     "tab_included": "Pricing",
     "tab_faqs": "FAQs",
     "related_title": "You Might Also Like",
-    "related_subtitle": "More Adventures For You"
+    "related_subtitle": "More Adventures For You",
+    "extra_fee": "Extra fee",
+    "pricing": {
+        "title": "Price type",
+        "from": "from",
+        "min_people": "Min",
+        "max_people": "Max"
+    },
+    "what_to_expect": "What to expect",
+    "meals_included": "Meals included",
+    "transportation": "Transportation",
+    "accommodation": "Accommodation",
+    "view_on_map": "View on map",
+    "check_in": "Check-in"
 }

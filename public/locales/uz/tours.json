@@ -48,5 +48,18 @@
     "tab_included": "Narxga kiradi",
     "tab_faqs": "Savol-javob",
     "related_title": "Sizga yoqishi mumkin",
-    "related_subtitle": "Boshqa sarguzashtlar"
+    "related_subtitle": "Boshqa sarguzashtlar",
+    "extra_fee": "Qo'shimcha to'lov",
+    "pricing": {
+        "title": "Narx turi",
+        "from": "dan",
+        "min_people": "Min",
+        "max_people": "Max"
+    },
+    "what_to_expect": "Nimalarni kutish mumkin",
+    "meals_included": "Ovqatlanish",
+    "transportation": "Transport",
+    "accommodation": "Mehmonxona",
+    "view_on_map": "Xaritada ko'rish",
+    "check_in": "Check-in"
 }

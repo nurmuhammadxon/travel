@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import type {
     User, LoginPayload, RegisterPayload, AuthTokens,
     Tour, Country, Destination, Booking, Review, PaginatedResponse,
-    LocalizedText, AdminTourDetail,
+    AdminTourDetail, TourPayload,
 } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -259,26 +259,6 @@ export const getReviews = (tourId: string) =>
     api.get<unknown, Review[]>("/reviews", { params: { tour_id: tourId } });
 
 // --- Admin Interface & API Methods ---
-
-export interface TourPayload {
-    title: LocalizedText;
-    slug?: string;
-    short_description: LocalizedText;
-    description: LocalizedText;
-    category: string;
-    duration_days: number;
-    duration_nights: number;
-    price: number;
-    currency: string;
-    cover_image: string;
-    max_group_size: number;
-    is_featured?: boolean;
-    is_active?: boolean;
-    country_ids: string[];
-    destination_ids: string[];
-    itinerary: unknown[];
-}
-
 export interface SiteStats {
     years_experience: number;
     satisfaction_percent: number;

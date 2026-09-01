@@ -1,21 +1,19 @@
 import { notFound } from "next/navigation";
 import { getT } from "next-i18next/server";
-import { MapPin, Clock, ShieldCheck, UserRound, Activity, Check, X } from "lucide-react";
+import { MapPin, Clock, ShieldCheck, UserRound, Activity, Check } from "lucide-react";
 import { getTourBySlug, getTours } from "@/lib/api";
 import { localizedText, localizedList } from "@/lib/utils";
 import type { Tour } from "@/types";
 import { TourGallery } from "@/components/tours/TourGallery";
 import { ReviewsSection } from "@/components/tours/ReviewsSection";
-import { BookingCard } from "@/components/tours/BookingCard";
+import { TourBookingPanel } from "@/components/tours/TourBookingPanel";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-    Accordion,
-    AccordionItem,
-    AccordionTrigger,
-    AccordionContent,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { TourCard } from "@/components/tours/TourCard";
+import { RouteTimeline } from "@/components/tours/RouteTimeline";
+import { TourItinerary } from "@/components/tours/TourItinerary";
+import { TourIncludedExcluded } from "@/components/tours/TourIncludedExcluded";
 
 interface Props {
     params: Promise<{ lng: string; slug: string }>;
@@ -40,7 +38,7 @@ export default async function TourDetailPage({ params }: Props) {
             category: tour.category,
             page_size: 4,
         });
-        relatedTours = relatedRes.items.filter((t) => t.slug !== tour.slug).slice(0, 3);
+        relatedTours = relatedRes.items.filter((rt) => rt.slug !== tour.slug).slice(0, 3);
     } catch {
         relatedTours = [];
     }
@@ -99,7 +97,6 @@ export default async function TourDetailPage({ params }: Props) {
                     title={title}
                 />
 
-                {/* Tezkor ma'lumot qatori */}
                 {quickInfo.length > 0 && (
                     <div className="flex flex-wrap gap-6 md:gap-10 mt-8 pb-8 border-b border-border">
                         {quickInfo.map((info) => (
@@ -117,8 +114,8 @@ export default async function TourDetailPage({ params }: Props) {
                 )}
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-8">
+                    {/* --- CHAP USTUN (kontent) --- */}
                     <div className="lg:col-span-2">
-                        {/* Yo'nalish chip'lari */}
                         {destinationChips.length > 0 && (
                             <div className="mb-8">
                                 <h2 className="text-lg font-bold text-primary mb-3">
@@ -179,70 +176,39 @@ export default async function TourDetailPage({ params }: Props) {
                                 )}
                             </TabsContent>
 
-                            {/* --- ITINERARY (accordion) --- */}
+                            {/* --- ITINERARY --- */}
                             {tour.itinerary && tour.itinerary.length > 0 && (
                                 <TabsContent value="itinerary">
-                                    <Accordion defaultValue={["day-0"]}>
-                                        {tour.itinerary.map((day, i) => (
-                                            <AccordionItem key={i} value={`day-${i}`}>
-                                                <AccordionTrigger className="text-left">
-                                                    <span className="flex items-center gap-3">
-                                                        <span className="shrink-0 h-8 w-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
-                                                            {day.day}
-                                                        </span>
-                                                        <span className="font-semibold text-foreground">
-                                                            {localizedText(day.title, lng)}
-                                                        </span>
-                                                    </span>
-                                                </AccordionTrigger>
-                                                <AccordionContent className="pl-11 text-sm text-muted-foreground">
-                                                    {localizedText(day.description, lng)}
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        ))}
-                                    </Accordion>
+                                    <TourItinerary
+                                        itinerary={tour.itinerary}
+                                        lng={lng}
+                                        labels={{
+                                            what_to_expect: t("what_to_expect"),
+                                            meals_included: t("meals_included"),
+                                            transportation: t("transportation"),
+                                            accommodation: t("accommodation"),
+                                            view_on_map: t("view_on_map"),
+                                            check_in: t("check_in"),
+                                        }}
+                                    />
                                 </TabsContent>
                             )}
 
                             {/* --- INCLUDED / EXCLUDED --- */}
                             {(included.length > 0 || excluded.length > 0) && (
                                 <TabsContent value="included">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        {included.length > 0 && (
-                                            <div>
-                                                <h3 className="font-semibold text-foreground mb-3">
-                                                    {t("whats_included")}
-                                                </h3>
-                                                <ul className="space-y-2">
-                                                    {included.map((item, i) => (
-                                                        <li key={i} className="flex items-start gap-2 text-sm">
-                                                            <Check className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                                                            <span className="text-foreground/80">{item}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-                                        {excluded.length > 0 && (
-                                            <div>
-                                                <h3 className="font-semibold text-foreground mb-3">
-                                                    {t("whats_excluded")}
-                                                </h3>
-                                                <ul className="space-y-2">
-                                                    {excluded.map((item, i) => (
-                                                        <li key={i} className="flex items-start gap-2 text-sm">
-                                                            <X className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
-                                                            <span className="text-foreground/80">{item}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-                                    </div>
+                                    <TourIncludedExcluded
+                                        included={included}
+                                        excluded={excluded}
+                                        labels={{
+                                            whats_included: t("whats_included"),
+                                            whats_excluded: t("whats_excluded"),
+                                        }}
+                                    />
                                 </TabsContent>
                             )}
 
-                            {/* --- FAQ (accordion) --- */}
+                            {/* --- FAQ --- */}
                             {tour.faqs && tour.faqs.length > 0 && (
                                 <TabsContent value="faqs">
                                     <Accordion defaultValue={[]}>
@@ -260,6 +226,16 @@ export default async function TourDetailPage({ params }: Props) {
                                 </TabsContent>
                             )}
                         </Tabs>
+
+                        {tour.route_points && tour.route_points.length > 0 && (
+                            <div className="mt-10">
+                                <RouteTimeline
+                                    points={tour.route_points}
+                                    lng={lng}
+                                    extraFeeLabel={t("extra_fee")}
+                                />
+                            </div>
+                        )}
 
                         <div className="mt-10">
                             <ReviewsSection
@@ -281,13 +257,19 @@ export default async function TourDetailPage({ params }: Props) {
                         </div>
                     </div>
 
+                    {/* --- O'NG USTUN (band qilish) --- */}
                     <div className="lg:col-span-1">
                         <div className="sticky top-28">
-                            <BookingCard
-                                tourId={tour.id}
-                                price={Number(tour.price)}
-                                currency={tour.currency}
-                                labels={{
+                            <TourBookingPanel
+                                tour={tour}
+                                lng={lng}
+                                pricingLabels={{
+                                    title: t("pricing.title"),
+                                    from: t("pricing.from"),
+                                    min_people: t("pricing.min_people"),
+                                    max_people: t("pricing.max_people"),
+                                }}
+                                bookingLabels={{
                                     from: t("from"),
                                     per_person: t("per_person"),
                                     date: t("select_date"),
@@ -305,6 +287,7 @@ export default async function TourDetailPage({ params }: Props) {
                         </div>
                     </div>
                 </div>
+
                 {relatedTours.length > 0 && (
                     <div className="mt-20 pt-12 border-t border-border">
                         <div className="text-center mb-10">

@@ -48,5 +48,18 @@
     "tab_included": "Цена",
     "tab_faqs": "Вопросы",
     "related_title": "Вам может понравиться",
-    "related_subtitle": "Другие приключения"
+    "related_subtitle": "Другие приключения",
+    "extra_fee": "Дополнительная плата",
+    "pricing": {
+        "title": "Тип цены",
+        "from": "от",
+        "min_people": "Мин",
+        "max_people": "Макс"
+    },
+    "what_to_expect": "Чего ожидать",
+    "meals_included": "Питание",
+    "transportation": "Транспорт",
+    "accommodation": "Проживание",
+    "view_on_map": "Смотреть на карте",
+    "check_in": "Заезд"
 }
