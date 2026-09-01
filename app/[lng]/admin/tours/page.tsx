@@ -10,7 +10,7 @@ import { getTours, deleteTour, updateTour } from "@/lib/api";
 import { showSuccess, showError } from "@/lib/toast";
 import type { Tour } from "@/types";
 import { cn } from "@/lib/utils";
-
+import { GeographyManagerDialog } from "@/components/admin/tours/GeographyManagerDialog";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -103,6 +103,7 @@ export default function AdminToursPage() {
                         {t("tours.total", { count: isLoading ? t("tours.loading_count") : tours.length })}
                     </p>
                 </div>
+                <GeographyManagerDialog />
                 <Link
                     href={`${prefix}/admin/tours/new`}
                     className={cn(buttonVariants(), "gap-1.5")}

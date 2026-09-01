@@ -4,6 +4,8 @@ import type {
     User, LoginPayload, RegisterPayload, AuthTokens,
     Tour, Country, Destination, Booking, Review, PaginatedResponse,
     AdminTourDetail, TourPayload,
+    LocalizedText,
+    SiteStats,
 } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -259,11 +261,8 @@ export const getReviews = (tourId: string) =>
     api.get<unknown, Review[]>("/reviews", { params: { tour_id: tourId } });
 
 // --- Admin Interface & API Methods ---
-export interface SiteStats {
+export interface UpdateSiteStatsPayload {
     years_experience: number;
-    satisfaction_percent: number;
-    completed_trips: number;
-    happy_travelers: number;
 }
 
 // --- Profile  ---
@@ -315,7 +314,7 @@ export const deleteReview = (reviewId: string) =>
     api.delete<unknown, void>(`/reviews/${reviewId}`);
 
 export interface CountryPayload {
-    name: string;
+    name: LocalizedText;
     slug: string;
     cover_image?: string;
 }
@@ -324,7 +323,7 @@ export const createCountry = (payload: CountryPayload) =>
     api.post<unknown, Country>("/countries", payload);
 
 export interface DestinationPayload {
-    name: string;
+    name: LocalizedText;
     slug: string;
     description?: string;
     cover_image?: string;
@@ -338,7 +337,7 @@ export const createDestination = (payload: DestinationPayload) =>
 export const getSiteStats = () =>
     api.get<unknown, SiteStats>("/site-stats");
 
-export const updateSiteStats = (payload: Partial<SiteStats>) =>
+export const updateSiteStats = (payload: UpdateSiteStatsPayload) =>
     api.patch<unknown, SiteStats>("/site-stats", payload);
 
 export default api;

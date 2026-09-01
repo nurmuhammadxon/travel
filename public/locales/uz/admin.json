@@ -219,7 +219,8 @@
             "happy_travelers": "Baxtli sayohatchilar",
             "save": "Saqlash",
             "saving": "Saqlanmoqda...",
-            "save_success": "Statistika yangilandi"
+            "save_success": "Statistika yangilandi",
+            "auto_calculated_note": "Quyidagilar buyurtma va sharh ma'lumotlaridan avtomatik hisoblanadi, qo'lda o'zgartirilmaydi"
         },
         "geography": {
             "countries_title": "Davlatlar",
@@ -237,7 +238,9 @@
             "destination_created": "Yo'nalish qo'shildi",
             "no_countries": "Hozircha davlatlar yo'q",
             "no_destinations": "Hozircha yo'nalishlar yo'q",
-            "tour_count": "{{count}} ta tur"
+            "tour_count": "{{count}} ta tur",
+            "manage_button": "Davlat / Yo'nalish",
+            "dialog_title": "Davlat va yo'nalishlarni boshqarish"
         }
     }
 }

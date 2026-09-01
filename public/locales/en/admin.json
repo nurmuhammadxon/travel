@@ -219,7 +219,8 @@
             "happy_travelers": "Happy travelers",
             "save": "Save",
             "saving": "Saving...",
-            "save_success": "Statistics updated"
+            "save_success": "Statistics updated",
+            "auto_calculated_note": "The values below are calculated automatically from bookings and reviews, not manually editable"
         },
         "geography": {
             "countries_title": "Countries",
@@ -237,7 +238,9 @@
             "destination_created": "Destination added",
             "no_countries": "No countries yet",
             "no_destinations": "No destinations yet",
-            "tour_count": "{{count}} tours"
+            "tour_count": "{{count}} tours",
+            "manage_button": "Country / Destination",
+            "dialog_title": "Manage countries and destinations"
         }
     }
 }
