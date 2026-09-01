@@ -56,7 +56,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 rounded-2xl overflow-hidden">
                 <button
                     onClick={() => openLightbox(0)}
-                    className="md:col-span-2 md:row-span-2 relative aspect-video md:aspect-auto min-h-65 muted overflow-hidden group"
+                    className="md:col-span-2 md:row-span-2 relative aspect-video md:aspect-auto min-h-65 bg-muted overflow-hidden group"
                 >
                     {getMediaUrl(list[0]) ? (
                         <img
@@ -103,61 +103,66 @@ export function TourGallery({ images, title }: { images: string[]; title: string
             </div>
 
             <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-                <DialogContent className="fixed! inset-0! left-0! top-0! translate-x-0! translate-y-0! w-screen! h-screen! max-w-none! max-h-none! rounded-none! border-0! p-0! m-0! gap-0! bg-black! [&>button]:hidden">
-                    <div className="relative w-full h-full">
+                <DialogContent
+                    showCloseButton={false}
+                    className="fixed! inset-0! left-0! top-0! translate-x-0! translate-y-0! w-screen! h-screen! max-w-none! max-h-none! rounded-none! border-0! p-0! m-0! gap-0! bg-black/95!"
+                >
+                    {/* Rasmning o'zi — markazda, "contain" (butunlay ko'rinadi, kesilmaydi) */}
+                    <div className="absolute inset-0 flex items-center justify-center p-4 md:p-10 pointer-events-none">
                         {getMediaUrl(list[activeIndex]) ? (
                             <img
                                 src={getMediaUrl(list[activeIndex])!}
                                 alt=""
-                                className="absolute inset-0 h-full w-full object-cover!"
+                                className="max-h-full max-w-full object-contain rounded-lg shadow-2xl"
                             />
                         ) : (
                             <TourImagePlaceholder className="h-full w-full" />
                         )}
-
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setLightboxOpen(false);
-                            }}
-                            className="absolute z-50 top-4 right-4 h-10 w-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer"
-                            aria-label="Yopish"
-                        >
-                            <X className="h-5 w-5" />
-                        </button>
-
-                        <span className="absolute z-50 top-4 left-4 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white">
-                            {activeIndex + 1} / {list.length}
-                        </span>
-
-                        {list.length > 1 && (
-                            <>
-                                <button
-                                    type="button"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        goPrev();
-                                    }}
-                                    className="absolute z-50 left-2 md:left-6 top-1/2 -translate-y-1/2 h-11 w-11 md:h-14 md:w-14 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer"
-                                    aria-label="Oldingi rasm"
-                                >
-                                    <ChevronLeft className="h-6 w-6 md:h-7 md:w-7" />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        goNext();
-                                    }}
-                                    className="absolute z-50 right-2 md:right-6 top-1/2 -translate-y-1/2 h-11 w-11 md:h-14 md:w-14 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer"
-                                    aria-label="Keyingi rasm"
-                                >
-                                    <ChevronRight className="h-6 w-6 md:h-7 md:w-7" />
-                                </button>
-                            </>
-                        )}
                     </div>
+
+                    {/* Boshqaruv elementlari — rasmdan alohida qatlamda, eng yuqori z-index bilan */}
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setLightboxOpen(false);
+                        }}
+                        className="fixed z-9999 top-4 right-4 h-10 w-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer pointer-events-auto"
+                        aria-label="Yopish"
+                    >
+                        <X className="h-5 w-5" />
+                    </button>
+
+                    <span className="fixed z-9999 top-4 left-4 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white pointer-events-none">
+                        {activeIndex + 1} / {list.length}
+                    </span>
+
+                    {list.length > 1 && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    goPrev();
+                                }}
+                                className="fixed z-9999 left-2 md:left-6 top-1/2 -translate-y-1/2 h-11 w-11 md:h-14 md:w-14 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer pointer-events-auto"
+                                aria-label="Oldingi rasm"
+                            >
+                                <ChevronLeft className="h-6 w-6 md:h-7 md:w-7" />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    goNext();
+                                }}
+                                className="fixed z-9999 right-2 md:right-6 top-1/2 -translate-y-1/2 h-11 w-11 md:h-14 md:w-14 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors cursor-pointer pointer-events-auto"
+                                aria-label="Keyingi rasm"
+                            >
+                                <ChevronRight className="h-6 w-6 md:h-7 md:w-7" />
+                            </button>
+                        </>
+                    )}
                 </DialogContent>
             </Dialog>
         </>

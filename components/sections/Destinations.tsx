@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { ArrowUpRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, localizedText } from "@/lib/utils";
 import type { Country } from "@/types";
 
 const COUNTRY_IMAGES: Record<string, string> = {
@@ -104,12 +104,14 @@ export function Destinations({ countries }: DestinationsProps) {
                     const blur = isCenter ? 0 : abs === 1 ? 1 : 2;
                     const zIndex = 30 - abs;
 
+                    const destName = localizedText(dest.name);
+
                     return (
                         <button
                             key={dest.slug}
                             type="button"
                             onClick={() => (isCenter ? undefined : goTo(i))}
-                            aria-label={dest.name}
+                            aria-label={destName}
                             className={cn(
                                 "absolute top-1/2 left-1/2 w-55 md:w-70 h-75 md:h-95 rounded-3xl overflow-hidden shadow-xl transition-all duration-500 ease-out cursor-grab",
                                 !visible && "opacity-0 pointer-events-none"
@@ -124,7 +126,7 @@ export function Destinations({ countries }: DestinationsProps) {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={getCountryImage(dest.slug)}
-                                alt={dest.name}
+                                alt={destName}
                                 draggable={false}
                                 className="absolute inset-0 h-full w-full object-cover bg-muted"
                                 onError={(e) => {
@@ -134,7 +136,7 @@ export function Destinations({ countries }: DestinationsProps) {
                             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/15 to-transparent" />
 
                             <div className="absolute inset-0 flex flex-col justify-end p-5 text-left">
-                                <h3 className="text-xl md:text-2xl font-bold text-white">{dest.name}</h3>
+                                <h3 className="text-xl md:text-2xl font-bold text-white">{destName}</h3>
                                 <p className="text-xs md:text-sm text-white/70 mt-1">
                                     {dest.tourCount} {t("destinations.tours_count")}
                                 </p>
