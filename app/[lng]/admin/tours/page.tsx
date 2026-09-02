@@ -10,7 +10,7 @@ import { getTours, deleteTour, updateTour } from "@/lib/api";
 import { showSuccess, showError } from "@/lib/toast";
 import type { Tour } from "@/types";
 import { cn } from "@/lib/utils";
-import { GeographyManagerDialog } from "@/components/admin/tours/GeographyManagerDialog";
+import { GeographyManagerDialog } from "@/components/admin/geography/geography-manager-dialog";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
