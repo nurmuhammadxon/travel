@@ -256,7 +256,9 @@
             "no_destinations": "No destinations yet",
             "tour_count": "{{count}} tours",
             "manage_button": "Country / Destination",
-            "dialog_title": "Manage countries and destinations"
+            "dialog_title": "Manage countries and destinations",
+            "cover_image": "Cover image",
+            "description": "Description"
         }
     }
 }

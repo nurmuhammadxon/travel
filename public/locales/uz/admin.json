@@ -256,7 +256,9 @@
             "no_destinations": "Hozircha yo'nalishlar yo'q",
             "tour_count": "{{count}} ta tur",
             "manage_button": "Davlat / Yo'nalish",
-            "dialog_title": "Davlat va yo'nalishlarni boshqarish"
+            "dialog_title": "Davlat va yo'nalishlarni boshqarish",
+            "cover_image": "Muqova rasmi",
+            "description": "Tavsif"
         }
     }
 }
