@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { ArrowUpRight } from "lucide-react";
 import { cn, localizedText } from "@/lib/utils";
+import { getMediaUrl } from "@/lib/media";
+import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 import type { Country } from "@/types";
 
 const COUNTRY_IMAGES: Record<string, string> = {
@@ -108,7 +110,8 @@ export function Destinations({ countries }: DestinationsProps) {
                     const zIndex = 30 - abs;
 
                     const destName = localizedText(dest.name, lng);
-                    
+                    const imageUrl = getMediaUrl(dest.cover_image);
+
                     return (
                         <button
                             key={dest.slug}
@@ -126,16 +129,17 @@ export function Destinations({ countries }: DestinationsProps) {
                                 zIndex,
                             }}
                         >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src={getCountryImage(dest.slug)}
-                                alt={destName}
-                                draggable={false}
-                                className="absolute inset-0 h-full w-full object-cover bg-muted"
-                                onError={(e) => {
-                                    (e.target as HTMLImageElement).style.display = "none";
-                                }}
-                            />
+                            {imageUrl ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                    src={imageUrl}
+                                    alt={destName}
+                                    draggable={false}
+                                    className="absolute inset-0 h-full w-full object-cover bg-muted"
+                                />
+                            ) : (
+                                <TourImagePlaceholder className="absolute inset-0 h-full w-full" />
+                            )}
                             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/15 to-transparent" />
 
                             <div className="absolute inset-0 flex flex-col justify-end p-5 text-left">
