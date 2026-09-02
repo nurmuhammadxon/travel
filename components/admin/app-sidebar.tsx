@@ -12,10 +12,10 @@ import {
     Users,
     LogOut,
     Globe,
+    MapPinned,
     MessageSquare,
     Settings
 } from "lucide-react";
-
 import {
     Sidebar,
     SidebarContent,
@@ -53,6 +53,7 @@ export function AppSidebar() {
 
     const items = [
         { title: t("sidebar.dashboard"), url: `${prefix}/admin`, icon: LayoutDashboard },
+        { title: t("sidebar.geography"), url: `${prefix}/admin/geography`, icon: MapPinned },
         { title: t("sidebar.tours"), url: `${prefix}/admin/tours`, icon: Compass },
         { title: t("sidebar.bookings"), url: `${prefix}/admin/bookings`, icon: ClipboardList },
         { title: t("sidebar.messages"), url: `${prefix}/admin/messages`, icon: MessageSquare },

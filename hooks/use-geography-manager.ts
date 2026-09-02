@@ -36,6 +36,7 @@ export function useGeographyManager(open: boolean) {
     const [countryCoverImage, setCountryCoverImage] = useState("");
     const [editingCountryId, setEditingCountryId] = useState<string | null>(null);
     const [deletingCountryId, setDeletingCountryId] = useState<string | null>(null);
+    const [countrySaveTick, setCountrySaveTick] = useState(0);
     const [isSavingCountry, setIsSavingCountry] = useState(false);
 
     // --- Destinations ---
@@ -49,6 +50,7 @@ export function useGeographyManager(open: boolean) {
     const [destinationCoverImage, setDestinationCoverImage] = useState("");
     const [editingDestinationId, setEditingDestinationId] = useState<string | null>(null);
     const [deletingDestinationId, setDeletingDestinationId] = useState<string | null>(null);
+    const [destinationSaveTick, setDestinationSaveTick] = useState(0);
     const [isSavingDestination, setIsSavingDestination] = useState(false);
 
     async function loadGeography() {
@@ -120,6 +122,7 @@ export function useGeographyManager(open: boolean) {
                 showSuccess(t("settings.geography.country_created"));
             }
             resetCountryForm();
+            setCountrySaveTick((n) => n + 1);
             await loadGeography();
         } catch (err) {
             showError(err instanceof Error ? err.message : t("settings.error_generic"));
@@ -201,6 +204,7 @@ export function useGeographyManager(open: boolean) {
                 showSuccess(t("settings.geography.destination_created"));
             }
             resetDestinationForm();
+            setDestinationSaveTick((n) => n + 1);
             await loadGeography();
         } catch (err) {
             showError(err instanceof Error ? err.message : t("settings.error_generic"));
@@ -226,7 +230,7 @@ export function useGeographyManager(open: boolean) {
             setDeletingDestinationId(null);
         }
     }
-    
+
     return {
         t, lng,
         countries, isLoadingCountries,
@@ -235,7 +239,7 @@ export function useGeographyManager(open: boolean) {
         countryCoverImage, setCountryCoverImage,
         isSavingCountry, handleCreateCountry,
         editingCountryId, startEditCountry, cancelEditCountry,
-        deletingCountryId, handleDeleteCountry,
+        deletingCountryId, handleDeleteCountry, countrySaveTick,
 
         destinations, isLoadingDestinations,
         destinationName, setDestinationName: handleDestinationNameChange,
@@ -245,7 +249,7 @@ export function useGeographyManager(open: boolean) {
         destinationCoverImage, setDestinationCoverImage,
         isSavingDestination, handleCreateDestination,
         editingDestinationId, startEditDestination, cancelEditDestination,
-        deletingDestinationId, handleDeleteDestination,
+        deletingDestinationId, handleDeleteDestination, destinationSaveTick,
     };
 }
 

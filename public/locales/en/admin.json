@@ -2,6 +2,7 @@
     "sidebar": {
         "dashboard": "Dashboard",
         "tours": "Tours",
+        "geography": "Geography",
         "bookings": "Bookings",
         "reviews": "Reviews",
         "users": "Users",
@@ -268,6 +269,8 @@
             "dialog_title": "Manage countries and destinations",
             "cover_image": "Cover image",
             "description": "Description",
+            "page_title": "Geography management",
+            "page_subtitle": "Manage countries and destinations",
             "edit": "Edit",
             "delete": "Delete",
             "update": "Save",

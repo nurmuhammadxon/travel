@@ -3,14 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Plus, Pencil, Trash2, Star, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Star, Loader2, Globe } from "lucide-react";
 import { useT } from "next-i18next/client";
 
 import { getTours, deleteTour, updateTour } from "@/lib/api";
 import { showSuccess, showError } from "@/lib/toast";
 import type { Tour } from "@/types";
 import { cn } from "@/lib/utils";
-import { GeographyManagerDialog } from "@/components/admin/geography/geography-manager-dialog";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -103,7 +102,13 @@ export default function AdminToursPage() {
                         {t("tours.total", { count: isLoading ? t("tours.loading_count") : tours.length })}
                     </p>
                 </div>
-                <GeographyManagerDialog />
+                <Link
+                    href={`${prefix}/admin/geography`}
+                    className={cn(buttonVariants({ variant: "outline" }), "gap-1.5")}
+                >
+                    <Globe className="h-4 w-4" />
+                    {t("settings.geography.manage_button")}
+                </Link>
                 <Link
                     href={`${prefix}/admin/tours/new`}
                     className={cn(buttonVariants(), "gap-1.5")}

@@ -2,6 +2,7 @@
     "sidebar": {
         "dashboard": "Bosh sahifa",
         "tours": "Turlar",
+        "geography": "Geografiya",
         "bookings": "Buyurtmalar",
         "reviews": "Sharhlar",
         "users": "Foydalanuvchilar",
@@ -268,6 +269,8 @@
             "dialog_title": "Davlat va yo'nalishlarni boshqarish",
             "cover_image": "Muqova rasmi",
             "description": "Tavsif",
+            "page_title": "Geografiya boshqaruvi",
+            "page_subtitle": "Davlatlar va yo'nalishlarni boshqarish",
             "edit": "Tahrirlash",
             "delete": "O'chirish",
             "update": "Saqlash",
