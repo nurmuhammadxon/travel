@@ -184,7 +184,16 @@
         "fitness_level": "Физическая подготовка (1-5)",
         "map_embed_url": "Карта (embed URL)",
         "no_countries": "Пока нет стран. Добавьте их в разделе Настройки.",
-        "no_destinations": "Для этой страны нет направлений."
+        "no_destinations": "Для этой страны нет направлений.",
+        "route_points": "Точки маршрута",
+        "activity_type": "Тип активности",
+        "duration_minutes": "Длительность (мин)",
+        "has_extra_fee": "Дополнительная плата",
+        "name": "Название",
+        "address": "Адрес",
+        "latitude": "Широта (latitude)",
+        "longitude": "Долгота (longitude)",
+        "add_route_point": "Добавить точку маршрута"
     },
     "messages": {
         "title": "Сообщения",

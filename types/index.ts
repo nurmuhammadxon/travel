@@ -95,14 +95,23 @@ export interface Tour {
     }[];
     map_embed_url?: string;
     destinations?: Destination[];
-    route_points?: {
-        order: number;
-        type: "start" | "stop" | "end";
-        title: string | { uz?: string; ru?: string; en?: string };
-        subtitle?: string | { uz?: string; ru?: string; en?: string };
-        has_extra_fee?: boolean;
-    }[];
+    route_points?: RoutePoint[];
     pricing_options?: TourPricingOption[];
+}
+
+export type RoutePointType = "start" | "stop" | "end";
+export type RouteActivityType = "photo_stop" | "guided_tour" | "shopping";
+
+export interface RoutePoint {
+    order: number;
+    type: RoutePointType;
+    name: string | { uz?: string; ru?: string; en?: string };
+    address?: string | { uz?: string; ru?: string; en?: string };
+    activity_type?: RouteActivityType | "";
+    duration_minutes?: number | null;
+    has_extra_fee?: boolean;
+    latitude?: number | null;
+    longitude?: number | null;
 }
 
 export interface TourPayload {
@@ -141,6 +150,7 @@ export interface TourPayload {
         min_people: number;
         max_people: number | null;
     }[];
+    route_points: RoutePoint[];
 }
 
 export interface Country {
@@ -248,6 +258,7 @@ export interface AdminTourDetail {
         min_people: number;
         max_people: number | null;
     }[];
+    route_points: RoutePoint[];
 
     countries?: unknown[];
     destinations?: unknown[];

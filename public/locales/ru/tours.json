@@ -61,5 +61,9 @@
     "transportation": "Транспорт",
     "accommodation": "Проживание",
     "view_on_map": "Смотреть на карте",
-    "check_in": "Заезд"
+    "check_in": "Заезд",
+    "photo_stop": "Фото-остановка",
+    "guided_tour": "Экскурсия с гидом",
+    "shopping": "Шоппинг",
+    "duration_minutes": "мин"
 }

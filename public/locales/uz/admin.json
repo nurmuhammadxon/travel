@@ -184,7 +184,16 @@
         "fitness_level": "Jismoniy tayyorgarlik (1-5)",
         "map_embed_url": "Xarita (embed URL)",
         "no_countries": "Hozircha davlatlar yo'q. Sozlamalar bo'limidan qo'shing.",
-        "no_destinations": "Bu davlat uchun yo'nalishlar yo'q."
+        "no_destinations": "Bu davlat uchun yo'nalishlar yo'q.",
+        "route_points": "Marshrut nuqtalari",
+        "activity_type": "Faoliyat turi",
+        "duration_minutes": "Davomiyligi (daqiqa)",
+        "has_extra_fee": "Qo'shimcha to'lov",
+        "name": "Nomi",
+        "address": "Manzil",
+        "latitude": "Kenglik (latitude)",
+        "longitude": "Uzunlik (longitude)",
+        "add_route_point": "Marshrut nuqtasi qo'shish"
     },
     "messages": {
         "title": "Xabarlar",

@@ -5,13 +5,25 @@ import { useRouter, useParams } from "next/navigation";
 import { useT } from "next-i18next/client";
 import { createTour, updateTour, uploadReviewImage } from "@/lib/api";
 import { showSuccess, showError } from "@/lib/toast";
-import type { AdminTourDetail, TourPayload } from "@/types";
+import type { AdminTourDetail, TourPayload, RoutePoint, RoutePointType, RouteActivityType } from "@/types";
 
 export type MultiLangText = { uz: string; ru: string; en: string };
 
 export interface FaqItem {
     question: MultiLangText;
     answer: MultiLangText;
+}
+
+export interface RoutePointForm {
+    order: number;
+    type: RoutePointType;
+    name: MultiLangText;
+    address: MultiLangText;
+    activity_type: RouteActivityType | "";
+    duration_minutes: number | null;
+    has_extra_fee: boolean;
+    latitude: number | null;
+    longitude: number | null;
 }
 
 export interface PricingOption {
@@ -30,6 +42,12 @@ function slugify(text: string) {
         .trim()
         .replace(/[^\w\s-]/g, "")
         .replace(/\s+/g, "-");
+}
+
+function toMultiLang(value?: string | { uz?: string; ru?: string; en?: string } | null): MultiLangText {
+    if (!value) return { uz: "", ru: "", en: "" };
+    if (typeof value === "string") return { uz: value, ru: value, en: value };
+    return { uz: value.uz ?? "", ru: value.ru ?? "", en: value.en ?? "" };
 }
 
 function listToText(list?: string[]) {
@@ -147,6 +165,70 @@ export function useTourForm(initialData?: AdminTourDetail) {
         setPricingOptions(updated);
     }
 
+    // Route points (marshrut nuqtalari)
+    const [routePoints, setRoutePoints] = useState<RoutePointForm[]>(
+        (initialData?.route_points ?? []).map((p) => ({
+            order: p.order,
+            type: p.type,
+            name: toMultiLang(p.name),
+            address: toMultiLang(p.address),
+            activity_type: (p.activity_type as RouteActivityType) ?? "",
+            duration_minutes: p.duration_minutes ?? null,
+            has_extra_fee: p.has_extra_fee ?? false,
+            latitude: p.latitude ?? null,
+            longitude: p.longitude ?? null,
+        }))
+    );
+
+    function addRoutePoint(type: RoutePointType = "stop") {
+        setRoutePoints((prev) => [
+            ...prev,
+            {
+                order: prev.length + 1,
+                type,
+                name: { uz: "", ru: "", en: "" },
+                address: { uz: "", ru: "", en: "" },
+                activity_type: "",
+                duration_minutes: null,
+                has_extra_fee: false,
+                latitude: null,
+                longitude: null,
+            },
+        ]);
+    }
+
+    function removeRoutePoint(index: number) {
+        setRoutePoints((prev) =>
+            prev.filter((_, i) => i !== index).map((p, i) => ({ ...p, order: i + 1 }))
+        );
+    }
+
+    function updateRoutePoint(index: number, field: keyof RoutePointForm, value: any) {
+        setRoutePoints((prev) => {
+            const updated = [...prev];
+            updated[index] = { ...updated[index], [field]: value };
+            return updated;
+        });
+    }
+
+    function updateRoutePointText(index: number, field: "name" | "address", lang: "uz" | "ru" | "en", value: string) {
+        setRoutePoints((prev) => {
+            const updated = [...prev];
+            updated[index] = { ...updated[index], [field]: { ...updated[index][field], [lang]: value } };
+            return updated;
+        });
+    }
+
+    function moveRoutePoint(index: number, direction: -1 | 1) {
+        setRoutePoints((prev) => {
+            const target = index + direction;
+            if (target < 0 || target >= prev.length) return prev;
+            const updated = [...prev];
+            [updated[index], updated[target]] = [updated[target], updated[index]];
+            return updated.map((p, i) => ({ ...p, order: i + 1 }));
+        });
+    }
+
     const [isSaving, setIsSaving] = useState(false);
 
     function handleTitleUzChange(value: string) {
@@ -219,6 +301,17 @@ export function useTourForm(initialData?: AdminTourDetail) {
             excluded: { uz: textToList(excludedUz), ru: textToList(excludedRu), en: textToList(excludedEn) },
             faqs,
             pricing_options: pricingOptions,
+            route_points: routePoints.map((p) => ({
+                order: p.order,
+                type: p.type,
+                name: p.name,
+                ...(p.type !== "stop" ? { address: p.address } : {}),
+                ...(p.type === "stop" && p.activity_type ? { activity_type: p.activity_type } : {}),
+                ...(p.type === "stop" && p.duration_minutes ? { duration_minutes: Number(p.duration_minutes) } : {}),
+                has_extra_fee: p.has_extra_fee,
+                ...(p.latitude !== null ? { latitude: Number(p.latitude) } : {}),
+                ...(p.longitude !== null ? { longitude: Number(p.longitude) } : {}),
+            })),
         };
 
         if (!isEdit) payload.slug = slug;
@@ -258,6 +351,7 @@ export function useTourForm(initialData?: AdminTourDetail) {
         excludedUz, setExcludedUz, excludedRu, setExcludedRu, excludedEn, setExcludedEn,
         faqs, addFaq, removeFaq, updateFaq,
         pricingOptions, addPricingOption, removePricingOption, updatePricingOption, updatePricingLabel,
+        routePoints, addRoutePoint, removeRoutePoint, updateRoutePoint, updateRoutePointText, moveRoutePoint,
         isSaving, handleSubmit,
     };
 }

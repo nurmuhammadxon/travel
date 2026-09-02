@@ -233,6 +233,12 @@ export default async function TourDetailPage({ params }: Props) {
                                     points={tour.route_points}
                                     lng={lng}
                                     extraFeeLabel={t("extra_fee")}
+                                    minutesLabel={t("duration_minutes")}
+                                    activityLabels={{
+                                        photo_stop: t("photo_stop"),
+                                        guided_tour: t("guided_tour"),
+                                        shopping: t("shopping"),
+                                    }}
                                 />
                             </div>
                         )}

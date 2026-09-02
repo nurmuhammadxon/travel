@@ -10,6 +10,7 @@ import { HighlightsSection } from "@/components/sections/highlights-section";
 import { IncludedExcludedSection } from "@/components/sections/included-excluded-section";
 import { FaqsSection } from "@/components/sections/faqs-section";
 import { PricingOptionsSection } from "@/components/sections/pricing-options-section";
+import { RoutePointsSection } from "@/components/sections/route-points-section";
 import { GeographySection } from "@/components/sections/geography-section";
 
 interface TourFormProps {
@@ -28,6 +29,7 @@ export function TourForm({ initialData }: TourFormProps) {
             <IncludedExcludedSection {...f} />
             <FaqsSection {...f} />
             <PricingOptionsSection {...f} />
+            <RoutePointsSection {...f} />
             <GeographySection {...f} />
 
             <div className="flex justify-end gap-2">

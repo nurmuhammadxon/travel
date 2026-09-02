@@ -184,7 +184,16 @@
         "fitness_level": "Fitness level (1-5)",
         "map_embed_url": "Map (embed URL)",
         "no_countries": "No countries yet. Add them in Settings.",
-        "no_destinations": "No destinations for this country."
+        "no_destinations": "No destinations for this country.",
+        "route_points": "Route points",
+        "activity_type": "Activity type",
+        "duration_minutes": "Duration (minutes)",
+        "has_extra_fee": "Has extra fee",
+        "name": "Name",
+        "address": "Address",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "add_route_point": "Add route point"
     },
     "messages": {
         "title": "Messages",

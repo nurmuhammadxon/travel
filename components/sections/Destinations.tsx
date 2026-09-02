@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { ArrowUpRight } from "lucide-react";
@@ -29,6 +30,8 @@ interface DestinationsProps {
 
 export function Destinations({ countries }: DestinationsProps) {
     const { t } = useT("home");
+    const params = useParams<{ lng: string }>();
+    const lng = params.lng ?? "uz";
     const count = countries.length;
     const [active, setActive] = useState(Math.floor(count / 2));
 
@@ -104,8 +107,8 @@ export function Destinations({ countries }: DestinationsProps) {
                     const blur = isCenter ? 0 : abs === 1 ? 1 : 2;
                     const zIndex = 30 - abs;
 
-                    const destName = localizedText(dest.name);
-
+                    const destName = localizedText(dest.name, lng);
+                    
                     return (
                         <button
                             key={dest.slug}

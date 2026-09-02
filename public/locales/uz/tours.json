@@ -61,5 +61,9 @@
     "transportation": "Transport",
     "accommodation": "Mehmonxona",
     "view_on_map": "Xaritada ko'rish",
-    "check_in": "Check-in"
+    "check_in": "Check-in",
+    "photo_stop": "Foto to'xtash",
+    "guided_tour": "Gid bilan sayohat",
+    "shopping": "Xarid qilish",
+    "duration_minutes": "daqiqa"
 }

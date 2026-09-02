@@ -61,5 +61,9 @@
     "transportation": "Transportation",
     "accommodation": "Accommodation",
     "view_on_map": "View on map",
-    "check_in": "Check-in"
+    "check_in": "Check-in",
+    "photo_stop": "Photo stop",
+    "guided_tour": "Guided tour",
+    "shopping": "Shopping",
+    "duration_minutes": "min"
 }
