@@ -222,6 +222,22 @@
             "save_success": "Statistika yangilandi",
             "auto_calculated_note": "Quyidagilar buyurtma va sharh ma'lumotlaridan avtomatik hisoblanadi, qo'lda o'zgartirilmaydi"
         },
+        "site_config": {
+            "title": "Logo va aloqa ma'lumotlari",
+            "subtitle": "Bu ma'lumotlar backend'da saqlanmaydi. Formani to'ldiring, kodni generatsiya qiling, nusxalab lib/site-config.ts fayliga joylashtiring va saytni qayta deploy qiling.",
+            "logo_src": "Logo rasm manzili (public/ ichida)",
+            "logo_alt": "Logo matni (alt)",
+            "email": "Email",
+            "phone": "Telefon",
+            "phone_secondary": "Qo'shimcha telefon",
+            "address": "Manzil",
+            "generate": "Kodni generatsiya qilish",
+            "generate_note": "Quyidagi kodni to'liq nusxalab, lib/site-config.ts fayliga joylashtiring:",
+            "copy": "Nusxalash",
+            "copied": "Nusxalandi",
+            "copy_success": "Kod buferga nusxalandi",
+            "copy_error": "Nusxalashda xatolik"
+        },
         "geography": {
             "countries_title": "Davlatlar",
             "countries_subtitle": "Tur yaratishda tanlanadigan davlatlar ro'yxati",

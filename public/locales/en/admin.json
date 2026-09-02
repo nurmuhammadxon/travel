@@ -222,6 +222,22 @@
             "save_success": "Statistics updated",
             "auto_calculated_note": "The values below are calculated automatically from bookings and reviews, not manually editable"
         },
+        "site_config": {
+            "title": "Logo & contact information",
+            "subtitle": "This data isn't stored on the backend. Fill the form, generate the code, copy it into lib/site-config.ts, and redeploy the site.",
+            "logo_src": "Logo image path (inside public/)",
+            "logo_alt": "Logo alt text",
+            "email": "Email",
+            "phone": "Phone",
+            "phone_secondary": "Secondary phone",
+            "address": "Address",
+            "generate": "Generate code",
+            "generate_note": "Copy the code below and paste it into lib/site-config.ts:",
+            "copy": "Copy",
+            "copied": "Copied",
+            "copy_success": "Code copied to clipboard",
+            "copy_error": "Failed to copy"
+        },
         "geography": {
             "countries_title": "Countries",
             "countries_subtitle": "Countries selectable when creating a tour",

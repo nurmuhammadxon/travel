@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { useT } from "next-i18next/client";
 import { Save } from "lucide-react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-
 import {
     getSiteStats,
     updateSiteStats,
@@ -27,7 +25,6 @@ const EMPTY_STATS: SiteStats = {
 export default function AdminSettingsPage() {
     const { t } = useT("admin");
 
-    // --- Site stats ---
     const [statsForm, setStatsForm] = useState<SiteStats>(EMPTY_STATS);
     const [isLoadingStats, setIsLoadingStats] = useState(true);
     const [statsLoadError, setStatsLoadError] = useState<string | null>(null);
@@ -95,7 +92,6 @@ export default function AdminSettingsPage() {
                         <p className="text-sm text-destructive">{statsLoadError}</p>
                     ) : (
                         <div className="space-y-6">
-                            {/* Tahrirlanadigan maydon */}
                             <form onSubmit={handleSaveStats} className="flex flex-wrap items-end gap-3">
                                 <div className="max-w-xs space-y-1.5">
                                     <Label htmlFor="years_experience">
@@ -116,7 +112,6 @@ export default function AdminSettingsPage() {
                                 </Button>
                             </form>
 
-                            {/* Avtomatik hisoblanadigan (faqat ko'rsatish) */}
                             <div>
                                 <p className="text-xs text-muted-foreground mb-2">
                                     {t("settings.site_stats.auto_calculated_note")}

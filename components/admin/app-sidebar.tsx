@@ -34,6 +34,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
+import { SiteLogo } from "../shared/site-logo";
 
 const LANGUAGES = [
     { code: "uz", label: "O'zbekcha" },
@@ -77,9 +78,14 @@ export function AppSidebar() {
         <Sidebar collapsible="icon">
             <SidebarHeader>
                 <div className="flex items-center gap-2 px-2 py-1.5">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-bold text-sm shrink-0">
-                        DS
-                    </div>
+                    <SiteLogo
+                        imgClassName="h-8 w-8 rounded-md object-contain shrink-0"
+                        fallback={
+                            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-bold text-sm shrink-0">
+                                DS
+                            </div>
+                        }
+                    />
                     <div className="flex flex-col leading-tight group-data-[collapsible=icon]:hidden">
                         <span className="text-base font-bold tracking-tight">
                             Discover<span className="text-accent">Stans</span>

@@ -19,6 +19,7 @@ import i18nConfig from "../../i18n.config";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { isAdminUser } from "@/lib/auth";
+import { SiteLogo } from "../shared/site-logo";
 
 const NAV_LINKS = [
   { href: "/", key: "nav.home" },
@@ -87,12 +88,11 @@ export function Header() {
       <nav className="mx-auto max-w-7xl px-4 flex items-center justify-between h-16 md:h-20">
         {/* logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <span
-            className={`text-xl md:text-2xl font-bold tracking-tight transition-colors ${isTransparent ? "text-white" : "text-primary"
+          <SiteLogo
+            textClassName={`text-xl md:text-2xl font-bold tracking-tight transition-colors ${isTransparent ? "text-white" : "text-primary"
               }`}
-          >
-            Discover<span className="text-accent">Stans</span>
-          </span>
+            highlightClassName="text-accent"
+          />
         </Link>
         {/* navbar */}
         <ul className="hidden md:flex items-center gap-8">
@@ -204,7 +204,6 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Mobil gamburger — endi bg-primary bilan, boshqalarga bir xil uslubda */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger
               className="md:hidden"
