@@ -258,7 +258,17 @@
             "manage_button": "Country / Destination",
             "dialog_title": "Manage countries and destinations",
             "cover_image": "Cover image",
-            "description": "Description"
+            "description": "Description",
+            "edit": "Edit",
+            "delete": "Delete",
+            "update": "Save",
+            "cancel": "Cancel",
+            "country_updated": "Country updated",
+            "destination_updated": "Destination updated",
+            "confirm_delete_country": "Delete this country?",
+            "confirm_delete_destination": "Delete this destination?",
+            "delete_success": "Deleted",
+            "delete_error": "Failed to delete"
         }
     }
 }

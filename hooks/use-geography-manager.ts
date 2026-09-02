@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useT } from "next-i18next/client";
 
-import { getCountries, getDestinations, createCountry, createDestination } from "@/lib/api";
+import {
+    getCountries, getDestinations,
+    createCountry, updateCountry, deleteCountry,
+    createDestination, updateDestination, deleteDestination,
+} from "@/lib/api";
 import { showSuccess, showError } from "@/lib/toast";
 import type { Country, Destination, LocalizedText } from "@/types";
 
@@ -30,6 +34,8 @@ export function useGeographyManager(open: boolean) {
     const [countrySlug, setCountrySlug] = useState("");
     const [countrySlugTouched, setCountrySlugTouched] = useState(false);
     const [countryCoverImage, setCountryCoverImage] = useState("");
+    const [editingCountryId, setEditingCountryId] = useState<string | null>(null);
+    const [deletingCountryId, setDeletingCountryId] = useState<string | null>(null);
     const [isSavingCountry, setIsSavingCountry] = useState(false);
 
     // --- Destinations ---
@@ -41,6 +47,8 @@ export function useGeographyManager(open: boolean) {
     const [destinationCountryId, setDestinationCountryId] = useState("");
     const [destinationDescription, setDestinationDescription] = useState("");
     const [destinationCoverImage, setDestinationCoverImage] = useState("");
+    const [editingDestinationId, setEditingDestinationId] = useState<string | null>(null);
+    const [deletingDestinationId, setDeletingDestinationId] = useState<string | null>(null);
     const [isSavingDestination, setIsSavingDestination] = useState(false);
 
     async function loadGeography() {
@@ -71,20 +79,47 @@ export function useGeographyManager(open: boolean) {
         if (!countrySlugTouched) setCountrySlug(slugify(next.uz || next.ru || next.en || ""));
     }
 
+    function resetCountryForm() {
+        setCountryName(EMPTY_LOCALIZED);
+        setCountrySlug("");
+        setCountrySlugTouched(false);
+        setCountryCoverImage("");
+        setEditingCountryId(null);
+    }
+
+    function startEditCountry(country: Country) {
+        setEditingCountryId(country.id);
+        setCountryName(
+            typeof country.name === "string"
+                ? { uz: country.name, ru: country.name, en: country.name }
+                : { uz: country.name?.uz ?? "", ru: country.name?.ru ?? "", en: country.name?.en ?? "" }
+        );
+        setCountrySlug(country.slug);
+        setCountrySlugTouched(true);
+        setCountryCoverImage(country.cover_image ?? "");
+    }
+
+    function cancelEditCountry() {
+        resetCountryForm();
+    }
+
     async function handleCreateCountry(e: React.FormEvent) {
         e.preventDefault();
         setIsSavingCountry(true);
         try {
-            await createCountry({
+            const payload = {
                 name: countryName,
                 slug: countrySlug,
                 cover_image: countryCoverImage || undefined,
-            });
-            showSuccess(t("settings.geography.country_created"));
-            setCountryName(EMPTY_LOCALIZED);
-            setCountrySlug("");
-            setCountrySlugTouched(false);
-            setCountryCoverImage("");
+            };
+            if (editingCountryId) {
+                await updateCountry(editingCountryId, payload);
+                showSuccess(t("settings.geography.country_updated"));
+            } else {
+                await createCountry(payload);
+                showSuccess(t("settings.geography.country_created"));
+            }
+            resetCountryForm();
             await loadGeography();
         } catch (err) {
             showError(err instanceof Error ? err.message : t("settings.error_generic"));
@@ -93,9 +128,54 @@ export function useGeographyManager(open: boolean) {
         }
     }
 
+    async function handleDeleteCountry(country: Country) {
+        if (typeof window !== "undefined") {
+            const ok = window.confirm(t("settings.geography.confirm_delete_country"));
+            if (!ok) return;
+        }
+        setDeletingCountryId(country.id);
+        try {
+            await deleteCountry(country.id);
+            showSuccess(t("settings.geography.delete_success"));
+            if (editingCountryId === country.id) resetCountryForm();
+            await loadGeography();
+        } catch (err) {
+            showError(err instanceof Error ? err.message : t("settings.geography.delete_error"));
+        } finally {
+            setDeletingCountryId(null);
+        }
+    }
+
     function handleDestinationNameChange(next: LocalizedText) {
         setDestinationName(next);
         if (!destinationSlugTouched) setDestinationSlug(slugify(next.uz || next.ru || next.en || ""));
+    }
+
+    function resetDestinationForm() {
+        setDestinationName(EMPTY_LOCALIZED);
+        setDestinationSlug("");
+        setDestinationSlugTouched(false);
+        setDestinationDescription("");
+        setDestinationCoverImage("");
+        setEditingDestinationId(null);
+    }
+
+    function startEditDestination(destination: Destination) {
+        setEditingDestinationId(destination.id);
+        setDestinationName(
+            typeof destination.name === "string"
+                ? { uz: destination.name, ru: destination.name, en: destination.name }
+                : { uz: destination.name?.uz ?? "", ru: destination.name?.ru ?? "", en: destination.name?.en ?? "" }
+        );
+        setDestinationSlug(destination.slug);
+        setDestinationSlugTouched(true);
+        setDestinationCountryId(destination.country_id);
+        setDestinationDescription(destination.description ?? "");
+        setDestinationCoverImage(destination.cover_image ?? "");
+    }
+
+    function cancelEditDestination() {
+        resetDestinationForm();
     }
 
     async function handleCreateDestination(e: React.FormEvent) {
@@ -106,19 +186,21 @@ export function useGeographyManager(open: boolean) {
         }
         setIsSavingDestination(true);
         try {
-            await createDestination({
+            const payload = {
                 name: destinationName,
                 slug: destinationSlug,
                 country_id: destinationCountryId,
                 description: destinationDescription || undefined,
                 cover_image: destinationCoverImage || undefined,
-            });
-            showSuccess(t("settings.geography.destination_created"));
-            setDestinationName(EMPTY_LOCALIZED);
-            setDestinationSlug("");
-            setDestinationSlugTouched(false);
-            setDestinationDescription("");
-            setDestinationCoverImage("");
+            };
+            if (editingDestinationId) {
+                await updateDestination(editingDestinationId, payload);
+                showSuccess(t("settings.geography.destination_updated"));
+            } else {
+                await createDestination(payload);
+                showSuccess(t("settings.geography.destination_created"));
+            }
+            resetDestinationForm();
             await loadGeography();
         } catch (err) {
             showError(err instanceof Error ? err.message : t("settings.error_generic"));
@@ -127,6 +209,24 @@ export function useGeographyManager(open: boolean) {
         }
     }
 
+    async function handleDeleteDestination(destination: Destination) {
+        if (typeof window !== "undefined") {
+            const ok = window.confirm(t("settings.geography.confirm_delete_destination"));
+            if (!ok) return;
+        }
+        setDeletingDestinationId(destination.id);
+        try {
+            await deleteDestination(destination.id);
+            showSuccess(t("settings.geography.delete_success"));
+            if (editingDestinationId === destination.id) resetDestinationForm();
+            await loadGeography();
+        } catch (err) {
+            showError(err instanceof Error ? err.message : t("settings.geography.delete_error"));
+        } finally {
+            setDeletingDestinationId(null);
+        }
+    }
+    
     return {
         t, lng,
         countries, isLoadingCountries,
@@ -134,6 +234,8 @@ export function useGeographyManager(open: boolean) {
         countrySlug, setCountrySlug: (v: string) => { setCountrySlug(v); setCountrySlugTouched(true); },
         countryCoverImage, setCountryCoverImage,
         isSavingCountry, handleCreateCountry,
+        editingCountryId, startEditCountry, cancelEditCountry,
+        deletingCountryId, handleDeleteCountry,
 
         destinations, isLoadingDestinations,
         destinationName, setDestinationName: handleDestinationNameChange,
@@ -142,6 +244,8 @@ export function useGeographyManager(open: boolean) {
         destinationDescription, setDestinationDescription,
         destinationCoverImage, setDestinationCoverImage,
         isSavingDestination, handleCreateDestination,
+        editingDestinationId, startEditDestination, cancelEditDestination,
+        deletingDestinationId, handleDeleteDestination,
     };
 }
 

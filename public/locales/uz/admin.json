@@ -258,7 +258,17 @@
             "manage_button": "Davlat / Yo'nalish",
             "dialog_title": "Davlat va yo'nalishlarni boshqarish",
             "cover_image": "Muqova rasmi",
-            "description": "Tavsif"
+            "description": "Tavsif",
+            "edit": "Tahrirlash",
+            "delete": "O'chirish",
+            "update": "Saqlash",
+            "cancel": "Bekor qilish",
+            "country_updated": "Davlat yangilandi",
+            "destination_updated": "Yo'nalish yangilandi",
+            "confirm_delete_country": "Bu davlatni o'chirmoqchimisiz?",
+            "confirm_delete_destination": "Bu yo'nalishni o'chirmoqchimisiz?",
+            "delete_success": "O'chirildi",
+            "delete_error": "O'chirishda xatolik yuz berdi"
         }
     }
 }

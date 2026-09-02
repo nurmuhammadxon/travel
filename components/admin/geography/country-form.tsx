@@ -37,10 +37,28 @@ export function CountryForm(f: UseGeographyManagerReturn) {
                     errorMessage={f.t("form.upload_error")}
                 />
             </div>
-            <Button type="submit" disabled={f.isSavingCountry} size="sm" className="gap-1.5">
-                <Plus className="h-3.5 w-3.5" />
-                {f.isSavingCountry ? f.t("settings.geography.saving") : f.t("settings.geography.add")}
-            </Button>
+
+            <div className="flex items-center gap-2">
+                <Button type="submit" disabled={f.isSavingCountry} size="sm" className="gap-1.5">
+                    <Plus className="h-3.5 w-3.5" />
+                    {f.isSavingCountry
+                        ? f.t("settings.geography.saving")
+                        : f.editingCountryId
+                            ? f.t("settings.geography.update")
+                            : f.t("settings.geography.add")}
+                </Button>
+                {f.editingCountryId && (
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={f.cancelEditCountry}
+                        disabled={f.isSavingCountry}
+                    >
+                        {f.t("settings.geography.cancel")}
+                    </Button>
+                )}
+            </div>
         </form>
     );
 }

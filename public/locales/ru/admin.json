@@ -258,7 +258,17 @@
             "manage_button": "Страна / Направление",
             "dialog_title": "Управление странами и направлениями",
             "cover_image": "Обложка",
-            "description": "Описание"
+            "description": "Описание",
+            "edit": "Редактировать",
+            "delete": "Удалить",
+            "update": "Сохранить",
+            "cancel": "Отмена",
+            "country_updated": "Страна обновлена",
+            "destination_updated": "Направление обновлено",
+            "confirm_delete_country": "Удалить эту страну?",
+            "confirm_delete_destination": "Удалить это направление?",
+            "delete_success": "Удалено",
+            "delete_error": "Ошибка при удалении"
         }
     }
 }

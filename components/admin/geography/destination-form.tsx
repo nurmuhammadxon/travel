@@ -69,10 +69,27 @@ export function DestinationForm(f: UseGeographyManagerReturn) {
                 />
             </div>
 
-            <Button type="submit" disabled={f.isSavingDestination} size="sm" className="gap-1.5">
-                <Plus className="h-3.5 w-3.5" />
-                {f.isSavingDestination ? f.t("settings.geography.saving") : f.t("settings.geography.add")}
-            </Button>
+            <div className="flex items-center gap-2">
+                <Button type="submit" disabled={f.isSavingDestination} size="sm" className="gap-1.5">
+                    <Plus className="h-3.5 w-3.5" />
+                    {f.isSavingDestination
+                        ? f.t("settings.geography.saving")
+                        : f.editingDestinationId
+                            ? f.t("settings.geography.update")
+                            : f.t("settings.geography.add")}
+                </Button>
+                {f.editingDestinationId && (
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={f.cancelEditDestination}
+                        disabled={f.isSavingDestination}
+                    >
+                        {f.t("settings.geography.cancel")}
+                    </Button>
+                )}
+            </div>
         </form>
     );
 }
