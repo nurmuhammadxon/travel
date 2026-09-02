@@ -16,15 +16,13 @@ export async function getHomePageData(lng: string): Promise<HomePageData> {
     let reviews: Review[] = [];
     let siteStats: SiteStats | null = null;
 
-    // Barcha ochiq API so'rovlarini parallel tartibda yuboramiz
     const [toursRes, countryList, allReviews, statsRes] = await Promise.allSettled([
         getTours({ lang: lng, page_size: 6 }),
-        getCountries(lng),
+        getCountries(),
         getAllReviews(),
         getSiteStats(),
     ]);
 
-    // 1. Turlar natijasi
     if (toursRes.status === "fulfilled" && toursRes.value) {
         featuredTours = toursRes.value.items || [];
         totalTours = toursRes.value.total || 0;
@@ -32,7 +30,6 @@ export async function getHomePageData(lng: string): Promise<HomePageData> {
         console.error("getTours xatosi:", toursRes.reason);
     }
 
-    // 2. Davlatlar va ularga tegishli turlar soni
     if (countryList.status === "fulfilled" && Array.isArray(countryList.value)) {
         try {
             countries = await Promise.all(
@@ -52,14 +49,12 @@ export async function getHomePageData(lng: string): Promise<HomePageData> {
         console.error("getCountries xatosi:", countryList.reason);
     }
 
-    // 3. Sharhlar natijasi
     if (allReviews.status === "fulfilled" && Array.isArray(allReviews.value)) {
         reviews = allReviews.value.slice(0, 8);
     } else if (allReviews.status === "rejected") {
         console.error("getAllReviews xatosi:", allReviews.reason);
     }
 
-    // 4. Sayt statistikasi
     if (statsRes.status === "fulfilled" && statsRes.value) {
         siteStats = statsRes.value;
     } else if (statsRes.status === "rejected") {

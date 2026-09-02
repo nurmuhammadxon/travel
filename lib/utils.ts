@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function localizedText(
-  value: string | { uz?: string; ru?: string; en?: string } | undefined,
+  value: string | { uz?: string; ru?: string; en?: string } | null | undefined,
   lang: string = "uz"
 ): string {
   if (!value) return "";

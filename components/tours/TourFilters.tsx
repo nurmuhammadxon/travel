@@ -61,7 +61,7 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
         let cancelled = false;
         setIsLoadingLists(true);
 
-        Promise.all([getCountries(lng), getDestinations(lng)])
+        Promise.all([getCountries(), getDestinations()])
             .then(([countriesRes, destinationsRes]) => {
                 if (cancelled) return;
                 setCountries(countriesRes);

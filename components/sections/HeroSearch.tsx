@@ -28,14 +28,12 @@ export function HeroSearch() {
     const containerRef = useRef<HTMLDivElement>(null);
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Yo'nalishlar ro'yxatini bir marta yuklab, keshda saqlaymiz
-    useEffect(() => {
-        getDestinations(lng)
+      useEffect(() => {
+        getDestinations()
             .then(setAllDestinations)
             .catch(() => setAllDestinations([]));
-    }, [lng]);
+    }, []);
 
-    // Tashqariga bosilganda dropdown yopiladi
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) {
             if (containerRef.current && !containerRef.current.contains(e.target as Node)) {

@@ -322,6 +322,12 @@ export interface CountryPayload {
 export const createCountry = (payload: CountryPayload) =>
     api.post<unknown, Country>("/countries", payload);
 
+export const updateCountry = (countryId: string, payload: Partial<CountryPayload>) =>
+    api.patch<unknown, Country>(`/countries/${countryId}`, payload);
+
+export const deleteCountry = (countryId: string) =>
+    api.delete<unknown, void>(`/countries/${countryId}`);
+
 export interface DestinationPayload {
     name: LocalizedText;
     slug: string;
@@ -332,6 +338,12 @@ export interface DestinationPayload {
 
 export const createDestination = (payload: DestinationPayload) =>
     api.post<unknown, Destination>("/destinations", payload);
+
+export const updateDestination = (destinationId: string, payload: Partial<DestinationPayload>) =>
+    api.patch<unknown, Destination>(`/destinations/${destinationId}`, payload);
+
+export const deleteDestination = (destinationId: string) =>
+    api.delete<unknown, void>(`/destinations/${destinationId}`);
 
 // Admin: Site Stats
 export const getSiteStats = () =>
