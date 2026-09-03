@@ -164,7 +164,7 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
                     )}
                 </Button>
 
-                <button
+                <Button
                     type="button"
                     onClick={() => updateParams({ category: null })}
                     className={`shrink-0 rounded-full border px-3 py-1.5 text-xs whitespace-nowrap transition-colors ${!currentCategory
@@ -173,10 +173,10 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
                         }`}
                 >
                     {t("all_categories")}
-                </button>
+                </Button>
 
                 {CATEGORIES.map((c) => (
-                    <button
+                    <Button
                         key={c.value}
                         type="button"
                         onClick={() => toggleCategory(c.value)}
@@ -186,7 +186,7 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
                             }`}
                     >
                         {c.label}
-                    </button>
+                    </Button>
                 ))}
 
                 <span className="ml-auto shrink-0 text-sm font-medium whitespace-nowrap pl-2">

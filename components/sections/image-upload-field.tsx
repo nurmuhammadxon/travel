@@ -6,6 +6,7 @@ import { Loader2, Upload, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { uploadReviewImage } from "@/lib/api";
 import { showError } from "@/lib/toast";
+import { Button } from "../ui/button";
 
 interface ImageUploadFieldProps {
     label: string;
@@ -47,7 +48,6 @@ export function ImageUploadField({
             <Label>{label}</Label>
             <div className="flex items-center gap-4">
                 {value && (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={value} alt="" className="h-20 w-32 rounded-md object-cover border" />
                 )}
                 <div className="flex flex-col gap-2">
@@ -67,13 +67,13 @@ export function ImageUploadField({
                         />
                     </label>
                     {value && (
-                        <button
+                        <Button
                             type="button"
                             onClick={() => onChange("")}
                             className="inline-flex items-center gap-1 text-xs text-destructive hover:underline"
                         >
                             <X className="h-3 w-3" /> {removeLabel}
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>

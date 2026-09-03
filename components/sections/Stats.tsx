@@ -25,7 +25,7 @@ function useCountUp(target: number, start: boolean, duration = 1500) {
 
         function tick(now: number) {
             const progress = Math.min((now - startTime) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3); // ease-out
+            const eased = 1 - Math.pow(1 - progress, 3);
             setValue(Math.round(target * eased));
             if (progress < 1) raf = requestAnimationFrame(tick);
         }

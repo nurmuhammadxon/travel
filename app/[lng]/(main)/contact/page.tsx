@@ -19,7 +19,6 @@ export default async function ContactPage({ params }: Props) {
                     className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/10" />
-
                 <div className="relative z-10 w-full mx-auto max-w-3xl px-4 text-center">
                     <div className="flex items-center justify-center gap-2 text-white text-lg font-medium tracking-wide uppercase mb-4">
                         <MapPin className="h-4 w-4" />
@@ -30,9 +29,7 @@ export default async function ContactPage({ params }: Props) {
                     </h1>
                 </div>
             </div>
-
             <div className="mx-auto max-w-6xl px-4">
-                {/* Uch ustunli malumot qatori */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6 mb-16">
                     <div>
                         <div className="flex items-center gap-3 mb-4">

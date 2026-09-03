@@ -15,9 +15,9 @@ export function FaqsSection(f: UseTourFormReturn) {
             <CardContent className="space-y-4">
                 {f.faqs.map((faq, i) => (
                     <div key={i} className="border rounded-md p-4 space-y-3 relative">
-                        <button type="button" onClick={() => f.removeFaq(i)} className="absolute top-3 right-3 text-destructive">
+                        <Button type="button" onClick={() => f.removeFaq(i)} className="absolute top-3 right-3 text-destructive">
                             <Trash2 className="h-4 w-4" />
-                        </button>
+                        </Button>
                         <Label className="text-xs">{f.t("form.question")}</Label>
                         <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
                             <Input placeholder="UZ" value={faq.question.uz} onChange={(e) => f.updateFaq(i, "question", "uz", e.target.value)} />

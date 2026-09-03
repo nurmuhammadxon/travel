@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { MapPin, Compass, ChevronUp, ChevronDown } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { HeroSearch } from "./HeroSearch";
 
@@ -37,21 +37,19 @@ export function Hero() {
                 className="object-cover"
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-black/10" />
-
-            {/* O'ng tomondagi slayd navigatsiyasi */}
             <div className="hidden md:flex flex-col items-center gap-3 absolute right-6 top-1/2 -translate-y-1/2 z-20">
-                <button
+                <Button
                     type="button"
                     aria-label="Oldingi slayd"
                     onClick={() => goTo(index - 1)}
                     className="h-8 w-8 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/25 transition-colors"
                 >
                     <ChevronUp className="h-4 w-4" />
-                </button>
+                </Button>
 
                 <div className="flex flex-col items-center gap-1.5 py-2">
                     {Array.from({ length: SLIDE_COUNT }).map((_, i) => (
-                        <button
+                        <Button
                             key={i}
                             type="button"
                             aria-label={`${i + 1}-slayd`}
@@ -64,21 +62,19 @@ export function Hero() {
                                     i === index ? "h-4 bg-accent" : "h-1.5 bg-white/40"
                                 )}
                             />
-                        </button>
+                        </Button>
                     ))}
                 </div>
 
-                <button
+                <Button
                     type="button"
                     aria-label="Keyingi slayd"
                     onClick={() => goTo(index + 1)}
                     className="h-8 w-8 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/25 transition-colors"
                 >
                     <ChevronDown className="h-4 w-4" />
-                </button>
+                </Button>
             </div>
-
-            {/* Asosiy matn */}
             <div className="relative z-10 flex-1 flex items-center pt-28">
                 <div className="mx-auto max-w-7xl px-4 w-full">
                     <div className="flex items-center gap-2 text-white text-base font-medium tracking-wide uppercase mb-4">
@@ -118,8 +114,6 @@ export function Hero() {
                     </div>
                 </div>
             </div>
-
-            {/* Qidiruv paneli */}
             <HeroSearch />
         </section>
     );

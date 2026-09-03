@@ -121,7 +121,7 @@ export function ReviewsSection({ tourId, initialReviews, labels }: ReviewsSectio
                                 {Array.from({ length: 5 }).map((_, i) => {
                                     const starValue = i + 1;
                                     return (
-                                        <button
+                                        <Button
                                             key={i}
                                             type="button"
                                             onClick={() => setRating(starValue)}
@@ -136,7 +136,7 @@ export function ReviewsSection({ tourId, initialReviews, labels }: ReviewsSectio
                                                         : "fill-muted text-muted-foreground/30"
                                                 )}
                                             />
-                                        </button>
+                                        </Button>
                                     );
                                 })}
                             </div>

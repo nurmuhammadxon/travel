@@ -114,7 +114,7 @@ export default function AdminBookingsPage() {
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
-                <button
+                <Button
                     onClick={() => setStatusFilter("all")}
                     className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${statusFilter === "all"
                         ? "bg-primary text-white border-primary"
@@ -122,9 +122,9 @@ export default function AdminBookingsPage() {
                         }`}
                 >
                     {t("bookings.filter_all")}
-                </button>
+                </Button>
                 {STATUS_OPTIONS.map((s) => (
-                    <button
+                    <Button
                         key={s}
                         onClick={() => setStatusFilter(s)}
                         className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${statusFilter === s
@@ -133,7 +133,7 @@ export default function AdminBookingsPage() {
                             }`}
                     >
                         {STATUS_LABEL[s]}
-                    </button>
+                    </Button>
                 ))}
             </div>
 

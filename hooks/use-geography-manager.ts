@@ -27,7 +27,6 @@ export function useGeographyManager(open: boolean) {
     const params = useParams<{ lng: string }>();
     const lng = params.lng ?? "uz";
 
-    // --- Countries ---
     const [countries, setCountries] = useState<Country[]>([]);
     const [isLoadingCountries, setIsLoadingCountries] = useState(true);
     const [countryName, setCountryName] = useState<LocalizedText>(EMPTY_LOCALIZED);
@@ -39,7 +38,6 @@ export function useGeographyManager(open: boolean) {
     const [countrySaveTick, setCountrySaveTick] = useState(0);
     const [isSavingCountry, setIsSavingCountry] = useState(false);
 
-    // --- Destinations ---
     const [destinations, setDestinations] = useState<Destination[]>([]);
     const [isLoadingDestinations, setIsLoadingDestinations] = useState(true);
     const [destinationName, setDestinationName] = useState<LocalizedText>(EMPTY_LOCALIZED);
@@ -73,7 +71,6 @@ export function useGeographyManager(open: boolean) {
 
     useEffect(() => {
         if (open) loadGeography();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
     function handleCountryNameChange(next: LocalizedText) {

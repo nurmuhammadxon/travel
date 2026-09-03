@@ -68,7 +68,6 @@ export function useTourForm(initialData?: AdminTourDetail) {
     const prefix = lng === "uz" ? "" : `/${lng}`;
     const isEdit = !!initialData;
 
-    // Asosiy ma'lumot
     const [titleUz, setTitleUz] = useState(initialData?.title?.uz ?? "");
     const [titleRu, setTitleRu] = useState(initialData?.title?.ru ?? "");
     const [titleEn, setTitleEn] = useState(initialData?.title?.en ?? "");
@@ -83,7 +82,6 @@ export function useTourForm(initialData?: AdminTourDetail) {
     const [descRu, setDescRu] = useState(initialData?.description?.ru ?? "");
     const [descEn, setDescEn] = useState(initialData?.description?.en ?? "");
 
-    // Narx / parametrlar
     const [category, setCategory] = useState(initialData?.category ?? "");
     const [durationDays, setDurationDays] = useState(initialData?.duration_days ?? 1);
     const [durationNights, setDurationNights] = useState(initialData?.duration_nights ?? 0);
@@ -97,7 +95,6 @@ export function useTourForm(initialData?: AdminTourDetail) {
     const [minAge, setMinAge] = useState<number>(initialData?.min_age ?? 0);
     const [fitnessLevel, setFitnessLevel] = useState<number>(initialData?.fitness_level ?? 1);
 
-    // Geografiya (checkbox orqali)
     const [countryIds, setCountryIds] = useState<string[]>(initialData?.country_ids ?? []);
     const [destinationIds, setDestinationIds] = useState<string[]>(initialData?.destination_ids ?? []);
 
@@ -113,12 +110,10 @@ export function useTourForm(initialData?: AdminTourDetail) {
         );
     }
 
-    // Galereya
     const [images, setImages] = useState<string[]>(initialData?.images ?? []);
     const [isUploadingGallery, setIsUploadingGallery] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
 
-    // Highlights / Included / Excluded
     const [highlightsUz, setHighlightsUz] = useState(listToText(initialData?.highlights?.uz));
     const [highlightsRu, setHighlightsRu] = useState(listToText(initialData?.highlights?.ru));
     const [highlightsEn, setHighlightsEn] = useState(listToText(initialData?.highlights?.en));
@@ -129,7 +124,6 @@ export function useTourForm(initialData?: AdminTourDetail) {
     const [excludedRu, setExcludedRu] = useState(listToText(initialData?.excluded?.ru));
     const [excludedEn, setExcludedEn] = useState(listToText(initialData?.excluded?.en));
 
-    // FAQ
     const [faqs, setFaqs] = useState<FaqItem[]>(initialData?.faqs ?? []);
     function addFaq() {
         setFaqs([...faqs, { question: { uz: "", ru: "", en: "" }, answer: { uz: "", ru: "", en: "" } }]);
@@ -143,7 +137,6 @@ export function useTourForm(initialData?: AdminTourDetail) {
         setFaqs(updated);
     }
 
-    // Pricing options
     const [pricingOptions, setPricingOptions] = useState<PricingOption[]>(initialData?.pricing_options ?? []);
     function addPricingOption() {
         setPricingOptions([
@@ -165,7 +158,6 @@ export function useTourForm(initialData?: AdminTourDetail) {
         setPricingOptions(updated);
     }
 
-    // Route points (marshrut nuqtalari)
     const [routePoints, setRoutePoints] = useState<RoutePointForm[]>(
         (initialData?.route_points ?? []).map((p) => ({
             order: p.order,

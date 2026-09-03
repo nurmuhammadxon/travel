@@ -2,6 +2,7 @@ import { Loader2, Upload, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import type { UseTourFormReturn } from "@/hooks/use-tour-form";
+import { Button } from "../ui/button";
 
 export function ImagesSection(f: UseTourFormReturn) {
     return (
@@ -14,7 +15,6 @@ export function ImagesSection(f: UseTourFormReturn) {
                     <Label>{f.t("form.cover_image")}</Label>
                     <div className="flex items-center gap-4">
                         {f.coverImage && (
-                            // eslint-disable-next-line @next/next/no-img-element
                             <img src={f.coverImage} alt="cover" className="h-20 w-32 rounded-md object-cover border" />
                         )}
                         <div className="flex flex-col gap-2">
@@ -24,9 +24,9 @@ export function ImagesSection(f: UseTourFormReturn) {
                                 <input type="file" accept="image/jpeg,image/png,image/webp,image/heic" className="hidden" onChange={f.handleCoverUpload} />
                             </label>
                             {f.coverImage && (
-                                <button type="button" onClick={() => f.setCoverImage("")} className="inline-flex items-center gap-1 text-xs text-destructive hover:underline">
+                                <Button type="button" onClick={() => f.setCoverImage("")} className="inline-flex items-center gap-1 text-xs text-destructive hover:underline">
                                     <X className="h-3 w-3" /> {f.t("form.remove_image")}
-                                </button>
+                                </Button>
                             )}
                         </div>
                     </div>
@@ -37,11 +37,10 @@ export function ImagesSection(f: UseTourFormReturn) {
                     <div className="flex flex-wrap gap-3">
                         {f.images.map((img, i) => (
                             <div key={i} className="relative">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={img} alt={`gallery-${i}`} className="h-20 w-28 rounded-md object-cover border" />
-                                <button type="button" onClick={() => f.removeGalleryImage(i)} className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1">
+                                <Button type="button" onClick={() => f.removeGalleryImage(i)} className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1">
                                     <X className="h-3 w-3" />
-                                </button>
+                                </Button>
                             </div>
                         ))}
                     </div>

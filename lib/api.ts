@@ -22,7 +22,6 @@ export const api = axios.create({
     },
 });
 
-// --- Helper Functions (Cookies) ---
 export function setTokens(tokens: AuthTokens) {
     if (typeof window === "undefined" || !tokens) return;
 
@@ -63,13 +62,11 @@ export function hasStoredSession(): boolean {
     return !!getRefreshToken();
 }
 
-// --- Request Interceptor ---
 api.interceptors.request.use(
     (config) => {
         if (typeof window !== "undefined") {
             const token = getAccessToken();
 
-            // LOG: Token bor yoki yo'qligini tekshirish uchun
             if (process.env.NODE_ENV === "development") {
                 console.log(`[Request: ${config.method?.toUpperCase()}] ${config.url} | Token:`, token ? "Mavjud" : "TOPILMADI!");
             }
@@ -84,7 +81,6 @@ api.interceptors.request.use(
 );
 
 
-// --- Single Response Interceptor (Data Unwrap + Refresh Token Logic) ---
 function formatErrorDetail(detail: unknown): string {
     if (!detail) return "Xatolik yuz berdi";
 
@@ -122,7 +118,6 @@ export interface ApiError extends Error {
     detail?: unknown;
 }
 
-// --- Response Interceptor (Refresh Token & Error Handling) ---
 api.interceptors.response.use(
     (response) => response.data,
     async (error: AxiosError<{ detail?: unknown }>) => {
@@ -140,7 +135,6 @@ api.interceptors.response.use(
 
             if (refreshToken) {
                 try {
-                    // Tokenni yangilash uchun alohida axios so'rovi (cheksiz siklga tushmaslik uchun)
                     const res = await axios.post<AuthTokens>(`${API_URL}/auth/refresh`, {
                         refresh_token: refreshToken,
                     });
@@ -173,7 +167,6 @@ api.interceptors.response.use(
         return Promise.reject(formattedError);
     });
 
-// --- Auth ---
 export const registerRequest = (payload: RegisterPayload) =>
     api.post<unknown, User>("/auth/register", payload);
 
@@ -189,7 +182,6 @@ export async function logoutRequest() {
     clearTokens();
 }
 
-// --- Tours ---
 export function getTours(params: Record<string, string | number | undefined> = {}) {
     const filteredParams = Object.fromEntries(
         Object.entries(params).filter(([, v]) => v !== undefined)
@@ -208,7 +200,6 @@ export const getDestinations = (countryId?: string) =>
         countryId ? `/destinations?country_id=${countryId}` : "/destinations"
     );
 
-// --- Bookings ---
 export interface CreateBookingPayload {
     tour_id: string;
     full_name: string;
@@ -234,7 +225,6 @@ export const getBookingByNumber = (bookingNumber: string) =>
 
 export const getMyBookings = () => api.get<unknown, Booking[]>("/bookings/my");
 
-// --- Reviews ---
 export async function uploadReviewImage(file: File): Promise<{ url: string }> {
     const formData = new FormData();
     formData.append("file", file);
@@ -260,12 +250,10 @@ export const createReview = (payload: CreateReviewPayload) =>
 export const getReviews = (tourId: string) =>
     api.get<unknown, Review[]>("/reviews", { params: { tour_id: tourId } });
 
-// --- Admin Interface & API Methods ---
 export interface UpdateSiteStatsPayload {
     years_experience: number;
 }
 
-// --- Profile  ---
 export interface UpdateProfilePayload {
     full_name?: string;
     email?: string;
@@ -278,10 +266,8 @@ export const getProfile = () => api.get<unknown, User>("/users/me");
 export const updateProfile = (payload: UpdateProfilePayload) =>
     api.patch<unknown, User>("/users/me", payload);
 
-// Admin: Users
 export const getUsers = () => api.get<unknown, User[]>("/users");
 
-// Admin: Tours
 export const getTourRaw = (slug: string) =>
     api.get<unknown, AdminTourDetail>(`/tours/${slug}`);
 
@@ -294,7 +280,6 @@ export const updateTour = (tourId: string, payload: Partial<TourPayload>) =>
 export const deleteTour = (tourId: string) =>
     api.delete<unknown, void>(`/tours/${tourId}`);
 
-// Admin: Bookings
 export const getAllBookings = () => api.get<unknown, Booking[]>("/bookings");
 
 export const updateBookingStatus = (bookingId: string, status: Booking["status"]) =>
@@ -303,7 +288,6 @@ export const updateBookingStatus = (bookingId: string, status: Booking["status"]
 export const autoCompleteBookings = () =>
     api.post<unknown, { message: string }>("/bookings/auto-complete");
 
-// Admin: Reviews & Locations
 export const getAllReviews = async (): Promise<Review[]> => {
     const res = await api.get<unknown, Review[] | { items: Review[] }>("/reviews");
     if (Array.isArray(res)) return res;
@@ -345,7 +329,6 @@ export const updateDestination = (destinationId: string, payload: Partial<Destin
 export const deleteDestination = (destinationId: string) =>
     api.delete<unknown, void>(`/destinations/${destinationId}`);
 
-// Admin: Site Stats
 export const getSiteStats = () =>
     api.get<unknown, SiteStats>("/site-stats");
 
@@ -354,7 +337,6 @@ export const updateSiteStats = (payload: UpdateSiteStatsPayload) =>
 
 export default api;
 
-// --- Contact Messages ---
 export interface ContactMessagePayload {
     name: string;
     email: string;

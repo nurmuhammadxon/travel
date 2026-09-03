@@ -17,25 +17,25 @@ export function RoutePointsSection(f: UseTourFormReturn) {
                 {f.routePoints.map((point, i) => (
                     <div key={i} className="border rounded-md p-4 space-y-3 relative">
                         <div className="absolute top-3 right-3 flex items-center gap-1">
-                            <button
+                            <Button
                                 type="button"
                                 disabled={i === 0}
                                 onClick={() => f.moveRoutePoint(i, -1)}
                                 className="text-muted-foreground disabled:opacity-30"
                             >
                                 <ArrowUp className="h-4 w-4" />
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 type="button"
                                 disabled={i === f.routePoints.length - 1}
                                 onClick={() => f.moveRoutePoint(i, 1)}
                                 className="text-muted-foreground disabled:opacity-30"
                             >
                                 <ArrowDown className="h-4 w-4" />
-                            </button>
-                            <button type="button" onClick={() => f.removeRoutePoint(i)} className="text-destructive ml-1">
+                            </Button>
+                            <Button type="button" onClick={() => f.removeRoutePoint(i)} className="text-destructive ml-1">
                                 <Trash2 className="h-4 w-4" />
-                            </button>
+                            </Button>
                         </div>
 
                         <div className="grid grid-cols-1 gap-3 md:grid-cols-4 pr-20">

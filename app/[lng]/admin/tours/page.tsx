@@ -61,7 +61,6 @@ export default function AdminToursPage() {
 
     useEffect(() => {
         loadTours();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function handleToggleFeatured(tour: Tour, value: boolean) {

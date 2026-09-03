@@ -47,7 +47,6 @@ export default function AdminSettingsPage() {
         return () => {
             cancelled = true;
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function handleSaveStats(e: React.FormEvent) {
@@ -74,8 +73,6 @@ export default function AdminSettingsPage() {
                 <h1 className="text-2xl font-semibold">{t("settings.title")}</h1>
                 <p className="text-sm text-muted-foreground">{t("settings.subtitle")}</p>
             </div>
-
-            {/* Site stats */}
             <Card>
                 <CardHeader>
                     <CardTitle>{t("settings.site_stats.title")}</CardTitle>

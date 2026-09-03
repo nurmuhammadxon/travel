@@ -56,7 +56,6 @@ export function TourAccommodation({ accommodation, labels }: TourAccommodationPr
             {accommodation.photos && accommodation.photos.length > 0 && (
                 <div className="flex gap-2 overflow-x-auto pt-1">
                     {accommodation.photos.map((img, pi) => (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                             key={pi}
                             src={img}

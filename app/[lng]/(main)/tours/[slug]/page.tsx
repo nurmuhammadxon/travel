@@ -112,9 +112,7 @@ export default async function TourDetailPage({ params }: Props) {
                         ))}
                     </div>
                 )}
-
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-8">
-                    {/* --- CHAP USTUN (kontent) --- */}
                     <div className="lg:col-span-2">
                         {destinationChips.length > 0 && (
                             <div className="mb-8">
@@ -135,7 +133,6 @@ export default async function TourDetailPage({ params }: Props) {
                                 </div>
                             </div>
                         )}
-
                         <Tabs defaultValue="overview">
                             <TabsList variant="line" className="mb-6 flex-wrap h-auto">
                                 <TabsTrigger value="overview">{t("tab_overview")}</TabsTrigger>
@@ -149,8 +146,6 @@ export default async function TourDetailPage({ params }: Props) {
                                     <TabsTrigger value="faqs">{t("tab_faqs")}</TabsTrigger>
                                 )}
                             </TabsList>
-
-                            {/* --- OVERVIEW --- */}
                             <TabsContent value="overview" className="space-y-8">
                                 <div>
                                     <h2 className="text-xl font-bold text-primary mb-3">{t("about_tour")}</h2>
@@ -176,7 +171,6 @@ export default async function TourDetailPage({ params }: Props) {
                                 )}
                             </TabsContent>
 
-                            {/* --- ITINERARY --- */}
                             {tour.itinerary && tour.itinerary.length > 0 && (
                                 <TabsContent value="itinerary">
                                     <TourItinerary
@@ -194,7 +188,6 @@ export default async function TourDetailPage({ params }: Props) {
                                 </TabsContent>
                             )}
 
-                            {/* --- INCLUDED / EXCLUDED --- */}
                             {(included.length > 0 || excluded.length > 0) && (
                                 <TabsContent value="included">
                                     <TourIncludedExcluded
@@ -208,7 +201,6 @@ export default async function TourDetailPage({ params }: Props) {
                                 </TabsContent>
                             )}
 
-                            {/* --- FAQ --- */}
                             {tour.faqs && tour.faqs.length > 0 && (
                                 <TabsContent value="faqs">
                                     <Accordion defaultValue={[]}>
@@ -262,8 +254,6 @@ export default async function TourDetailPage({ params }: Props) {
                             />
                         </div>
                     </div>
-
-                    {/* --- O'NG USTUN (band qilish) --- */}
                     <div className="lg:col-span-1">
                         <div className="sticky top-28">
                             <TourBookingPanel

@@ -86,7 +86,6 @@ export function Header() {
         }`}
     >
       <nav className="mx-auto max-w-7xl px-4 flex items-center justify-between h-16 md:h-20">
-        {/* logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <SiteLogo
             textClassName={`text-xl md:text-2xl font-bold tracking-tight transition-colors ${isTransparent ? "text-white" : "text-primary"
@@ -94,7 +93,6 @@ export function Header() {
             highlightClassName="text-accent"
           />
         </Link>
-        {/* navbar */}
         <ul className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href || pathname.endsWith(link.href);
@@ -115,7 +113,6 @@ export function Header() {
             );
           })}
         </ul>
-        {/* buttons */}
         <div className="hidden md:flex items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger
@@ -183,7 +180,6 @@ export function Header() {
 
         </div>
 
-        {/* Mobile */}
         <div className="flex md:hidden items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger
@@ -258,13 +254,13 @@ export function Header() {
                         <ClipboardList className="h-4 w-4" />
                         {t("nav.profile")}
                       </Link>
-                      <button
+                      <Button
                         onClick={handleLogout}
                         className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full text-destructive")}
                       >
                         <LogOut className="h-4 w-4" />
                         {t("nav.logout")}
-                      </button>
+                      </Button>
                     </>
                   ) : (
                     <Link

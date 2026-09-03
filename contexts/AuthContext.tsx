@@ -23,7 +23,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// 30 daqiqa faolsizlikdan keyin avtomatik chiqarish
 const INACTIVITY_LIMIT_MS = 30 * 60 * 1000;
 const ACTIVITY_EVENTS = ["mousemove", "keydown", "click", "scroll", "touchstart"];
 
@@ -51,12 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async function login(payload: LoginPayload): Promise<User> {
         const loggedInUser = await loginRequest(payload);
         setUser(loggedInUser);
-        return loggedInUser; // <-- endi User qaytaradi
+        return loggedInUser;
     }
 
     async function register(payload: RegisterPayload): Promise<User> {
         await registerRequest(payload);
-        return login({ email: payload.email, password: payload.password }); // <-- login natijasini qaytaradi
+        return login({ email: payload.email, password: payload.password }); 
+
     }
 
     async function logout() {
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
     }
 
-    // Faolsizlik taymerini boshqarish — faqat login qilingan holatda ishlaydi
+
     useEffect(() => {
         if (!user) return;
 
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         ACTIVITY_EVENTS.forEach((event) => window.addEventListener(event, resetTimer));
-        resetTimer(); // birinchi marta taymerni ishga tushirish
+        resetTimer(); 
 
         return () => {
             ACTIVITY_EVENTS.forEach((event) => window.removeEventListener(event, resetTimer));

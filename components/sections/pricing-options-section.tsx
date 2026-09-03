@@ -15,9 +15,9 @@ export function PricingOptionsSection(f: UseTourFormReturn) {
             <CardContent className="space-y-4">
                 {f.pricingOptions.map((opt, i) => (
                     <div key={i} className="border rounded-md p-4 space-y-3 relative">
-                        <button type="button" onClick={() => f.removePricingOption(i)} className="absolute top-3 right-3 text-destructive">
+                        <Button type="button" onClick={() => f.removePricingOption(i)} className="absolute top-3 right-3 text-destructive">
                             <Trash2 className="h-4 w-4" />
-                        </button>
+                        </Button>
                         <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
                             <div className="space-y-1">
                                 <Label className="text-xs">{f.t("form.type")}</Label>

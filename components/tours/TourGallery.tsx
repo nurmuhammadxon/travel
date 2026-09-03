@@ -6,6 +6,7 @@ import { getMediaUrl } from "@/lib/media";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { TourImagePlaceholder } from "./TourImagePlaceholder";
+import { Button } from "../ui/button";
 
 export function TourGallery({ images, title }: { images: string[]; title: string }) {
     const list = images && images.length > 0 ? images : [];
@@ -54,7 +55,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 rounded-2xl overflow-hidden">
-                <button
+                <Button
                     onClick={() => openLightbox(0)}
                     className="md:col-span-2 md:row-span-2 relative aspect-video md:aspect-auto min-h-65 bg-muted overflow-hidden group"
                 >
@@ -67,7 +68,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                     ) : (
                         <TourImagePlaceholder className="h-full w-full" />
                     )}
-                </button>
+                </Button>
 
                 {visibleThumbs.map((img, i) => {
                     const isLastVisible = i === visibleThumbs.length - 1;
@@ -75,7 +76,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                     const thumbUrl = getMediaUrl(img);
 
                     return (
-                        <button
+                        <Button
                             key={img + i}
                             onClick={() => openLightbox(i + 1)}
                             className="relative aspect-video md:aspect-square bg-muted overflow-hidden group"
@@ -97,7 +98,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                                     <Expand className="h-4 w-4" />+{remainingCount} Photos
                                 </span>
                             )}
-                        </button>
+                        </Button>
                     );
                 })}
             </div>
@@ -107,7 +108,6 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                     showCloseButton={false}
                     className="fixed! inset-0! left-0! top-0! translate-x-0! translate-y-0! w-screen! h-screen! max-w-none! max-h-none! rounded-none! border-0! p-0! m-0! gap-0! bg-black/95!"
                 >
-                    {/* Rasmning o'zi — markazda, "contain" (butunlay ko'rinadi, kesilmaydi) */}
                     <div className="absolute inset-0 flex items-center justify-center p-4 md:p-10 pointer-events-none">
                         {getMediaUrl(list[activeIndex]) ? (
                             <img
@@ -119,9 +119,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                             <TourImagePlaceholder className="h-full w-full" />
                         )}
                     </div>
-
-                    {/* Boshqaruv elementlari — rasmdan alohida qatlamda, eng yuqori z-index bilan */}
-                    <button
+                    <Button
                         type="button"
                         onClick={(e) => {
                             e.stopPropagation();
@@ -131,7 +129,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                         aria-label="Yopish"
                     >
                         <X className="h-5 w-5" />
-                    </button>
+                    </Button>
 
                     <span className="fixed z-9999 top-4 left-4 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white pointer-events-none">
                         {activeIndex + 1} / {list.length}
@@ -139,7 +137,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
 
                     {list.length > 1 && (
                         <>
-                            <button
+                            <Button
                                 type="button"
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -149,8 +147,8 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                                 aria-label="Oldingi rasm"
                             >
                                 <ChevronLeft className="h-6 w-6 md:h-7 md:w-7" />
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 type="button"
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -160,7 +158,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                                 aria-label="Keyingi rasm"
                             >
                                 <ChevronRight className="h-6 w-6 md:h-7 md:w-7" />
-                            </button>
+                            </Button>
                         </>
                     )}
                 </DialogContent>

@@ -9,6 +9,7 @@ import { cn, localizedText } from "@/lib/utils";
 import { getMediaUrl } from "@/lib/media";
 import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 import type { Country } from "@/types";
+import { Button } from "../ui/button";
 
 const COUNTRY_IMAGES: Record<string, string> = {
     uzbekistan: "/images/dest-toshkent.jpg",
@@ -113,7 +114,7 @@ export function Destinations({ countries }: DestinationsProps) {
                     const imageUrl = getMediaUrl(dest.cover_image);
 
                     return (
-                        <button
+                        <Button
                             key={dest.slug}
                             type="button"
                             onClick={() => (isCenter ? undefined : goTo(i))}
@@ -130,7 +131,6 @@ export function Destinations({ countries }: DestinationsProps) {
                             }}
                         >
                             {imageUrl ? (
-                                // eslint-disable-next-line @next/next/no-img-element
                                 <img
                                     src={imageUrl}
                                     alt={destName}
@@ -159,7 +159,7 @@ export function Destinations({ countries }: DestinationsProps) {
                                     </Link>
                                 )}
                             </div>
-                        </button>
+                        </Button>
                     );
                 })}
             </div>

@@ -5,6 +5,7 @@ import { useT } from "next-i18next/client";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Review } from "@/types";
+import { Button } from "../ui/button";
 
 const AVATAR_COLORS = ["bg-primary", "bg-accent", "bg-secondary"];
 
@@ -150,7 +151,7 @@ export function Testimonials({ reviews }: TestimonialsProps) {
 
       <div className="flex items-center justify-center gap-2 mt-8">
         {reviews.map((_, i) => (
-          <button
+          <Button
             key={i}
             type="button"
             aria-label={`${i + 1}-sharh`}

@@ -74,7 +74,6 @@ export function TourItineraryDay({ day, index, lng, labels }: TourItineraryDayPr
                 {day.gallery && day.gallery.length > 0 && (
                     <div className="flex gap-2 overflow-x-auto pb-1">
                         {day.gallery.map((img, gi) => (
-                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                                 key={gi}
                                 src={img}

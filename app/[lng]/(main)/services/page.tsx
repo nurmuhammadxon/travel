@@ -14,7 +14,6 @@ export default async function ServicesPage({ params }: Props) {
 
     return (
         <div className="min-h-screen bg-background">
-            {/* Hero */}
             <div className="relative min-h-screen flex items-center justify-center overflow-hidden mb-16">
                 <img
                     src="/images/service_image.png"

@@ -20,7 +20,6 @@ export default async function AboutPage({ params }: Props) {
 
     return (
         <section className="min-h-screen bg-background pb-10">
-            {/* Hero */}
             <div className="relative min-h-screen flex items-end overflow-hidden mb-16">
                 <img
                     src="/images/about_image.png"
@@ -44,14 +43,10 @@ export default async function AboutPage({ params }: Props) {
                     </p>
                 </div>
             </div>
-
             <div className="mx-auto max-w-4xl px-4">
-                {/* Hikoya */}
                 <div className="text-center mb-16">
                     <p className="text-lg text-foreground/80 leading-relaxed">{t("story")}</p>
                 </div>
-
-                {/* Qadriyatlar */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
                     {values.map((value, i) => {
                         const Icon = VALUE_ICONS[i];
@@ -66,8 +61,6 @@ export default async function AboutPage({ params }: Props) {
                         );
                     })}
                 </div>
-
-                {/* CTA */}
                 <div className="rounded-2xl bg-primary text-white p-8 md:p-10 text-center">
                     <h2 className="text-2xl font-bold mb-2">{t("cta_title")}</h2>
                     <p className="text-white/80 mb-6 max-w-md mx-auto">{t("cta_subtitle")}</p>

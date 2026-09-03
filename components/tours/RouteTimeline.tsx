@@ -51,12 +51,9 @@ export function RouteTimeline({
 
                     return (
                         <div key={`${point.order}-${i}`} className="relative flex gap-4 pb-8 last:pb-0">
-                            {/* Vertikal chiziq */}
                             {!isLast && (
                                 <span className="absolute left-3.75 top-8 bottom-0 w-0.5 bg-accent" />
                             )}
-
-                            {/* Ikonka */}
                             <div className="relative z-10 shrink-0">
                                 {isFirst ? (
                                     <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center">
@@ -70,8 +67,6 @@ export function RouteTimeline({
                                     </div>
                                 )}
                             </div>
-
-                            {/* Matn */}
                             <div className="pt-1">
                                 {isFirst && (
                                     <p className="text-xs font-semibold text-muted-foreground mb-1">

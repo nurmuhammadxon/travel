@@ -146,12 +146,10 @@ export default function ProfilePage() {
                                 required
                             />
                         </div>
-
                         <div className="space-y-2">
                             <Label htmlFor="email">{t("email")}</Label>
                             <Input id="email" type="email" value={profile.email} disabled />
                         </div>
-
                         <div className="space-y-2">
                             <Label htmlFor="phone">{t("phone")}</Label>
                             <Input
@@ -161,7 +159,6 @@ export default function ProfilePage() {
                                 placeholder="+998 90 123 45 67"
                             />
                         </div>
-
                         <div className="space-y-2">
                             <Label htmlFor="preferred_language">{t("language")}</Label>
                             <Select
@@ -178,17 +175,14 @@ export default function ProfilePage() {
                                 </SelectContent>
                             </Select>
                         </div>
-
                         <div className="space-y-2">
                             <Label>{t("role")}</Label>
                             <Input value={ROLE_LABEL[profile.role] ?? profile.role} disabled />
                         </div>
-
                         <Button type="submit" disabled={isSaving} className="w-full">
                             {isSaving ? t("saving") : t("save")}
                         </Button>
                     </form>
-
                     <Button
                         type="button"
                         variant="outline"
@@ -200,8 +194,6 @@ export default function ProfilePage() {
                     </Button>
                 </CardContent>
             </Card>
-
-            {/* Mening buyurtmalarim */}
             <Card>
                 <CardHeader>
                     <CardTitle>{t("bookings.title")}</CardTitle>

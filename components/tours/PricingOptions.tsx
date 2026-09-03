@@ -4,6 +4,7 @@ import { Users, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { localizedText } from "@/lib/utils";
 import type { TourPricingOption } from "@/types";
+import { Button } from "../ui/button";
 
 interface PricingOptionsProps {
     options: TourPricingOption[];
@@ -30,7 +31,7 @@ export function PricingOptions({ options, selectedId, onSelect, lng, labels }: P
                     const label = localizedText(option.label, lng);
 
                     return (
-                        <button
+                        <Button
                             key={option.id}
                             type="button"
                             onClick={() => onSelect(option)}
@@ -61,7 +62,7 @@ export function PricingOptions({ options, selectedId, onSelect, lng, labels }: P
                                     {option.max_people && `${labels.max_people}: ${option.max_people}`}
                                 </p>
                             )}
-                        </button>
+                        </Button>
                     );
                 })}
             </div>

@@ -10,6 +10,7 @@ import { getMediaUrl } from "@/lib/media";
 import { localizedText, cn } from "@/lib/utils";
 import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 import type { Destination, Tour } from "@/types";
+import { Button } from "../ui/button";
 
 export function HeroSearch() {
     const { t } = useT("home");
@@ -60,8 +61,6 @@ export function HeroSearch() {
         setIsOpen(true);
         debounceRef.current = setTimeout(async () => {
             setIsSearching(true);
-
-            // Yo'nalishlarni lokal filtrlaymiz (kichik ro'yxat, alohida so'rov shart emas)
             const destMatches = allDestinations
                 .filter((d) => localizedText(d.name, lng).toLowerCase().includes(trimmed.toLowerCase()))
                 .slice(0, 3);
@@ -115,13 +114,13 @@ export function HeroSearch() {
                     placeholder={t("hero.search_placeholder")}
                     className="flex-1 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground py-2 min-w-0"
                 />
-                <button
+                <Button
                     type="submit"
                     aria-label={t("hero.search_button")}
                     className="h-10 w-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center hover:bg-accent/90 transition-colors shrink-0"
                 >
                     <Search className="h-4 w-4" />
-                </button>
+                </Button>
             </form>
 
             {isOpen && (
@@ -144,7 +143,7 @@ export function HeroSearch() {
                                     {matchedDestinations.map((d) => {
                                         const img = getMediaUrl(d.cover_image);
                                         return (
-                                            <button
+                                            <Button
                                                 key={d.id}
                                                 type="button"
                                                 onClick={() => goToDestination(d.slug)}
@@ -170,7 +169,7 @@ export function HeroSearch() {
                                                         {localizedText(d.description, lng)}
                                                     </p>
                                                 </div>
-                                            </button>
+                                            </Button>
                                         );
                                     })}
                                 </div>
@@ -184,7 +183,7 @@ export function HeroSearch() {
                                     {matchedTours.map((tour) => {
                                         const img = getMediaUrl(tour.cover_image);
                                         return (
-                                            <button
+                                            <Button
                                                 key={tour.id}
                                                 type="button"
                                                 onClick={() => goToTour(tour.slug)}
@@ -209,7 +208,7 @@ export function HeroSearch() {
                                                         {tour.category}
                                                     </p>
                                                 </div>
-                                            </button>
+                                            </Button>
                                         );
                                     })}
                                 </div>
