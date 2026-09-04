@@ -29,7 +29,7 @@ export function HeroSearch() {
     const containerRef = useRef<HTMLDivElement>(null);
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-      useEffect(() => {
+    useEffect(() => {
         getDestinations()
             .then(setAllDestinations)
             .catch(() => setAllDestinations([]));
@@ -147,8 +147,8 @@ export function HeroSearch() {
                                                 key={d.id}
                                                 type="button"
                                                 onClick={() => goToDestination(d.slug)}
-                                                className="flex items-center gap-3 w-full px-2 py-2 rounded-lg hover:bg-muted text-left transition-colors"
-                                            >
+                                                variant="ghost"
+                                                className="flex items-center gap-3 w-full h-auto px-2 py-2 rounded-lg bg-transparent hover:bg-muted text-left text-foreground transition-colors whitespace-normal justify-start"                                            >
                                                 <div className="h-12 w-12 rounded-lg overflow-hidden shrink-0 bg-muted">
                                                     {img ? (
                                                         <img
@@ -187,8 +187,8 @@ export function HeroSearch() {
                                                 key={tour.id}
                                                 type="button"
                                                 onClick={() => goToTour(tour.slug)}
-                                                className="flex items-center gap-3 w-full px-2 py-2 rounded-lg hover:bg-muted text-left transition-colors"
-                                            >
+                                                variant="ghost"
+                                                className="flex items-center gap-3 w-full h-auto px-2 py-2 rounded-lg bg-transparent hover:bg-muted text-left text-foreground transition-colors whitespace-normal justify-start"                                            >
                                                 <div className="h-12 w-12 rounded-lg overflow-hidden shrink-0 bg-muted">
                                                     {img ? (
                                                         <img

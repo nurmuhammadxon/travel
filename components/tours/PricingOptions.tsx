@@ -4,7 +4,6 @@ import { Users, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { localizedText } from "@/lib/utils";
 import type { TourPricingOption } from "@/types";
-import { Button } from "../ui/button";
 
 interface PricingOptionsProps {
     options: TourPricingOption[];
@@ -31,12 +30,12 @@ export function PricingOptions({ options, selectedId, onSelect, lng, labels }: P
                     const label = localizedText(option.label, lng);
 
                     return (
-                        <Button
+                        <button
                             key={option.id}
                             type="button"
                             onClick={() => onSelect(option)}
                             className={cn(
-                                "relative text-left rounded-xl border-2 p-4 transition-colors",
+                                "relative block h-auto w-full text-left rounded-xl border-2 p-4 whitespace-normal transition-colors cursor-pointer",
                                 isSelected
                                     ? "border-primary bg-primary/5"
                                     : "border-border hover:border-primary/40"
@@ -62,7 +61,7 @@ export function PricingOptions({ options, selectedId, onSelect, lng, labels }: P
                                     {option.max_people && `${labels.max_people}: ${option.max_people}`}
                                 </p>
                             )}
-                        </Button>
+                        </button>
                     );
                 })}
             </div>

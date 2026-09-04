@@ -124,9 +124,11 @@ export function ReviewsSection({ tourId, initialReviews, labels }: ReviewsSectio
                                         <Button
                                             key={i}
                                             type="button"
+                                            variant="ghost"
                                             onClick={() => setRating(starValue)}
                                             onMouseEnter={() => setHoverRating(starValue)}
                                             onMouseLeave={() => setHoverRating(0)}
+                                            className="bg-transparent hover:bg-transparent p-0 h-auto w-auto"
                                         >
                                             <Star
                                                 className={cn(

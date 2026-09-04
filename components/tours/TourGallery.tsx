@@ -55,9 +55,10 @@ export function TourGallery({ images, title }: { images: string[]; title: string
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 rounded-2xl overflow-hidden">
-                <Button
+                <button
+                    type="button"
                     onClick={() => openLightbox(0)}
-                    className="md:col-span-2 md:row-span-2 relative aspect-video md:aspect-auto min-h-65 bg-muted overflow-hidden group"
+                    className="md:col-span-2 md:row-span-2 relative aspect-video md:aspect-auto min-h-65 bg-muted overflow-hidden group cursor-pointer block w-full h-full"
                 >
                     {getMediaUrl(list[0]) ? (
                         <img
@@ -68,7 +69,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                     ) : (
                         <TourImagePlaceholder className="h-full w-full" />
                     )}
-                </Button>
+                </button>
 
                 {visibleThumbs.map((img, i) => {
                     const isLastVisible = i === visibleThumbs.length - 1;
@@ -76,10 +77,11 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                     const thumbUrl = getMediaUrl(img);
 
                     return (
-                        <Button
+                        <button
                             key={img + i}
+                            type="button"
                             onClick={() => openLightbox(i + 1)}
-                            className="relative aspect-video md:aspect-square bg-muted overflow-hidden group"
+                            className="relative aspect-video md:aspect-square bg-muted overflow-hidden group cursor-pointer block w-full h-full"
                         >
                             {thumbUrl ? (
                                 <img
@@ -98,7 +100,7 @@ export function TourGallery({ images, title }: { images: string[]; title: string
                                     <Expand className="h-4 w-4" />+{remainingCount} Photos
                                 </span>
                             )}
-                        </Button>
+                        </button>
                     );
                 })}
             </div>
