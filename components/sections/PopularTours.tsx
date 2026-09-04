@@ -78,15 +78,13 @@ export function PopularTours({ tours }: { tours: Tour[] }) {
                         <Button
                             onClick={() => scroll("left")}
                             aria-label="Chapga"
-                            className="h-10 w-10 rounded-full border border-accent flex items-center justify-center text-accent hover:bg-accent hover:text-white transition-colors cursor-pointer"
-                        >
+                            className="h-10 w-10 rounded-full border border-accent bg-white flex items-center justify-center text-accent hover:bg-accent hover:text-white transition-colors cursor-pointer"                        >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
                         <Button
                             onClick={() => scroll("right")}
                             aria-label="O'ngga"
-                            className="h-10 w-10 rounded-full border border-accent flex items-center justify-center text-accent hover:bg-accent hover:text-white transition-colors cursor-pointer"
-                        >
+                            className="h-10 w-10 rounded-full border border-accent bg-white flex items-center justify-center text-accent hover:bg-accent hover:text-white transition-colors cursor-pointer"                        >
                             <ChevronRight className="h-4 w-4" />
                         </Button>
                     </div>

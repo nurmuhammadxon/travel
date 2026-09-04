@@ -167,8 +167,8 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
                 <Button
                     type="button"
                     onClick={() => updateParams({ category: null })}
-                    className={`shrink-0 rounded-full border px-3 py-1.5 text-xs whitespace-nowrap transition-colors ${!currentCategory
-                        ? "bg-primary text-primary-foreground border-primary"
+                    className={`shrink-0 rounded-full border px-3 py-1.5 text-xs whitespace-nowrap transition-colors bg-white ${!currentCategory
+                        ? "text-primary border-primary hover:text-white"
                         : "border-border text-muted-foreground hover:bg-muted"
                         }`}
                 >
@@ -180,8 +180,8 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
                         key={c.value}
                         type="button"
                         onClick={() => toggleCategory(c.value)}
-                        className={`shrink-0 rounded-full border px-3 py-1.5 text-xs whitespace-nowrap transition-colors ${currentCategory === c.value
-                            ? "bg-primary text-primary-foreground border-primary"
+                        className={`shrink-0 rounded-full border px-3 py-1.5 text-xs whitespace-nowrap transition-colors bg-white  ${currentCategory === c.value
+                            ? "text-primary border-primary hover:text-white"
                             : "border-border text-muted-foreground hover:bg-muted"
                             }`}
                     >
