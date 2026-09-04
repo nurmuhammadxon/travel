@@ -103,6 +103,7 @@ export default function AdminToursPage() {
                 </div>
                 <Link
                     href={`${prefix}/admin/geography`}
+                    prefetch={false}
                     className={cn(buttonVariants({ variant: "outline" }), "gap-1.5")}
                 >
                     <Globe className="h-4 w-4" />
@@ -110,6 +111,7 @@ export default function AdminToursPage() {
                 </Link>
                 <Link
                     href={`${prefix}/admin/tours/new`}
+                    prefetch={false}
                     className={cn(buttonVariants(), "gap-1.5")}
                 >
                     <Plus className="h-4 w-4" />
@@ -171,7 +173,7 @@ export default function AdminToursPage() {
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button variant="ghost" size="icon">
-                                            <Link href={`${prefix}/admin/tours/${tour.slug}/edit`}>
+                                            <Link href={`${prefix}/admin/tours/${tour.slug}/edit`} prefetch={false}>
                                                 <Pencil className="h-4 w-4" />
                                             </Link>
                                         </Button>

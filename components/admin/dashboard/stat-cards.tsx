@@ -22,7 +22,7 @@ export function StatCards({ cards, isLoading }: StatCardsProps) {
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {cards.map((card) => (
-                <Link key={card.title} href={card.href}>
+                <Link key={card.title} href={card.href} prefetch={false}>
                     <Card className="transition-colors hover:border-primary/50">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium text-muted-foreground">

@@ -125,6 +125,7 @@ export default function AdminDashboardPage() {
                     <CardTitle>{t("dashboard.recent_bookings")}</CardTitle>
                     <Link
                         href={`${prefix}/admin/bookings`}
+                        prefetch={false}
                         className="flex items-center gap-1 text-sm text-primary hover:underline"
                     >
                         {t("dashboard.view_all")} <ArrowUpRight className="h-3.5 w-3.5" />

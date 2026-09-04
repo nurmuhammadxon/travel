@@ -109,7 +109,7 @@ export function AppSidebar() {
 
                                 return (
                                     <SidebarMenuItem key={item.url}>
-                                        <Link href={item.url} className={linkClass(isActive)}>
+                                        <Link href={item.url} prefetch={false} className={linkClass(isActive)}>
                                             <item.icon />
                                             <span>{item.title}</span>
                                         </Link>
