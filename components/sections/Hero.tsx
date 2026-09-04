@@ -28,15 +28,17 @@ export function Hero() {
     }, [index]);
 
     return (
-        <section className="relative min-h-screen flex flex-col overflow-hidden">
-            <Image
-                src="/images/hero_image.png"
-                alt="Registon maydoni, Samarqand"
-                fill
-                priority
-                className="object-cover"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-black/10" />
+        <section className="relative min-h-screen flex flex-col">
+            <div className="absolute inset-0 overflow-hidden">
+                <Image
+                    src="/images/hero_image.png"
+                    alt="Registon maydoni, Samarqand"
+                    fill
+                    priority
+                    className="object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-black/10" />
+            </div>
             <div className="hidden md:flex flex-col items-center gap-3 absolute right-6 top-1/2 -translate-y-1/2 z-20">
                 <Button
                     type="button"
