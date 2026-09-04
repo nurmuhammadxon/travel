@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { uploadReviewImage } from "@/lib/api";
 import { showError } from "@/lib/toast";
 import { Button } from "../ui/button";
+import { getMediaUrl } from "@/lib/media";
 
 interface ImageUploadFieldProps {
     label: string;
@@ -48,7 +49,7 @@ export function ImageUploadField({
             <Label>{label}</Label>
             <div className="flex items-center gap-4">
                 {value && (
-                    <img src={value} alt="" className="h-20 w-32 rounded-md object-cover border" />
+                    <img src={getMediaUrl(value) ?? value} alt="" className="h-20 w-32 rounded-md object-cover border" />
                 )}
                 <div className="flex flex-col gap-2">
                     <label className="inline-flex items-center gap-2 cursor-pointer rounded-md border px-3 py-2 text-sm hover:bg-muted">

@@ -7,6 +7,9 @@ import type { RoutePoint } from "@/types";
 interface RouteTimelineProps {
     points: RoutePoint[];
     lng?: string;
+    title?: string;
+    startingLocationLabel?: string;
+    dropoffLocationLabel?: string;
     extraFeeLabel?: string;
     activityLabels?: Partial<Record<"photo_stop" | "guided_tour" | "shopping", string>>;
     minutesLabel?: string;
@@ -27,17 +30,21 @@ const DEFAULT_ACTIVITY_LABEL: Record<string, string> = {
 export function RouteTimeline({
     points,
     lng = "uz",
+    title = "Itinerary",
+    startingLocationLabel = "Starting location:",
+    dropoffLocationLabel = "Drop-off location:",
     extraFeeLabel = "Qo'shimcha to'lov",
     activityLabels = {},
     minutesLabel = "min",
 }: RouteTimelineProps) {
+
     if (!points || points.length === 0) return null;
 
     const sorted = [...points].sort((a, b) => a.order - b.order);
 
     return (
         <div>
-            <h3 className="text-lg font-bold text-primary mb-6">Itinerary</h3>
+            <h3 className="text-lg font-bold text-primary mb-6">{title}</h3>
             <div className="relative pl-1">
                 {sorted.map((point, i) => {
                     const isFirst = i === 0;
@@ -70,12 +77,12 @@ export function RouteTimeline({
                             <div className="pt-1">
                                 {isFirst && (
                                     <p className="text-xs font-semibold text-muted-foreground mb-1">
-                                        Starting location:
+                                        {startingLocationLabel}
                                     </p>
                                 )}
                                 {isLast && sorted.length > 1 && (
                                     <p className="text-xs font-semibold text-muted-foreground mb-1">
-                                        Drop-off location:
+                                        {dropoffLocationLabel}
                                     </p>
                                 )}
                                 <p className="font-bold text-foreground text-sm leading-snug">{name}</p>

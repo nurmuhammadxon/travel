@@ -1,4 +1,5 @@
 import type { Tour } from "@/types";
+import { getMediaUrl } from "@/lib/media";
 
 type ItineraryDay = NonNullable<Tour["itinerary"]>[number];
 type Accommodation = NonNullable<ItineraryDay["accommodation"]>;
@@ -58,7 +59,7 @@ export function TourAccommodation({ accommodation, labels }: TourAccommodationPr
                     {accommodation.photos.map((img, pi) => (
                         <img
                             key={pi}
-                            src={img}
+                            src={getMediaUrl(img) ?? img}
                             alt=""
                             className="h-14 w-20 rounded-md object-cover shrink-0"
                         />

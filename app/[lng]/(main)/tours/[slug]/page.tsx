@@ -224,6 +224,9 @@ export default async function TourDetailPage({ params }: Props) {
                                 <RouteTimeline
                                     points={tour.route_points}
                                     lng={lng}
+                                    title={t("route_title")}
+                                    startingLocationLabel={t("starting_location")}
+                                    dropoffLocationLabel={t("dropoff_location")}
                                     extraFeeLabel={t("extra_fee")}
                                     minutesLabel={t("duration_minutes")}
                                     activityLabels={{

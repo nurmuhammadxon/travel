@@ -1,6 +1,7 @@
 import { AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { localizedText } from "@/lib/utils";
 import type { Tour } from "@/types";
+import { getMediaUrl } from "@/lib/media";
 import { TourAccommodation } from "./TourAccommodation";
 
 type ItineraryDay = NonNullable<Tour["itinerary"]>[number];
@@ -76,7 +77,7 @@ export function TourItineraryDay({ day, index, lng, labels }: TourItineraryDayPr
                         {day.gallery.map((img, gi) => (
                             <img
                                 key={gi}
-                                src={img}
+                                src={getMediaUrl(img) ?? img}
                                 alt=""
                                 className="h-20 w-28 rounded-lg object-cover shrink-0"
                             />

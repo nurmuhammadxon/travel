@@ -2,6 +2,7 @@ import { Loader2, Upload, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import type { UseTourFormReturn } from "@/hooks/use-tour-form";
+import { getMediaUrl } from "@/lib/media";
 import { Button } from "../ui/button";
 
 export function ImagesSection(f: UseTourFormReturn) {
@@ -15,7 +16,7 @@ export function ImagesSection(f: UseTourFormReturn) {
                     <Label>{f.t("form.cover_image")}</Label>
                     <div className="flex items-center gap-4">
                         {f.coverImage && (
-                            <img src={f.coverImage} alt="cover" className="h-20 w-32 rounded-md object-cover border" />
+                            <img src={getMediaUrl(f.coverImage) ?? f.coverImage} alt="cover" className="h-20 w-32 rounded-md object-cover border" />
                         )}
                         <div className="flex flex-col gap-2">
                             <label className="inline-flex items-center gap-2 cursor-pointer rounded-md border px-3 py-2 text-sm hover:bg-muted">
@@ -37,8 +38,7 @@ export function ImagesSection(f: UseTourFormReturn) {
                     <div className="flex flex-wrap gap-3">
                         {f.images.map((img, i) => (
                             <div key={i} className="relative">
-                                <img src={img} alt={`gallery-${i}`} className="h-20 w-28 rounded-md object-cover border" />
-                                <Button type="button" onClick={() => f.removeGalleryImage(i)} className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1">
+                                <img src={getMediaUrl(img) ?? img} alt={`gallery-${i}`} className="h-20 w-28 rounded-md object-cover border" />                                <Button type="button" onClick={() => f.removeGalleryImage(i)} className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1">
                                     <X className="h-3 w-3" />
                                 </Button>
                             </div>

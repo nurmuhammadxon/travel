@@ -124,7 +124,7 @@ export function HeroSearch() {
             </form>
 
             {isOpen && (
-                <div className="absolute left-4 right-4 mt-2 bg-white rounded-2xl shadow-2xl overflow-hidden text-left max-h-[70vh] overflow-y-auto">
+                <div className="absolute z-30 left-4 right-4 mt-2 bg-white border border-border rounded-2xl shadow-2xl overflow-hidden text-left max-h-[70vh] overflow-y-auto">
                     {isSearching && !hasResults ? (
                         <div className="flex items-center justify-center py-8">
                             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />

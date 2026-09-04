@@ -196,9 +196,9 @@ export const getCountries = () =>
     api.get<unknown, Country[]>("/countries");
 
 export const getDestinations = (countryId?: string) =>
-    api.get<unknown, Destination[]>(
-        countryId ? `/destinations?country_id=${countryId}` : "/destinations"
-    );
+    api.get<unknown, Destination[]>("/destinations", {
+        params: countryId ? { country_id: countryId } : undefined,
+    });
 
 export interface CreateBookingPayload {
     tour_id: string;
