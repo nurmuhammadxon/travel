@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DiscoverStans — Travel Agency Frontend
 
-## Getting Started
+O'zbekiston va Markaziy Osiyo bo'ylab sayohat turlarini taqdim etuvchi
+[DiscoverStans](https://www.discover-stans.uz)
+[Next.js](https://nextjs.org) (App Router) va TypeScript'da qurilgan.
 
-First, run the development server:
+## Texnologiyalar
 
-```bash
+- **Framework:** Next.js (App Router, Server Components)
+- **Til:** TypeScript
+- **Stil:** Tailwind CSS + shadcn/ui komponentlari
+- **Ko'p tillilik (i18n):** `next-i18next` — `uz`, `ru`, `en` tillari qo'llab-quvvatlanadi (standart til: `en`, prefiksisiz)
+- **Formalar:** `react-hook-form` + `zod`
+- **HTTP so'rovlar:** `axios`
+- **Bildirishnomalar:** `sonner`
+- **Ikonkalar:** `lucide-react`, `@hugeicons/react`
+- **Navigatsiya indikatori:** `nextjs-toploader`
+
+## Loyihani ishga tushirish
+
+### Talablar
+
+- Node.js 18+ (tavsiya: 20+)
+- npm (yoki yarn/pnpm/bun)
+
+### O'rnatish
+
+\`\`\`bash
+npm install
+\`\`\`
+
+### Muhit o'zgaruvchilari
+
+Loyiha ildizida `.env.local` fayl yarating:
+
+\`\`\`bash
+NEXT_PUBLIC_API_URL=https://your-backend-url.com
+\`\`\`
+
+Bu — backend API manzili (masalan Render.com'dagi FastAPI/Express server). Barcha
+`fetch`/`axios` so'rovlari shu manzilga yuboriladi.
+
+> ⚠️ Agar backend Render.com'ning bepul tarifida bo'lsa, u 15 daqiqa
+> faoliyatsizlikdan keyin "uxlab qoladi" va birinchi so'rov 30-60 soniya
+> davom etishi mumkin (cold start). Buni yumshatish uchun frontend'da
+> `hooks/use-fetch.ts` avtomatik qayta urinish (retry) mexanizmini o'z ichiga oladi.
+
+### Development rejimida ishga tushirish
+
+\`\`\`bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[http://localhost:3000](http://localhost:3000) manzilida ochiladi.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production uchun build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+\`\`\`bash
+npm run build
+npm run start
+\`\`\`
 
-## Learn More
+### Lint
 
-To learn more about Next.js, take a look at the following resources:
+\`\`\`bash
+npm run lint
+\`\`\`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Loyiha strukturasi
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+\`\`\`
+app/
+  [lng]/                    # Til prefiksli barcha sahifalar (uz, ru, en)
+    (main)/                 # Asosiy sayt: bosh sahifa, about, tours, contact...
+      about/
+      contact/
+      services/
+      tours/
+        [slug]/              # Bitta tur haqida batafsil sahifa
+      login/
+      profile/
+    admin/                   # Admin panel (turlar, buyurtmalar, foydalanuvchilar...)
+      bookings/
+      geography/
+      messages/
+      reviews/
+      settings/
+      tours/
+      users/
+  not-found.tsx              # Global 404 sahifa
 
-## Deploy on Vercel
+components/
+  layout/                    # Header, Footer
+  sections/                  # Bosh sahifadagi bloklar (Hero, Destinations, PopularTours...)
+  tours/                     # Tur kartochkasi, filtrlar, sharhlar
+  services/
+  admin/                     # Admin panel komponentlari
+  ui/                        # shadcn/ui asosidagi umumiy UI komponentlari
+  _components/                # Umumiy error/loading komponentlari
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+hooks/
+  use-fetch.ts                # Ma'lumot olish + avtomatik retry (cold start uchun)
+  use-localized-href.ts       # Ichki havolalarga to'g'ri til prefiksini qo'shish
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+lib/
+  api.ts                      # Backend bilan aloqa (axios instance + interceptorlar)
+  utils.ts                    # Umumiy yordamchi funksiyalar (localizedHref, metaT...)
+  site-config.ts               # Sayt/kompaniya ma'lumotlari (aloqa, manzil va h.k.)
+
+contexts/
+  AuthContext.tsx             # Foydalanuvchi autentifikatsiyasi holati
+
+public/
+  locales/                    # Tarjima fayllari
+    en/  ru/  uz/
+\`\`\`
+
+## Ko'p tillilik (i18n)
+
+- Qo'llab-quvvatlanadigan tillar: `uz`, `ru`, `en` (`i18n.config.ts`)
+- Standart til (`en`) URL'da prefikssiz ko'rinadi (`hideDefaultLocale: true`):
+  - `/tours` → ingliz tilida
+  - `/uz/tours` → o'zbek tilida
+  - `/ru/tours` → rus tilida
+- Tarjima fayllari `public/locales/{til}/{namespace}.json` ko'rinishida
+- **Ichki havolalar** (`<Link href="...">`) yozayotganda tilni saqlab qolish uchun:
+  - Server componentlarda: `localizedHref(lng, "/tours")` (`lib/utils.ts`)
+  - Client componentlarda: `useLocalizedHref()` hook (`hooks/use-localized-href.ts`)
+  - Hech qachon `href="/tours"` kabi tilsiz qattiq yozilgan yo'l ishlatilmasin —
+    bu foydalanuvchini har doim standart (`en`) tilga olib ketadi
+
+## Backend bilan aloqa
+
+Barcha so'rovlar `lib/api.ts`dagi markazlashtirilgan `axios` instance orqali
+yuboriladi. `hooks/use-fetch.ts` esa ma'lumot olishning umumiy patternini
+(`isLoading`, `isRetrying`, `error`) taqdim etadi — backend sekin javob bersa
+(masalan Render cold start), foydalanuvchiga "server uyg'onmoqda" degan xabar
+avtomatik ko'rsatiladi va so'rov qayta uriniladi.
+
+## Deploy
+
+Loyiha Vercel, Render yoki boshqa Next.js'ni qo'llab-quvvatlaydigan istalgan
+platformaga joylashtirilishi mumkin. Muhim: `NEXT_PUBLIC_API_URL` muhit
+o'zgaruvchisini deploy platformasida ham sozlashni unutmang.
