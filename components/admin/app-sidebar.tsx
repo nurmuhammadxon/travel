@@ -72,7 +72,7 @@ export function AppSidebar() {
 
     function switchLocale(locale: string) {
         const withoutPrefix = prefix && pathname.startsWith(prefix) ? pathname.slice(prefix.length) : pathname;
-        const newPrefix = locale === "uz" ? "" : `/${locale}`;
+        const newPrefix = locale === "en" ? "" : `/${locale}`;
         router.push(`${newPrefix}${withoutPrefix}` || "/");
     }
 
