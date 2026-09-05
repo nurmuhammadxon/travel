@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { createReview } from "@/lib/api";
 import { showSuccess, showError } from "@/lib/toast";
 import { cn } from "@/lib/utils";
+import { useLocalizedHref } from "@/hooks/use-localized-href";
 import type { Review } from "@/types";
 
 interface ReviewsSectionProps {
@@ -30,6 +31,7 @@ interface ReviewsSectionProps {
 
 export function ReviewsSection({ tourId, initialReviews, labels }: ReviewsSectionProps) {
     const { user } = useAuth();
+    const withLocale = useLocalizedHref();
     const [reviews, setReviews] = useState(initialReviews);
     const [rating, setRating] = useState(5);
     const [hoverRating, setHoverRating] = useState(0);
@@ -109,7 +111,7 @@ export function ReviewsSection({ tourId, initialReviews, labels }: ReviewsSectio
                 {!user ? (
                     <p className="text-sm text-muted-foreground">
                         {labels.login_prompt}{" "}
-                        <Link href="/login" className="text-accent font-semibold hover:underline">
+                        <Link href={withLocale("/login")} className="text-accent font-semibold hover:underline">
                             {labels.login_link}
                         </Link>
                     </p>

@@ -1,7 +1,7 @@
 import { getT } from "next-i18next/server";
 import { Compass, ShieldCheck, Heart, Users } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, localizedHref } from "@/lib/utils";
 import type { Metadata } from "next";
 
 interface Props {
@@ -92,7 +92,7 @@ export default async function AboutPage({ params }: Props) {
                     <h2 className="text-2xl font-bold mb-2">{t("cta_title")}</h2>
                     <p className="text-white/80 mb-6 max-w-md mx-auto">{t("cta_subtitle")}</p>
                     <Link
-                        href="/tours"
+                        href={localizedHref(lng, "/tours")}
                         className={cn(
                             "inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground px-6 py-3 text-sm font-semibold hover:bg-accent/90 transition-colors"
                         )}

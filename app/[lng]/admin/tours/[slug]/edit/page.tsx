@@ -41,7 +41,7 @@ export default function EditTourPage() {
         <div className="flex flex-col gap-6 max-w-4xl">
             <div>
                 <h1 className="text-2xl font-semibold">{t("tours.edit_page_title")}</h1>
-                <p className="text-sm text-muted-foreground">{tour.title.uz}</p>
+                <p className="text-sm text-muted-foreground">{tour.title.en}</p>
             </div>
             <TourForm initialData={tour} />
         </div>

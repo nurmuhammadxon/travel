@@ -7,6 +7,7 @@ import { useT } from "next-i18next/client";
 import { MapPin, Compass, ChevronUp, ChevronDown } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLocalizedHref } from "@/hooks/use-localized-href";
 import { HeroSearch } from "./HeroSearch";
 
 const SLIDE_COUNT = 6;
@@ -14,6 +15,7 @@ const ROTATE_INTERVAL = 4500;
 
 export function Hero() {
     const { t } = useT("home");
+    const withLocale = useLocalizedHref();
     const [index, setIndex] = useState(0);
 
     const goTo = useCallback((next: number) => {
@@ -95,7 +97,7 @@ export function Hero() {
 
                     <div className="mt-10 flex flex-wrap items-center gap-4">
                         <Link
-                            href="/tours"
+                            href={withLocale("/tours")}
                             className={cn(
                                 buttonVariants({ size: "lg" }),
                                 "rounded-full font-bold bg-accent text-white text-base gap-2 px-8 hover:bg-transparent hover:text-white border border-accent hover:border-white/40 transition-colors duration-300"
@@ -105,7 +107,7 @@ export function Hero() {
                             {t("hero.cta_primary")}
                         </Link>
                         <Link
-                            href="/about"
+                            href={withLocale("/about")}
                             className={cn(
                                 buttonVariants({ variant: "outline", size: "lg" }),
                                 "rounded-full font-bold border-white/40 text-white text-base px-8 hover:bg-accent hover:border-accent hover:text-white transition-colors duration-300"

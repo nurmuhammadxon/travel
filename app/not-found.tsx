@@ -1,10 +1,23 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Compass, Home } from "lucide-react";
+import i18nConfig from "../i18n.config";
+import { localizedHref } from "@/lib/utils";
 import "./globals.css";
 
 export default function RootNotFound() {
+    const pathname = usePathname();
+    const segments = pathname.split("/").filter(Boolean);
+    const currentLocale = i18nConfig.supportedLngs.includes(segments[0])
+        ? segments[0]
+        : i18nConfig.fallbackLng;
+    const withLocale = (href: string) =>
+        localizedHref(currentLocale, href, i18nConfig.fallbackLng);
+
     return (
-        <html lang="en">
+        <html lang={currentLocale}>
             <body className="antialiased">
                 <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
                     <img
@@ -25,14 +38,14 @@ export default function RootNotFound() {
 
                         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                             <Link
-                                href="/"
+                                href={withLocale("/")}
                                 className="inline-flex items-center gap-2 rounded-full bg-white text-[#1B3A6B] px-6 py-3 text-sm font-semibold hover:bg-white/90 transition-colors w-full sm:w-auto justify-center"
                             >
                                 <Home className="h-4 w-4" />
                                 Home
                             </Link>
                             <Link
-                                href="/tours"
+                                href={withLocale("/tours")}
                                 className="inline-flex items-center gap-2 rounded-full bg-[#C98A2C] text-[#1E2430] px-6 py-3 text-sm font-semibold hover:opacity-90 transition-opacity w-full sm:w-auto justify-center"
                             >
                                 <Compass className="h-4 w-4" />

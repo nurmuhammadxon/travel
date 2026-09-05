@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { ChevronLeft, ChevronRight, MapPin, ArrowUpRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/media";
-import { localizedText } from "@/lib/utils";
+import { localizedText, localizedHref } from "@/lib/utils";
 import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 import type { Tour } from "@/types";
 import { Button } from "../ui/button";
@@ -111,7 +111,7 @@ export function PopularTours({ tours }: { tours: Tour[] }) {
                     return (
                         <Link
                             key={tour.id}
-                            href={`/tours/${tour.slug}`}
+                            href={localizedHref(lng, `/tours/${tour.slug}`)}
                             onClick={onCardClick}
                             draggable={false}
                             className="group snap-start shrink-0 w-70 md:w-[320px] rounded-2xl overflow-hidden bg-card ring-1 ring-border hover:ring-primary/30 transition-all duration-300"
@@ -161,7 +161,7 @@ export function PopularTours({ tours }: { tours: Tour[] }) {
                 })}
 
                 <Link
-                    href="/tours"
+                    href={localizedHref(lng, "/tours")}
                     onClick={onCardClick}
                     draggable={false}
                     className="group snap-start shrink-0 w-70 md:w-[320px] rounded-2xl bg-primary text-white flex flex-col items-center justify-center gap-3 p-8 text-center hover:bg-primary/90 transition-colors"

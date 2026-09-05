@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useT } from "next-i18next/client";
 import { ArrowUpRight } from "lucide-react";
-import { cn, localizedText } from "@/lib/utils";
+import { cn, localizedText, localizedHref } from "@/lib/utils";
 import { getMediaUrl } from "@/lib/media";
 import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 import type { Country } from "@/types";
@@ -150,7 +150,7 @@ export function Destinations({ countries }: DestinationsProps) {
 
                                 {isCenter && (
                                     <Link
-                                        href={`/tours?destination=${dest.slug}`}
+                                        href={localizedHref(lng, `/tours?destination=${dest.slug}`)}
                                         onClick={(e) => e.stopPropagation()}
                                         className="mt-4 inline-flex items-center gap-2 self-start rounded-full bg-white/95 text-primary text-sm font-semibold px-5 py-2.5 hover:bg-white transition-colors"
                                     >
@@ -181,7 +181,7 @@ export function Destinations({ countries }: DestinationsProps) {
 
             <div className="mx-auto max-w-7xl px-4 mt-8 text-center">
                 <Link
-                    href="/tours"
+                    href={localizedHref(lng, "/tours")}
                     className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-accent transition-colors"
                 >
                     {t("destinations.view_all")}

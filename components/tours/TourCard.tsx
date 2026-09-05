@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { MapPin, ArrowUpRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/media";
-import { localizedText } from "@/lib/utils";
+import { localizedText, localizedHref } from "@/lib/utils";
 import type { Tour } from "@/types";
 import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 
@@ -19,7 +19,7 @@ export function TourCard({ tour, viewLabel }: { tour: Tour; viewLabel: string })
 
     return (
         <Link
-            href={`/tours/${tour.slug}`}
+            href={localizedHref(lng, `/tours/${tour.slug}`)}
             className="group rounded-2xl overflow-hidden bg-card ring-1 ring-border hover:ring-primary/30 transition-all duration-300"
         >
             <div className="relative h-52 bg-muted overflow-hidden">

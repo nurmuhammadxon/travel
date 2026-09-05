@@ -23,6 +23,15 @@ export function localizedList(
   return value[lang as "uz" | "ru" | "en"] ?? value.uz ?? value.en ?? value.ru ?? [];
 }
 
+export function localizedHref(
+  currentLocale: string,
+  href: string,
+  fallbackLng: string = "en"
+): string {
+  if (currentLocale === fallbackLng) return href;
+  return href === "/" ? `/${currentLocale}` : `/${currentLocale}${href}`;
+}
+
 export function metaT(
   t: (key: string) => string,
   key: string,

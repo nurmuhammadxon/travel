@@ -22,13 +22,13 @@ export const siteConfig = {
     },
 
     operator: {
-        name: "Aziz Rahimov",
+        name: "Xayrullayev Azim",
     },
 
     contact: {
         email: "discoverstans.uz@gmail.com",
         phone: "+998 90 123 45 67",
-        phoneSecondary: "+998 71 200 11 22",
+        phoneSecondary: "+998 99 343 40 94",
         address: {
             uz: "Samarqand, O'zbekiston",
             ru: "Самарканд, Узбекистан",
@@ -47,11 +47,11 @@ export const siteConfig = {
 };
 
 export type SiteConfig = typeof siteConfig;
-export type SupportedLocale = "uz" | "ru" | "en";
+export type SupportedLocale = "en" | "ru" | "uz";
 
 export function getLocalizedSiteField(
     field: Record<SupportedLocale, string>,
     lng: string
 ): string {
-    return field[lng as SupportedLocale] ?? field.uz;
+    return field[lng as SupportedLocale] ?? field.en;
 }

@@ -30,9 +30,9 @@ const NAV_LINKS = [
 ];
 
 const LANGUAGES = [
+  { code: "en", label: "English", },
   { code: "uz", label: "O'zbekcha", },
   { code: "ru", label: "Русский", },
-  { code: "en", label: "English", },
 ];
 
 export function Header() {
