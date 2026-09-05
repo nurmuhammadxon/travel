@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react";
 import { ServiceCard } from "@/components/services/ServiceCard";
 import { GetInTouchSection } from "@/components/sections/GetInTouchSection";
 import { SERVICE_KEYS } from "@/lib/data/services";
+import { metaT } from "@/lib/utils";
 import type { Metadata } from "next";
 
 interface Props {
@@ -13,8 +14,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { lng } = await params;
     const { t } = await getT("services", { lng });
 
-    const title = t("meta_title") ?? t("title");
-    const description = t("meta_description") ?? t("subtitle");
+    const title = metaT(t, "meta_title", "title");
+    const description = metaT(t, "meta_description", "subtitle");
 
     return {
         title,

@@ -2,6 +2,7 @@ import { getT } from "next-i18next/server";
 import { MapPin, Phone, Mail, Smartphone } from "lucide-react";
 import { GetInTouchSection } from "@/components/sections/GetInTouchSection";
 import { siteConfig, getLocalizedSiteField } from "@/lib/site-config";
+import { metaT } from "@/lib/utils";
 import type { Metadata } from "next";
 
 interface Props {
@@ -12,8 +13,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { lng } = await params;
     const { t } = await getT("contact", { lng });
 
-    const title = t("meta_title") ?? t("title");
-    const description = t("meta_description") ?? t("location_value");
+    const title = metaT(t, "meta_title", "title");
+    const description = metaT(t, "meta_description", "location_value");
 
     return {
         title,

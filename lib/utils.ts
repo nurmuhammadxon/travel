@@ -22,3 +22,12 @@ export function localizedList(
   if (Array.isArray(value)) return value;
   return value[lang as "uz" | "ru" | "en"] ?? value.uz ?? value.en ?? value.ru ?? [];
 }
+
+export function metaT(
+  t: (key: string) => string,
+  key: string,
+  fallbackKey: string
+): string {
+  const value = t(key);
+  return value && value !== key ? value : t(fallbackKey);
+}

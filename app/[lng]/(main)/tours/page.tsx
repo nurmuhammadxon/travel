@@ -3,6 +3,7 @@ import { getT } from "next-i18next/server";
 import { getTours } from "@/lib/api";
 import { TourCard } from "@/components/tours/TourCard";
 import { TourFilters } from "@/components/tours/TourFilters";
+import { metaT } from "@/lib/utils";
 import type { Metadata } from "next";
 
 interface Props {
@@ -19,8 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { lng } = await params;
     const { t } = await getT("tours", { lng });
 
-    const title = t("meta_title") ?? t("title");
-    const description = t("meta_description") ?? t("subtitle");
+    const title = metaT(t, "meta_title", "title");
+    const description = metaT(t, "meta_description", "subtitle");
 
     return {
         title,

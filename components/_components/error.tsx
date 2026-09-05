@@ -16,17 +16,19 @@ export default function Error({
     }, [error]);
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 text-center">
-            <div className="h-16 w-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
-                <AlertTriangle className="h-7 w-7 text-destructive" />
+        <div className="min-h-screen bg-background">
+            <div className="min-h-[45vh] bg-primary flex flex-col items-center justify-center px-4 text-center pt-16">
+                <div className="h-16 w-16 rounded-full bg-white/10 flex items-center justify-center mb-4">
+                    <AlertTriangle className="h-7 w-7 text-white" />
+                </div>
+                <h1 className="text-2xl font-bold text-white">Something went wrong</h1>
+                <p className="text-white/80 mt-2 max-w-sm">
+                    Sorry, an unexpected error occurred. Please try again.
+                </p>
+                <Button onClick={reset} className="mt-6 rounded-full bg-white text-primary hover:bg-white/90">
+                    Try again
+                </Button>
             </div>
-            <h1 className="text-2xl font-bold text-primary">Something went wrong</h1>
-            <p className="text-muted-foreground mt-2 max-w-sm">
-                Sorry, an unexpected error occurred. Please try again.
-            </p>
-            <Button onClick={reset} className="mt-6 rounded-full bg-primary text-white hover:bg-primary/90">
-                Try again
-            </Button>
         </div>
     );
 }
