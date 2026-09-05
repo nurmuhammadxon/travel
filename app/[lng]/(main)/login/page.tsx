@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useT } from "next-i18next/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MapPin } from "lucide-react";
+import { MapPin, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { loginSchema, registerSchema, type LoginValues, type RegisterValues } from "@/lib/validations/auth";
+import { siteConfig } from "@/lib/site-config";
 import { showSuccess, showError } from "@/lib/toast";
 import { Loading } from "@/components/_components/loading";
 import { isAdminUser } from "@/lib/auth";
@@ -28,6 +29,10 @@ export default function LoginPage() {
 
     const { login, register: registerUser, user, isLoading: authLoading } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [showLoginPassword, setShowLoginPassword] = useState(false);
+    const [showRegPassword, setShowRegPassword] = useState(false);
+    const [showRegConfirmPassword, setShowRegConfirmPassword] = useState(false);
 
     const {
         register: registerLoginField,
@@ -108,7 +113,7 @@ export default function LoginPage() {
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 text-white font-bold text-2xl mb-2">
                         <MapPin className="h-6 w-6 text-accent" />
-                        Discover<span className="text-accent">Stans</span>
+                        {siteConfig.logo.name}<span className="text-accent">{siteConfig.logo.nameHighlight}</span>
                     </div>
                     <p className="text-white/70 text-sm">{t("subtitle")}</p>
                 </div>
@@ -130,7 +135,23 @@ export default function LoginPage() {
 
                                 <div className="space-y-1.5">
                                     <Label htmlFor="login-password">{t("password")}</Label>
-                                    <Input id="login-password" type="password" placeholder="********" {...registerLoginField("password")} />
+                                    <div className="relative">
+                                        <Input
+                                            id="login-password"
+                                            type={showLoginPassword ? "text" : "password"}
+                                            placeholder="********"
+                                            className="pr-8"
+                                            {...registerLoginField("password")}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowLoginPassword((v) => !v)}
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                                            tabIndex={-1}
+                                        >
+                                            {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
+                                    </div>
                                     {loginErrors.password && <p className="text-xs text-destructive">{loginErrors.password.message}</p>}
                                 </div>
 
@@ -161,8 +182,46 @@ export default function LoginPage() {
 
                                 <div className="space-y-1.5">
                                     <Label htmlFor="reg-password">{t("password")}</Label>
-                                    <Input id="reg-password" type="password" placeholder="********" {...registerRegField("password")} />
+                                    <div className="relative">
+                                        <Input
+                                            id="reg-password"
+                                            type={showRegPassword ? "text" : "password"}
+                                            placeholder="********"
+                                            className="pr-8"
+                                            {...registerRegField("password")}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowRegPassword((v) => !v)}
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                                            tabIndex={-1}
+                                        >
+                                            {showRegPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
+                                    </div>
                                     {registerErrors.password && <p className="text-xs text-destructive">{registerErrors.password.message}</p>}
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="reg-confirm-password">{t("confirm_password")}</Label>
+                                    <div className="relative">
+                                        <Input
+                                            id="reg-confirm-password"
+                                            type={showRegConfirmPassword ? "text" : "password"}
+                                            placeholder="********"
+                                            className="pr-8"
+                                            {...registerRegField("confirm_password")}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowRegConfirmPassword((v) => !v)}
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                                            tabIndex={-1}
+                                        >
+                                            {showRegConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
+                                    </div>
+                                    {registerErrors.confirm_password && <p className="text-xs text-destructive">{registerErrors.confirm_password.message}</p>}
                                 </div>
 
                                 <Button type="submit" disabled={isSubmitting} className={cn("w-full rounded-full bg-primary text-white hover:bg-primary/90")}>
@@ -175,4 +234,4 @@ export default function LoginPage() {
             </div>
         </div>
     );
-};
+}

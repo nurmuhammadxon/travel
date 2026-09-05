@@ -5,6 +5,7 @@ export const siteConfig = {
         useImage: false,
         name: "Discover",
         nameHighlight: "Stans",
+        initials: "DS",
     },
 
     description:

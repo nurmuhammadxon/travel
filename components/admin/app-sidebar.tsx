@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import { SiteLogo } from "../shared/site-logo";
+import { siteConfig } from "@/lib/site-config";
 
 const LANGUAGES = [
     { code: "uz", label: "O'zbekcha" },
@@ -83,13 +84,13 @@ export function AppSidebar() {
                         imgClassName="h-8 w-8 rounded-md object-contain shrink-0"
                         fallback={
                             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-bold text-sm shrink-0">
-                                DS
+                                {siteConfig.logo.initials}
                             </div>
                         }
                     />
                     <div className="flex flex-col leading-tight group-data-[collapsible=icon]:hidden">
                         <span className="text-base font-bold tracking-tight">
-                            Discover<span className="text-accent">Stans</span>
+                            {siteConfig.logo.name}<span className="text-accent">{siteConfig.logo.nameHighlight}</span>
                         </span>
                         <span className="text-xs text-muted-foreground">Admin panel</span>
                     </div>

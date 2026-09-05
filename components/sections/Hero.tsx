@@ -54,9 +54,10 @@ export function Hero() {
                         <Button
                             key={i}
                             type="button"
+                            variant="ghost"
                             aria-label={`${i + 1}-slayd`}
                             onClick={() => goTo(i)}
-                            className="p-1"
+                            className="p-1 hover:bg-transparent"
                         >
                             <span
                                 className={cn(
@@ -67,7 +68,6 @@ export function Hero() {
                         </Button>
                     ))}
                 </div>
-
                 <Button
                     type="button"
                     aria-label="Keyingi slayd"
