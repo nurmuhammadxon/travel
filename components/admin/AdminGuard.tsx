@@ -11,8 +11,8 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useAuth();
     const router = useRouter();
     const params = useParams<{ lng: string }>();
-    const lng = params.lng ?? "uz";
-    const prefix = lng === "uz" ? "" : `/${lng}`;
+    const lng = params.lng ?? "en";
+    const prefix = lng === "en" ? "" : `/${lng}`;
 
     useEffect(() => {
         if (isLoading) return;

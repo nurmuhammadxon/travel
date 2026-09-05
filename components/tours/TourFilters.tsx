@@ -34,7 +34,7 @@ export function TourFilters({ resultCount }: TourFiltersProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const params = useParams<{ lng: string }>();
-    const lng = params.lng ?? "uz";
+    const lng = params.lng ?? "en";
     const [, startTransition] = useTransition();
 
     const currentSearch = searchParams.get("search") ?? "";

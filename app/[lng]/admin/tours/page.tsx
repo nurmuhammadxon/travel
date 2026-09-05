@@ -36,8 +36,8 @@ import {
 export default function AdminToursPage() {
     const { t } = useT("admin");
     const params = useParams<{ lng: string }>();
-    const lng = params.lng ?? "uz";
-    const prefix = lng === "uz" ? "" : `/${lng}`;
+    const lng = params.lng ?? "en";
+    const prefix = lng === "en" ? "" : `/${lng}`;
 
     const [tours, setTours] = useState<Tour[]>([]);
     const [isLoading, setIsLoading] = useState(true);

@@ -34,7 +34,7 @@ interface DestinationsProps {
 export function Destinations({ countries }: DestinationsProps) {
     const { t } = useT("home");
     const params = useParams<{ lng: string }>();
-    const lng = params.lng ?? "uz";
+    const lng = params.lng ?? "en";
     const count = countries.length;
     const [active, setActive] = useState(Math.floor(count / 2));
 

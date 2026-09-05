@@ -6,7 +6,7 @@ const STATIC_PATHS = ["", "/tours", "/about", "/services", "/contact"];
 const LOCALES = ["uz", "ru", "en"];
 
 function localizedUrl(path: string, lng: string) {
-    const prefix = lng === "uz" ? "" : `/${lng}`;
+    const prefix = lng === "en" ? "" : `/${lng}`;
     return `${BASE_URL}${prefix}${path}`;
 }
 

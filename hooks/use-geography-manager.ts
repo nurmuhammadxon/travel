@@ -25,7 +25,7 @@ function slugify(text: string) {
 export function useGeographyManager(open: boolean) {
     const { t } = useT("admin");
     const params = useParams<{ lng: string }>();
-    const lng = params.lng ?? "uz";
+    const lng = params.lng ?? "en";
 
     const [countries, setCountries] = useState<Country[]>([]);
     const [isLoadingCountries, setIsLoadingCountries] = useState(true);

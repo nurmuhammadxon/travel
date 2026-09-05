@@ -16,8 +16,8 @@ export function HeroSearch() {
     const { t } = useT("home");
     const router = useRouter();
     const params = useParams<{ lng: string }>();
-    const lng = params.lng ?? "uz";
-    const prefix = lng === "uz" ? "" : `/${lng}`;
+    const lng = params.lng ?? "en";
+    const prefix = lng === "en" ? "" : `/${lng}`;
 
     const [query, setQuery] = useState("");
     const [isOpen, setIsOpen] = useState(false);

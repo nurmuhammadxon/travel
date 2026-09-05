@@ -10,7 +10,7 @@ import { TourImagePlaceholder } from "@/components/tours/TourImagePlaceholder";
 
 export function TourCard({ tour, viewLabel }: { tour: Tour; viewLabel: string }) {
     const params = useParams<{ lng: string }>();
-    const lng = params.lng ?? "uz";
+    const lng = params.lng ?? "en";
     const imageUrl = getMediaUrl(tour.cover_image ?? tour.images?.[0]);
 
     const title = localizedText(tour.title, lng);
