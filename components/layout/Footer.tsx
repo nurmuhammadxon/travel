@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getT } from "next-i18next/server";
+import { localizedHref } from "@/lib/utils";
+import i18nConfig from "@/i18n.config";
 import { GirihBorder } from "./GirihBorder";
 import { SiteLogo } from "../shared/site-logo";
 import { siteConfig, getLocalizedSiteField } from "@/lib/site-config";
@@ -60,7 +62,7 @@ export async function Footer({ lng }: { lng: string }) {
                             return (
                                 <li key={link.href}>
                                     <Link
-                                        href={link.href}
+                                        href={localizedHref(lng, link.href, i18nConfig.fallbackLng)}
                                         className="text-sm text-primary-foreground/80 hover:text-accent transition-colors"
                                     >
                                         {t(link.key)}

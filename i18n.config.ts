@@ -14,4 +14,22 @@ const i18nConfig: I18nConfig = {
     : {}),
 };
 
+export function withLocale(path: string, lng: string): string {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  if (lng === i18nConfig.fallbackLng) {
+    return normalizedPath;
+  }
+  return normalizedPath === "/" ? `/${lng}` : `/${lng}${normalizedPath}`;
+}
+
+export function parseLocaleFromPath(pathname: string) {
+  const segments = pathname.split("/").filter(Boolean);
+  const hasLocale = i18nConfig.supportedLngs.includes(segments[0]);
+  return {
+    locale: hasLocale ? segments[0] : i18nConfig.fallbackLng,
+    segments: hasLocale ? segments.slice(1) : segments,
+  };
+}
+
 export default i18nConfig;
+export { i18nConfig };

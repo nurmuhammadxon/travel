@@ -11,6 +11,7 @@ import {
     hasStoredSession,
     clearTokens,
 } from "@/lib/api";
+import { useLocalizedHref } from "@/hooks/use-localized-href";
 import { showInfo } from "@/lib/toast";
 
 interface AuthContextType {
@@ -27,7 +28,7 @@ const INACTIVITY_LIMIT_MS = 30 * 60 * 1000;
 const ACTIVITY_EVENTS = ["mousemove", "keydown", "click", "scroll", "touchstart"];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const withLocale = useLocalizedHref(); const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
     const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -82,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 await logoutRequest();
                 setUser(null);
                 showInfo("Faolsizlik tufayli tizimdan chiqarildingiz");
-                router.push("/login");
+                router.push(withLocale("/login"));
             }, INACTIVITY_LIMIT_MS);
         }
 
@@ -93,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             ACTIVITY_EVENTS.forEach((event) => window.removeEventListener(event, resetTimer));
             if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
         };
-    }, [user, router]);
+    }, [user, withLocale]);
 
     return (
         <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>

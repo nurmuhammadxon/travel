@@ -16,7 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { GirihBorder } from "./GirihBorder";
 import i18nConfig from "../../i18n.config";
-import { cn } from "@/lib/utils";
+import { useLocalizedHref } from "@/hooks/use-localized-href";
+import { cn, localizedHref } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { isAdminUser } from "@/lib/auth";
 import { SiteLogo } from "../shared/site-logo";
@@ -42,11 +43,12 @@ export function Header() {
   const { user, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const withLocale = useLocalizedHref();
 
   async function handleLogout() {
     await logout();
     setMobileOpen(false);
-    router.push("/");
+    router.push(withLocale("/"));
   }
 
   useEffect(() => {
@@ -72,10 +74,8 @@ export function Header() {
   const isTransparent = isDarkHeroRoute && !scrolled;
 
   function switchLocale(locale: string) {
-    const rest = pathWithoutLocale;
-    const nextPath =
-      locale === i18nConfig.fallbackLng ? `/${rest.join("/")}` : `/${locale}/${rest.join("/")}`;
-    router.push(nextPath === "/" ? "/" : nextPath.replace(/\/$/, ""));
+    const rest = pathWithoutLocale.join("/");
+    router.push(localizedHref(locale, rest ? `/${rest}` : "/", i18nConfig.fallbackLng));
   }
 
   return (
@@ -86,7 +86,7 @@ export function Header() {
         }`}
     >
       <nav className="mx-auto max-w-7xl px-4 flex items-center justify-between h-16 md:h-20">
-        <Link href="/" className="flex items-center gap-2 shrink-0">
+        <Link href={withLocale("/")} className="flex items-center gap-2 shrink-0">
           <SiteLogo
             textClassName={`text-xl md:text-2xl font-bold tracking-tight transition-colors ${isTransparent ? "text-white" : "text-primary"
               }`}
@@ -95,11 +95,12 @@ export function Header() {
         </Link>
         <ul className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => {
-            const isActive = pathname === link.href || pathname.endsWith(link.href);
+            const href = withLocale(link.href);
+            const isActive = pathname === href || pathname.endsWith(link.href);
             return (
               <li key={link.href}>
                 <Link
-                  href={link.href}
+                  href={withLocale(link.href)}
                   className={`text-base font-bold transition-colors duration-500 delay-75 hover:text-accent ${isActive
                     ? "text-accent"
                     : isTransparent
@@ -152,12 +153,12 @@ export function Header() {
                 </div>
                 <DropdownMenuSeparator />
                 {isAdminUser(user) && (
-                  <DropdownMenuItem onClick={() => router.push("/admin")} className="gap-2">
+                  <DropdownMenuItem onClick={() => router.push(withLocale("/admin"))} className="gap-2">
                     <LayoutDashboard className="h-3.5 w-3.5" />
                     {t("nav.admin_panel")}
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem onClick={() => router.push("/profile")} className="gap-2">
+                <DropdownMenuItem onClick={() => router.push(withLocale("/profile"))} className="gap-2">
                   <ClipboardList className="h-3.5 w-3.5" />
                   {t("nav.profile")}
                 </DropdownMenuItem>
@@ -170,7 +171,7 @@ export function Header() {
             </DropdownMenu>
           ) : (
             <Link
-              href="/login"
+              href={withLocale("/login")}
               className="p-2.5 rounded-full bg-primary text-white hover:bg-primary/90 transition-all duration-200 hover:scale-110"
               aria-label={t("nav.login")}
             >
@@ -219,7 +220,7 @@ export function Header() {
                   {NAV_LINKS.map((link) => (
                     <li key={link.href}>
                       <Link
-                        href={link.href}
+                        href={withLocale(link.href)}
                         onClick={() => setMobileOpen(false)}
                         className="text-base font-medium text-foreground"
                       >
@@ -238,7 +239,7 @@ export function Header() {
                       </div>
                       {isAdminUser(user) && (
                         <Link
-                          href="/admin"
+                          href={withLocale("/admin")}
                           onClick={() => setMobileOpen(false)}
                           className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full")}
                         >
@@ -247,7 +248,7 @@ export function Header() {
                         </Link>
                       )}
                       <Link
-                        href="/profile"
+                        href={withLocale("/profile")}
                         onClick={() => setMobileOpen(false)}
                         className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full")}
                       >
@@ -264,7 +265,7 @@ export function Header() {
                     </>
                   ) : (
                     <Link
-                      href="/login"
+                      href={withLocale("/login")}
                       onClick={() => setMobileOpen(false)}
                       className={cn(buttonVariants({ variant: "outline" }), "gap-2 rounded-full")}
                     >
