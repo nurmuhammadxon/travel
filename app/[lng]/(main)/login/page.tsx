@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useT } from "next-i18next/client";
 import { useForm } from "react-hook-form";
@@ -29,6 +29,7 @@ export default function LoginPage() {
 
     const { login, register: registerUser, user, isLoading: authLoading } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const justAuthenticatedRef = useRef(false);
 
     const [showLoginPassword, setShowLoginPassword] = useState(false);
     const [showRegPassword, setShowRegPassword] = useState(false);
@@ -58,6 +59,7 @@ export default function LoginPage() {
         setIsSubmitting(true);
         try {
             const loggedInUser = await login(values);
+            justAuthenticatedRef.current = true;
             showSuccess(t("login_success"));
             redirectAfterLogin(loggedInUser);
         } catch (err) {
@@ -71,6 +73,7 @@ export default function LoginPage() {
         setIsSubmitting(true);
         try {
             const registeredUser = await registerUser(values);
+            justAuthenticatedRef.current = true;
             showSuccess(t("register_success"));
             redirectAfterLogin(registeredUser);
         } catch (err) {
@@ -81,6 +84,7 @@ export default function LoginPage() {
     }
 
     useEffect(() => {
+        if (justAuthenticatedRef.current) return;
         if (!authLoading && user) {
             redirectIfAlreadyAuthenticated(user);
         }
