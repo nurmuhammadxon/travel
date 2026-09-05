@@ -2,9 +2,36 @@ import { getT } from "next-i18next/server";
 import { Compass, ShieldCheck, Heart, Users } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
 
 interface Props {
     params: Promise<{ lng: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { lng } = await params;
+    const { t } = await getT("about", { lng });
+
+    const title = t("title");
+    const description = t("story");
+
+    return {
+        title,
+        description,
+        alternates: { canonical: "/about" },
+        openGraph: {
+            title,
+            description,
+            url: "/about",
+            images: [{ url: "/images/about_image.png", width: 1200, height: 630, alt: title }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ["/images/about_image.png"],
+        },
+    };
 }
 
 const VALUE_ICONS = [Compass, ShieldCheck, Heart, Users];
@@ -23,7 +50,7 @@ export default async function AboutPage({ params }: Props) {
             <div className="relative min-h-screen flex items-end overflow-hidden mb-16">
                 <img
                     src="/images/about_image.png"
-                    alt=""
+                    alt={t("title")}
                     className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/10" />

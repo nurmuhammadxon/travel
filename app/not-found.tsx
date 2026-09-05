@@ -4,7 +4,7 @@ import "./globals.css";
 
 export default function RootNotFound() {
     return (
-        <html lang="uz">
+        <html lang="en">
             <body className="antialiased">
                 <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
                     <img
@@ -17,10 +17,10 @@ export default function RootNotFound() {
                     <div className="relative z-10 text-center max-w-md">
                         <span className="text-7xl md:text-8xl font-bold text-white">404</span>
                         <h1 className="text-2xl md:text-3xl font-bold text-white">
-                            Sahifa topilmadi
+                            Page not found
                         </h1>
                         <p className="text-white/70 mt-3">
-                            Siz qidirayotgan sahifa mavjud emas yoki manzil o&apos;zgargan bo&apos;lishi mumkin. Ammo sayohat davom etadi.
+                            The page you are looking for doesn&apos;t exist or may have been moved. But the journey continues.
                         </p>
 
                         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -29,14 +29,14 @@ export default function RootNotFound() {
                                 className="inline-flex items-center gap-2 rounded-full bg-white text-[#1B3A6B] px-6 py-3 text-sm font-semibold hover:bg-white/90 transition-colors w-full sm:w-auto justify-center"
                             >
                                 <Home className="h-4 w-4" />
-                                Bosh sahifa
+                                Home
                             </Link>
                             <Link
                                 href="/tours"
                                 className="inline-flex items-center gap-2 rounded-full bg-[#C98A2C] text-[#1E2430] px-6 py-3 text-sm font-semibold hover:opacity-90 transition-opacity w-full sm:w-auto justify-center"
                             >
                                 <Compass className="h-4 w-4" />
-                                Turlarni ko&apos;rish
+                                View tours
                             </Link>
                         </div>
                     </div>

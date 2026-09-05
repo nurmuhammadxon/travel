@@ -3,9 +3,30 @@ import { MapPin } from "lucide-react";
 import { ServiceCard } from "@/components/services/ServiceCard";
 import { GetInTouchSection } from "@/components/sections/GetInTouchSection";
 import { SERVICE_KEYS } from "@/lib/data/services";
+import type { Metadata } from "next";
 
 interface Props {
     params: Promise<{ lng: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { lng } = await params;
+    const { t } = await getT("services", { lng });
+
+    const title = t("meta_title") ?? t("title");
+    const description = t("meta_description") ?? t("subtitle");
+
+    return {
+        title,
+        description,
+        alternates: { canonical: "/services" },
+        openGraph: {
+            title,
+            description,
+            url: "/services",
+            images: [{ url: "/images/service_image.png", width: 1200, height: 630, alt: title }],
+        },
+    };
 }
 
 export default async function ServicesPage({ params }: Props) {
@@ -17,7 +38,7 @@ export default async function ServicesPage({ params }: Props) {
             <div className="relative min-h-screen flex items-center justify-center overflow-hidden mb-16">
                 <img
                     src="/images/service_image.png"
-                    alt=""
+                    alt={t("title")}
                     className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/10" />

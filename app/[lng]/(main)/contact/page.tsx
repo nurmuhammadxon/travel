@@ -1,21 +1,49 @@
 import { getT } from "next-i18next/server";
 import { MapPin, Phone, Mail, Smartphone } from "lucide-react";
 import { GetInTouchSection } from "@/components/sections/GetInTouchSection";
+import { siteConfig, getLocalizedSiteField } from "@/lib/site-config";
+import type { Metadata } from "next";
 
 interface Props {
     params: Promise<{ lng: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { lng } = await params;
+    const { t } = await getT("contact", { lng });
+
+    const title = t("meta_title") ?? t("title");
+    const description = t("meta_description") ?? t("location_value");
+
+    return {
+        title,
+        description,
+        alternates: { canonical: "/contact" },
+        openGraph: {
+            title,
+            description,
+            url: "/contact",
+            images: [{ url: "/images/contact_image.png", width: 1200, height: 630, alt: title }],
+        },
+    };
 }
 
 export default async function ContactPage({ params }: Props) {
     const { lng } = await params;
     const { t } = await getT("contact", { lng });
 
+    const { email, phone, phoneSecondary } = siteConfig.contact;
+    const companyName = getLocalizedSiteField(siteConfig.companyName, lng);
+    const address = getLocalizedSiteField(siteConfig.contact.address, lng);
+    const telHref = (value: string) => `tel:${value.replace(/\s+/g, "")}`;
+    const mailtoHref = `mailto:${email}`;
+
     return (
         <div className="min-h-screen bg-background">
             <div className="relative min-h-screen flex items-center justify-center overflow-hidden mb-16">
                 <img
                     src="/images/contact_image.png"
-                    alt=""
+                    alt={t("title")}
                     className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/10" />
@@ -38,12 +66,12 @@ export default async function ContactPage({ params }: Props) {
                             </span>
                             <h3 className="font-bold text-primary text-lg">{t("location_title")}</h3>
                         </div>
-                        <p className="text-sm font-medium text-foreground">{t("company_name")}</p>
-                        <p className="text-sm text-muted-foreground">{t("location_value")}</p>
+                        <p className="text-sm font-medium text-foreground">{companyName}</p>
+                        <p className="text-sm text-muted-foreground">{address}</p>
 
                         <div className="mt-4">
                             <p className="text-sm font-medium text-foreground">{t("operator_title")}</p>
-                            <p className="text-sm text-muted-foreground">{t("operator_name")}</p>
+                            <p className="text-sm text-muted-foreground">{siteConfig.operator.name}</p>
                         </div>
                     </div>
 
@@ -60,16 +88,18 @@ export default async function ContactPage({ params }: Props) {
                                     <Smartphone className="h-3 w-3" />
                                     {t("mobile_label")}
                                 </div>
-                                <a href="tel:+998901234567" className="text-sm text-foreground hover:text-primary">
-                                    +998 90 123 45 67
+                                <a href={telHref(phone)} className="text-sm text-foreground hover:text-primary">
+                                    {phone}
                                 </a>
                             </div>
-                            <div>
-                                <div className="text-xs text-muted-foreground mb-0.5">{t("office_label")}</div>
-                                <a href="tel:+998712001122" className="text-sm text-foreground hover:text-primary">
-                                    +998 71 200 11 22
-                                </a>
-                            </div>
+                            {phoneSecondary && (
+                                <div>
+                                    <div className="text-xs text-muted-foreground mb-0.5">{t("office_label")}</div>
+                                    <a href={telHref(phoneSecondary)} className="text-sm text-foreground hover:text-primary">
+                                        {phoneSecondary}
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -85,8 +115,8 @@ export default async function ContactPage({ params }: Props) {
                                 <p className="text-sm font-medium text-foreground">{t("quotes_title")}</p>
                                 <p className="text-sm text-muted-foreground">
                                     {t("quotes_text")}{" "}
-                                    <a href="mailto:info@sayt.uz" className="text-primary hover:underline">
-                                        info@sayt.uz
+                                    <a href={mailtoHref} className="text-primary hover:underline">
+                                        {email}
                                     </a>
                                 </p>
                             </div>
@@ -94,8 +124,8 @@ export default async function ContactPage({ params }: Props) {
                                 <p className="text-sm font-medium text-foreground">{t("consulting_title")}</p>
                                 <p className="text-sm text-muted-foreground">
                                     {t("consulting_text")}{" "}
-                                    <a href="mailto:info@sayt.uz" className="text-primary hover:underline">
-                                        info@sayt.uz
+                                    <a href={mailtoHref} className="text-primary hover:underline">
+                                        {email}
                                     </a>
                                 </p>
                             </div>

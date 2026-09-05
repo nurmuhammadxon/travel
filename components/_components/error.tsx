@@ -20,12 +20,12 @@ export default function Error({
             <div className="h-16 w-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
                 <AlertTriangle className="h-7 w-7 text-destructive" />
             </div>
-            <h1 className="text-2xl font-bold text-primary">Nimadir notogri ketdi</h1>
+            <h1 className="text-2xl font-bold text-primary">Something went wrong</h1>
             <p className="text-muted-foreground mt-2 max-w-sm">
-                Kechirasiz, kutilmagan xatolik yuz berdi. Qaytadan urinib koring.
+                Sorry, an unexpected error occurred. Please try again.
             </p>
             <Button onClick={reset} className="mt-6 rounded-full bg-primary text-white hover:bg-primary/90">
-                Qaytadan urinish
+                Try again
             </Button>
         </div>
     );

@@ -3,6 +3,7 @@ import { getT } from "next-i18next/server";
 import { getTours } from "@/lib/api";
 import { TourCard } from "@/components/tours/TourCard";
 import { TourFilters } from "@/components/tours/TourFilters";
+import type { Metadata } from "next";
 
 interface Props {
     params: Promise<{ lng: string }>;
@@ -12,6 +13,26 @@ interface Props {
         country?: string;
         destination?: string;
     }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { lng } = await params;
+    const { t } = await getT("tours", { lng });
+
+    const title = t("meta_title") ?? t("title");
+    const description = t("meta_description") ?? t("subtitle");
+
+    return {
+        title,
+        description,
+        alternates: { canonical: "/tours" },
+        openGraph: {
+            title,
+            description,
+            url: "/tours",
+            images: [{ url: "/images/tours_image.png", width: 1200, height: 630, alt: title }],
+        },
+    };
 }
 
 export default async function ToursPage({ params, searchParams }: Props) {
@@ -41,7 +62,7 @@ export default async function ToursPage({ params, searchParams }: Props) {
             <div className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden -mx-4 mb-12">
                 <img
                     src="/images/tours_image.png"
-                    alt=""
+                    alt={t("title")}
                     className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/10" />

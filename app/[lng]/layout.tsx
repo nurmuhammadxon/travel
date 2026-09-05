@@ -28,7 +28,6 @@ initServerI18next(i18nConfig);
 export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL("https://discover-stans.uz"),
-
     title: {
       default: "DiscoverStans — O'zbekiston va Markaziy Osiyoga sayohat",
       template: "%s | DiscoverStans",
@@ -42,16 +41,22 @@ export async function generateMetadata(): Promise<Metadata> {
       "O'zbekiston sayohat",
       "O'zbekiston turizm",
       "Markaziy Osiyo sayohat",
+      "Samarqand tur",
+      "Buxoro tur",
+      "Xiva tur",
+      "Toshkent tur",
+      "Farg'ona vodiysi sayohat",
+      "Ipak yo'li sayohat",
+      "Silk Road tour Uzbekistan",
       "Central Asia travel",
-      "Uzbekistan travel",
+      "Uzbekistan travel agency",
+      "Uzbekistan guided tours",
       "Uzbekistan tourism",
-      "Samarqand",
-      "Buxoro",
-      "Xiva",
-      "Toshkent",
-      "sayohat turlari",
-      "turistik joylar",
+      "arzon sayohat paketlari O'zbekiston",
+      "guruh bilan sayohat O'zbekiston",
+      "individual tur O'zbekiston",
       "O'zbekiston turistik joylari",
+      "sayohat turlari Samarqand",
     ],
 
     authors: [
@@ -68,6 +73,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
     alternates: {
       canonical: "https://discover-stans.uz/",
+      languages: {
+        uz: "https://discover-stans.uz/",
+        ru: "https://discover-stans.uz/ru",
+        en: "https://discover-stans.uz/en",
+      },
     },
 
     robots: {

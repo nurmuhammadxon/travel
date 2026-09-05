@@ -3,6 +3,8 @@ import { getT } from "next-i18next/server";
 import { MapPin, Clock, ShieldCheck, UserRound, Activity, Check } from "lucide-react";
 import { getTourBySlug, getTours } from "@/lib/api";
 import { localizedText, localizedList } from "@/lib/utils";
+import type { Metadata } from "next";
+import { getMediaUrl } from "@/lib/media";
 import type { Tour } from "@/types";
 import { TourGallery } from "@/components/tours/TourGallery";
 import { ReviewsSection } from "@/components/tours/ReviewsSection";
@@ -17,6 +19,43 @@ import { TourIncludedExcluded } from "@/components/tours/TourIncludedExcluded";
 
 interface Props {
     params: Promise<{ lng: string; slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { lng, slug } = await params;
+
+    let tour;
+    try {
+        tour = await getTourBySlug(slug, lng);
+    } catch {
+        return {};
+    }
+    if (!tour) return {};
+
+    const title = localizedText(tour.title, lng);
+    const description =
+        localizedText(tour.short_description ?? tour.description, lng) ?? title;
+    const image = getMediaUrl(tour.cover_image) ?? "/images/tours_image.png";
+    const countryName = tour.countries?.[0] ? localizedText(tour.countries[0].name, lng) : "";
+
+    return {
+        title: `${title}${countryName ? ` — ${countryName}` : ""}`,
+        description,
+        alternates: { canonical: `/tours/${slug}` },
+        openGraph: {
+            title,
+            description,
+            url: `/tours/${slug}`,
+            type: "website",
+            images: [{ url: image, width: 1200, height: 630, alt: title }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [image],
+        },
+    };
 }
 
 export default async function TourDetailPage({ params }: Props) {

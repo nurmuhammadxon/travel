@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getT } from "next-i18next/server";
 import { GirihBorder } from "./GirihBorder";
 import { SiteLogo } from "../shared/site-logo";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, getLocalizedSiteField } from "@/lib/site-config";
 
 const QUICK_LINKS = [
     { href: "/", key: "nav.home" },
@@ -27,7 +27,8 @@ export async function Footer({ lng }: { lng: string }) {
     const phone = siteConfig.contact.phone;
     const phoneSecondary = siteConfig.contact.phoneSecondary;
     const email = siteConfig.contact.email;
-    const address = siteConfig.contact.address;
+    const address = getLocalizedSiteField(siteConfig.contact.address, lng);
+    const about = getLocalizedSiteField(siteConfig.description, lng);
 
     const phoneHref = "tel:" + phone.replace(/\s+/g, "");
     const phoneSecondaryHref = "tel:" + phoneSecondary.replace(/\s+/g, "");
@@ -46,7 +47,7 @@ export async function Footer({ lng }: { lng: string }) {
                 <div>
                     <SiteLogo textClassName="text-xl font-bold tracking-tight" highlightClassName="text-accent" />
                     <p className="mt-3 text-sm text-primary-foreground/70 leading-relaxed">
-                        {t("footer.about")}
+                        {about}
                     </p>
                 </div>
 
@@ -140,8 +141,8 @@ export async function Footer({ lng }: { lng: string }) {
 
             </div>
 
-            <p className="text-sm">
-                © {new Date().getFullYear()} {siteConfig.logo.name}
+            <p className="text-sm text-center pb-4">
+                © {year} {siteConfig.logo.name}
                 {siteConfig.logo.nameHighlight}. {t("footer.rights")}
             </p>
 

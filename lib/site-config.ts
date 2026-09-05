@@ -6,18 +6,34 @@ export const siteConfig = {
         name: "Discover",
         nameHighlight: "Stans",
         initials: "DS",
+        subtitle: "Hisobingizga kiring yoki yangi hisob yarating",
     },
 
-    description:
-        "Samarqand va O'zbekiston bo'ylab unutilmas sayohatlar tashkil qilamiz - tarix, madaniyat va mehmondo'stlik bir joyda.",
+    description: {
+        uz: "Samarqand va O'zbekiston bo'ylab unutilmas sayohatlar tashkil qilamiz - tarix, madaniyat va mehmondo'stlik bir joyda.",
+        ru: "Мы организуем незабываемые путешествия по Самарканду и Узбекистану - история, культура и гостеприимство в одном месте.",
+        en: "We organize unforgettable journeys across Samarkand and Uzbekistan - history, culture, and hospitality all in one place.",
+    },
 
-    copyright: "Barcha huquqlar himoyalangan.",
+    companyName: {
+        uz: "SayohatYoli sayohat agentligi",
+        ru: "Туристическое агентство SayohatYoli",
+        en: "SayohatYoli Travel Agency",
+    },
+
+    operator: {
+        name: "Aziz Rahimov",
+    },
 
     contact: {
         email: "discoverstans.uz@gmail.com",
-        phone: "+998 99 343 40 94 ",
-        phoneSecondary: "",
-        address: "Samarqand, O'zbekiston",
+        phone: "+998 90 123 45 67",
+        phoneSecondary: "+998 71 200 11 22",
+        address: {
+            uz: "Samarqand, O'zbekiston",
+            ru: "Самарканд, Узбекистан",
+            en: "Samarkand, Uzbekistan",
+        },
     },
 
     social: {
@@ -31,3 +47,11 @@ export const siteConfig = {
 };
 
 export type SiteConfig = typeof siteConfig;
+export type SupportedLocale = "uz" | "ru" | "en";
+
+export function getLocalizedSiteField(
+    field: Record<SupportedLocale, string>,
+    lng: string
+): string {
+    return field[lng as SupportedLocale] ?? field.uz;
+}
