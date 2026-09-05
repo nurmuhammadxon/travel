@@ -16,9 +16,9 @@ export const siteConfig = {
     },
 
     companyName: {
-        uz: "SayohatYoli sayohat agentligi",
-        ru: "Туристическое агентство SayohatYoli",
-        en: "SayohatYoli Travel Agency",
+        uz: "DiscoverStans sayohat agentligi",
+        ru: "Туристическое агентство DiscoverStans",
+        en: "DiscoverStans Travel Agency",
     },
 
     operator: {
