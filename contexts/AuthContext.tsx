@@ -47,6 +47,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .finally(() => setIsLoading(false));
     }, []);
 
+    useEffect(() => {
+        const backendUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!backendUrl) return;
+
+        fetch(`${backendUrl}/health`, { method: "GET", cache: "no-store" }).catch(() => {
+        });
+    }, []);
+
     async function login(payload: LoginPayload): Promise<User> {
         const loggedInUser = await loginRequest(payload);
         setUser(loggedInUser);
@@ -55,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     async function register(payload: RegisterPayload): Promise<User> {
         await registerRequest(payload);
-        return login({ email: payload.email, password: payload.password }); 
+        return login({ email: payload.email, password: payload.password });
 
     }
 
@@ -79,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         ACTIVITY_EVENTS.forEach((event) => window.addEventListener(event, resetTimer));
-        resetTimer(); 
+        resetTimer();
 
         return () => {
             ACTIVITY_EVENTS.forEach((event) => window.removeEventListener(event, resetTimer));

@@ -36,8 +36,9 @@ export default function AdminUsersPage() {
     const {
         data: users,
         isLoading,
+        isRetrying,
         error: loadError,
-    } = useFetch(getUsers, [] as User[], "Ro'yxatni yuklab bo'lmadi");
+    } = useFetch(getUsers, [] as User[], t("users.load_error"));
 
     const filtered = users.filter((u) =>
         `${u.full_name} ${u.email}`.toLowerCase().includes(search.toLowerCase())
@@ -61,8 +62,13 @@ export default function AdminUsersPage() {
             </div>
 
             {isLoading ? (
-                <div className="flex justify-center py-16">
+                <div className="flex flex-col items-center gap-3 py-16">
                     <Loading className="h-8 w-8 text-muted-foreground" />
+                    {isRetrying && (
+                        <p className="text-sm text-muted-foreground text-center">
+                            {t("users.retrying")}
+                        </p>
+                    )}
                 </div>
             ) : loadError ? (
                 <p className="text-destructive text-sm">{loadError}</p>

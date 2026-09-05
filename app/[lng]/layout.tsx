@@ -7,6 +7,7 @@ import {
   getResources,
   generateI18nStaticParams,
 } from "next-i18next/server";
+import NextTopLoader from "nextjs-toploader";
 import { I18nProvider } from "next-i18next/client";
 import { Toaster } from "@/components/ui/sonner";
 import i18nConfig from "../../i18n.config";
@@ -144,9 +145,8 @@ export default async function RootLayout({
 
   return (
     <html lang={lng}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <NextTopLoader color="var(--primary)" showSpinner={false} height={3} />
         <I18nProvider
           fallbackLng={i18nConfig.fallbackLng}
           language={lng}

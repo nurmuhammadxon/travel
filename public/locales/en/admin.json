@@ -121,7 +121,8 @@
         "role_agent": "Agent",
         "role_customer": "Customer",
         "not_found": "No users found",
-        "load_error": "Couldn't load the list"
+        "load_error": "Couldn't load the list",
+        "retrying": "Waking up the server, please wait (this can take 30-60s on first visit)..."
     },
     "form": {
         "main_info": "Main information",

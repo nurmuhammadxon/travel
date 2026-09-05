@@ -121,7 +121,8 @@
         "role_agent": "Agent",
         "role_customer": "Mijoz",
         "not_found": "Foydalanuvchi topilmadi",
-        "load_error": "Ro'yxatni yuklab bo'lmadi"
+        "load_error": "Ro'yxatni yuklab bo'lmadi",
+        "retrying": "Server uyg'onmoqda, biroz kuting (birinchi tashrifda 30-60s vaqt olishi mumkin)..."
     },
     "form": {
         "main_info": "Asosiy ma'lumot",
