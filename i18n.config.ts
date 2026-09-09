@@ -4,8 +4,7 @@ const i18nConfig: I18nConfig = {
   supportedLngs: ["uz", "ru", "en"],
   fallbackLng: "en",
   defaultNS: "common",
-  ns: ["common", "home", "tours", "about", "contact", "auth", "services", "admin", "profile"],
-  hideDefaultLocale: true,
+  ns: ["common", "home", "tours", "about", "contact", "auth", "services", "admin", "profile", "legal"], hideDefaultLocale: true,
   ...(process.env.NODE_ENV === "production"
     ? {
       resourceLoader: (language: string, namespace: string) =>

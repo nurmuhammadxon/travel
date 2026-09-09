@@ -17,6 +17,9 @@
         "contact": "Contact",
         "address": "Registan street, Samarkand",
         "follow": "Follow us",
-        "rights": "All rights reserved."
+        "rights": "All rights reserved.",
+        "legal": "Legal",
+        "offer": "Public Offer",
+        "privacy": "Privacy Policy"
     }
 }
