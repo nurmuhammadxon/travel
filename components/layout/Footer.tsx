@@ -143,26 +143,20 @@ export async function Footer({ lng }: { lng: string }) {
 
             </div>
 
-            <div className="mx-auto max-w-7xl px-4 pb-6 flex flex-col sm:flex-row items-center justify-center gap-x-6 gap-y-2 text-sm">
-                <Link
-                    href={localizedHref(lng, "/oferta", i18nConfig.fallbackLng)}
-                    className="text-primary-foreground/70 hover:text-accent transition-colors"
-                >
-                    {t("footer.offer")}
-                </Link>
-                <Link
-                    href={localizedHref(lng, "/privacy", i18nConfig.fallbackLng)}
-                    className="text-primary-foreground/70 hover:text-accent transition-colors"
-                >
-                    {t("footer.privacy")}
-                </Link>
+            <div className="mx-auto max-w-7xl px-4 pb-6 flex flex-col sm:flex-row items-center justify-center gap-x-6 gap-y-2 text-sm text-center">
+                <p>
+                    © {year} {siteConfig.logo.name}
+                    {siteConfig.logo.nameHighlight}. {t("footer.rights")}
+                </p>
+                <div className="flex items-center gap-x-6">
+                    <Link href={localizedHref(lng, "/oferta", i18nConfig.fallbackLng)} className="text-primary-foreground/70 hover:text-accent transition-colors">
+                        {t("footer.offer")}
+                    </Link>
+                    <Link href={localizedHref(lng, "/privacy", i18nConfig.fallbackLng)} className="text-primary-foreground/70 hover:text-accent transition-colors">
+                        {t("footer.privacy")}
+                    </Link>
+                </div>
             </div>
-
-            <p className="text-sm text-center pb-4">
-                © {year} {siteConfig.logo.name}
-                {siteConfig.logo.nameHighlight}. {t("footer.rights")}
-            </p>
-
         </footer>
     );
 }
