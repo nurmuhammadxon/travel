@@ -43,30 +43,49 @@ export function LegalDocument({ title, content, ruFallbackNotice }: LegalDocumen
     const sections = useMemo(() => extractSections(content), [content]);
     const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null);
 
-    useEffect(() => {
+      useEffect(() => {
         if (sections.length === 0) return;
 
-        const headingEls = sections
-            .map((section) => document.getElementById(section.id))
-            .filter((el): el is HTMLElement => Boolean(el));
+        let ticking = false;
 
-        if (headingEls.length === 0) return;
+        function computeActive() {
+            const headingEls = sections
+                .map((section) => document.getElementById(section.id))
+                .filter((el): el is HTMLElement => Boolean(el));
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visible = entries.filter((entry) => entry.isIntersecting);
-                if (visible.length === 0) return;
+            if (headingEls.length === 0) {
+                ticking = false;
+                return;
+            }
 
-                const topMost = visible.reduce((closest, entry) =>
-                    entry.boundingClientRect.top < closest.boundingClientRect.top ? entry : closest
-                );
-                setActiveId(topMost.target.id);
-            },
-            { rootMargin: `-${SCROLL_OFFSET}px 0px -65% 0px`, threshold: 0 }
-        );
+            const threshold = window.scrollY + SCROLL_OFFSET + 4;
+            let current = headingEls[0].id;
 
-        headingEls.forEach((el) => observer.observe(el));
-        return () => observer.disconnect();
+            for (const el of headingEls) {
+                const top = el.getBoundingClientRect().top + window.scrollY;
+                if (top <= threshold) {
+                    current = el.id;
+                }
+            }
+
+            setActiveId(current);
+            ticking = false;
+        }
+
+        function onScrollOrResize() {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(computeActive);
+        }
+
+        computeActive();
+        window.addEventListener("scroll", onScrollOrResize, { passive: true });
+        window.addEventListener("resize", onScrollOrResize);
+
+        return () => {
+            window.removeEventListener("scroll", onScrollOrResize);
+            window.removeEventListener("resize", onScrollOrResize);
+        };
     }, [sections]);
 
     function handleSectionClick(event: React.MouseEvent<HTMLAnchorElement>, id: string) {
