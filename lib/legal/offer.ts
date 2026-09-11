@@ -119,8 +119,6 @@ Aloqa: +998 99 343 40 94, discoverstans.uz@gmail.com
 
 **Effective date:** September 8, 2026
 
-*Note: This document is a translation for the convenience of English-speaking clients. In case of any discrepancy between this English version and the official Uzbek-language version, the Uzbek version shall prevail, in accordance with the legislation of the Republic of Uzbekistan.*
-
 This document constitutes a **public offer** in accordance with the Law of the Republic of Uzbekistan "On Electronic Commerce," the Civil Code (Article 355), and the Law "On Protection of Consumer Rights." It is issued by Khayrullayev Azim Sodiqovich (Individual Entrepreneur, trading as **"Discover Stans"**, hereinafter — the **"Provider"**) and defines the terms under which travel and tour services are provided to any interested party (hereinafter — the **"Customer"**).
 
 By registering on the website, placing a booking, or making a payment, the Customer fully and unconditionally accepts the terms of this Offer (Article 369 of the Civil Code).
