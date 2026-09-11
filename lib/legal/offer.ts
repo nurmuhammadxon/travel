@@ -226,8 +226,6 @@ Bank details: Kapitalbank, Samarkand Branch
 Contact: +998 99 343 40 94, discoverstans.uz@gmail.com
 
 ---
-
-*This text is a draft template. Before official publication, it is recommended to have it reviewed by a qualified lawyer familiar with the legislation of Uzbekistan, particularly regarding bank details, exact tax identifiers, and business-specific terms (cancellation windows, etc.).*
 `,
 } as const;
 

@@ -172,8 +172,6 @@ Phone: +998 99 343 40 94
 The Provider reserves the right to amend this Privacy Policy at any time. The updated version takes effect from the moment it is published on the Website. Users may be notified of significant changes via a separate notice on the Website.
 
 ---
-
-*This text is a draft template. Before official publication, it is recommended to have it reviewed by a qualified lawyer, particularly to confirm full compliance with the requirements of payment systems (Payme/Click/Ipak Yuli Bank) and the Law of the Republic of Uzbekistan "On Personal Data."*
 `,
 } as const;
 
